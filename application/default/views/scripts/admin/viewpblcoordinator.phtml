@@ -1,0 +1,62 @@
+<style type="text/css">
+.user{ border: solid 1px #bbbbbb; background-color: #eeeeee;}
+.userid {text-decoration:underline;color:#306FDF; cursor:pointer;}
+.horizontal1 {float: left; margin: 4px; width: 60px; }
+.horizontal2 {float: left; margin: 4px; width: 60px; text-align: center;}
+.horizontal3 {float: left; margin: 4px; width: 350px; padding-left: 20px;}
+.horizontal4 {float: left; margin: 4px; width: 300px; }
+.horizontal5 {float: left; margin: 4px; width: 60px; }
+.deleteimg {border: 0px; padding-left:16px; }
+</style>
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.2.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/removeuser.js"></script>
+
+<?php if (count($this->pblCoordinators) > 0) :?>
+<table>
+    <thead>
+        <tr align="left">
+            <th>
+                <div class="horizontal1">Delete</div>
+                <div class="horizontal2">Pbl No</div>
+                <div class="horizontal3">Pbl Name</div>
+                <div class="horizontal4">Case Coordinator</div>
+                <div class="horizontal5">Domain</div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php $pblUrlFormat = $this->url(array('module'=>'default','controller'=>'pbl', 'action'=>'index','ref'=>'%s'), null, true, false);?>
+    <?php foreach ($this->pblCoordinators as $pblCoordinator): ?>
+    <tr class="user" id="userid<?php echo $pblCoordinator['auto_id'] ?>">
+        <td>
+            <div class="horizontal1">
+                <a href="javascript:void(0);" onclick="removeUser('deletepblcoordinator', <?php echo $pblCoordinator['auto_id']?>, '<?php echo $pblCoordinator['uid']?>');">
+                    <img src="<?php echo $this->baseUrl;?>/img/delete.gif" class="deleteimg">
+                </a>
+            </div>
+            <div class="horizontal2">
+                <a href="<?php printf($pblUrlFormat,$pblCoordinator['pbl_ref']);?>"><?php echo $pblCoordinator['pbl_ref']?></a>
+            </div>
+            <div class="horizontal3">
+                <a href="<?php printf($pblUrlFormat,$pblCoordinator['pbl_ref']);?>"><?php echo $pblCoordinator['pbl_name']?></a>
+            </div>
+            <div class="horizontal4">
+                <span class="userid"><?php echo $pblCoordinator['uid'] ?></span>
+                <div class="userdetail"></div>
+            </div>
+            <div class="horizontal5">
+                <?php echo $pblCoordinator['domain_name'] ?>
+            </div>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php else : ?>
+<p>No Pbl Coordinator found.</p>
+<?php endif; ?>
+
+<p>
+    <a href="<?php echo $this->url(array('action'=>'addpblcoordinator', 'controller'=>'admin'), null, true); ?>">Add Pbl Coordinator</a>
+</p>

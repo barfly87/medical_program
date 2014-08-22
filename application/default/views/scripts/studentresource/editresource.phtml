@@ -1,0 +1,69 @@
+<?php include_once('../application/common/views/_ckeditorJsAndCss.phtml');?>
+   <script>
+  $(document).ready(function(){
+    $("#studentresourceeditform").validate();
+    // ensure ckeditor textarea gets updated before validation occurs
+    $("#resourcesubmit").click(function(){
+	     for (var i in CKEDITOR.instances) {
+	        CKEDITOR.instances[i].updateElement(); // update the textarea
+	     }
+ 	});
+  });
+</script>
+<form method="post" id="studentresourceeditform" enctype="multipart/form-data" action="<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'upload'),'default',true); ?>">
+<input type="hidden" name="loid" value="<?php echo $this->resourcelink->loid; ?>">
+<input type="hidden" name="resourcetype"  value="text" >
+<input type="hidden" name="replaceresourceid"  value="<?php echo $this->resourcelink->auto_id;?>" >
+<input type="hidden" name="redirect_to"  value="<?php echo $this->redirect_to;?>" >
+<table id="resourceform<?php echo $loid; ?>">
+
+<tr id="resource<?php echo $loid; ?>textrow">
+	<td><label for="resourcetext">Text *:</label></td>
+	<td><textarea name="resourcetext" class="ckeditor" id="resource<?php echo $loid; ?>text" rows="6" cols="55"><?php echo $this->content; ?></textarea></td>
+</tr>
+
+<tr id="description<?php echo $loid; ?>row">
+	<td><label for="description">Description *:</label></td>
+	<td><textarea name="description" rows="3" cols="55" class="required"><?php echo $this->resourcelink->description; ?></textarea><br>
+	<label for="description" class="error" generated="true"></label></td>
+</tr>
+<tr id="resourcecategory<?php echo $loid; ?>row">
+	<td>
+	<label for="resourcecategory">Category:</label></td>
+	<td><select name="resourcecategory">
+		<?php foreach($this->studentResourceCategories as $ind => $cat): ?>
+		<option value="<?php echo($ind)?>" <?php if($cat == $this->resourcelink->category) echo "selected";?>><?php echo($cat)?></option>
+		<?php endforeach;?>
+	</select>
+	</td>
+</tr>
+<tr id="copyrightrow<?php echo $loid; ?>">
+	<td colspan="2"><label for="copyright">The copyright on this is</label>
+		<input type="radio" name="copyright" id="copyright_mine" value="mine" <?php if('M' == $this->resourcelink->copyright) echo "checked";?> onclick="$('#copyrightownerrow<?php echo $loid; ?>').hide();$('#copyrightowner').removeClass('required');"> <label for="copyright_mine">mine</label>
+		<input type="radio" name="copyright" id="copyright_notmine" value="notmine" <?php if('N' == $this->resourcelink->copyright) echo "checked";?> onclick="$('#copyrightownerrow<?php echo $loid; ?>').show();$('#copyrightowner').addClass('required');"> <label for="copyright_notmine">someone else's</label>
+	</td>
+</tr>
+<tr id="copyrightownerrow<?php echo $loid; ?>" <?php if('M' == $this->resourcelink->copyright) echo 'style="display:none;"';?>>
+	<td><label for="copyrightowner">Copyright<br>owner *:</label></td>
+	<td><input name="copyrightowner" id="copyrightowner" size="60" value="<?php echo $this->resourcelink->copyrightother;?>"></td>
+</tr>
+<tr id="collaborativerow<?php echo $loid; ?>">
+	<td colspan="2"><label for="collaborative">Make this post editable by anyone</label>
+		<input type="checkbox" name="collaborative" id="collaborative" <?php if($this->resourcelink->collaborative=='true') echo 'checked';?>>
+	</td>
+</tr>
+<?php if($this->resourcelink->collaborative=='true'):?>
+<input type="hidden" name="private" value="Off">
+<?php else:?>
+<tr id="privaterow<?php echo $loid; ?>">
+	<td colspan="2"><label for="private">Make this post private, viewable only by me</label>
+		<input type="checkbox" name="private" id="private"<?php if($this->resourcelink->private=='true') echo 'checked';?>>
+	</td>
+</tr>
+<?php endif;?>
+
+<tr id="submitrow">
+	<td colspan="2"><input id="resourcesubmit" type="submit" value="update"></td>
+</tr>
+</table>
+</form>

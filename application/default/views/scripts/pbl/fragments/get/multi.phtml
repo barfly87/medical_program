@@ -1,0 +1,36 @@
+
+<?php $resourceUrlFormat = $this->url(array('module'=>'default', 'controller'=>$this->zendController, 'action'=>'get'),null,true).'/me/%s/id/%d/ref/'.$this->pblOrBlockRef;?>
+
+<?php if(isset($this->resourceData) && !empty($this->resourceData)) :?>
+
+    <?php if(isset($this->resourceData['parents']) && !empty($this->resourceData['parents'])) :?>
+    
+        <?php foreach($this->resourceData['parents'] as $key => $parent) :?>
+
+            <div class="pblElem" id="parent_id_<?php echo $parent['auto_id']; ?>" style="display:block;">
+            <?php if(isset($parent['childrens']) && !empty($parent['childrens'])) :?>
+
+                <?php foreach($parent['childrens'] as $key => $child) :?>
+                <div id="child_id_<?php echo $child['auto_id']; ?>">
+
+                    <p class="pblElemHeading"><?php echo $child['resource_type']; ?></p>
+
+                    <?php if(isset($child['resources']) && !empty($child['resources']) ) :?>
+                    <ol>
+                        <?php foreach($child['resources'] as $resource) :?>
+                            <li><span><a href="<?php printf($resourceUrlFormat,$child['url_name'],$resource['auto_id']);?>" id=""><?php echo $resource['title'];?></a></span></li>
+                        <?php endforeach;?>
+                    </ol>                    
+                    <?php endif;?>  
+
+                </div>
+                <?php endforeach;?>
+
+            <?php endif;?>
+            </div>        
+
+        <?php endforeach;?>
+    
+    <?php endif;?>
+    
+<?php endif;?>

@@ -1,0 +1,14 @@
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+<?php $href = $this->url(array('module'=>'default','controller'=> 'learningobjective', 'action'=>'view')); ?>
+<div>
+  <h2>Archiving learning objective <?php echo $this->lo->auto_id; ?></h2>
+  <p>Are you sure you want to archive the linkage between teaching activity <?php echo $this->ta->auto_id; ?>
+  and learning objective <?php echo $this->lo->auto_id; ?>?</p>
+  <p>Would you like to continue?</p>
+  <form method="post">
+    <p><input type="radio" name="sure" value="yes" /> Yes
+    <input type="radio" name="sure" value="no" checked="checked" /> No&nbsp;&nbsp;&nbsp;
+    <input type="submit" value="Submit" id="submit"/></p>
+  </form>
+</div>

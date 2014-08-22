@@ -1,0 +1,30 @@
+<?php 
+/**
+     This file is been used by 
+     /view/scripts/resource/uploadedit.phtml
+     /view/scripts/resource/loose.phtml
+*/
+?>
+
+<div>
+<?php if(isset($this->success)):?>
+	<p class="red" style="font-size:110%"><?php echo $this->success; ?></p>
+<?php elseif(isset($this->errors)) :?>
+    <?php if(!empty($this->formdata->mediabankError)) :?>
+        <span>
+            <ul>
+                <li class="red"><?php echo $this->errors[0];?> <span id="showHideError" class="underlineText">Show Error</span></li>
+                <li id="exception"><?php echo strip_tags($this->formdata->mediabankError,'<p><b><style><pre>');?></li>
+            </ul>
+        </span>
+	<?php else:?>
+        <span class="red">
+            <ul>
+            <?php foreach($this->errors as $error):?>
+                <li><?php echo $error;?></li>
+            <?php endforeach;?>
+            </ul>
+        </span>
+    <?php endif;?>
+<?php endif;?>
+</div>

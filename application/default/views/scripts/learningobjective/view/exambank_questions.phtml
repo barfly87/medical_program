@@ -1,0 +1,49 @@
+<style type="text/css">
+a.exambankQuestionUrl {
+    color: #2F1D03;
+    text-decoration:underline;
+}
+a.exambankQuestionUrl:hover {
+    color: #7F6B4F;
+    text-decoration:none;
+}
+</style>
+<div>
+    <div class="subHeadings subHeadingsResources">
+        <?php if (Utilities::isMyLo($this->lo->auto_id) === true) :?>
+            <?php
+            $exambankConfig = ExambankService::config();
+            $addNewQuestionUrl = (isset($exambankConfig['addNewQuestionUrl'])) ? 
+                                    sprintf($exambankConfig['addNewQuestionUrl'],$this->lo->auto_id) : 'javascript:return (void)';
+                                
+            $linkExistingQuestionUrl = (isset($exambankConfig['linkExistingQuestionUrl'])) ? 
+                                            sprintf($exambankConfig['linkExistingQuestionUrl'],$this->lo->auto_id) : 'javascript:return (void)';
+            ?>
+            <span style="float:right">
+                <a class="sectionLink" href="<?php echo $addNewQuestionUrl ; ?>" target="_blank">Add</a>
+                <a class="sectionLink" href="<?php echo $linkExistingQuestionUrl ; ?>" target="_blank">Link</a>  
+            </span> 
+        <?php endif; ?>
+            Exambank questions
+    </div>
+    <div id="examContainer">
+        <div class="examElem">
+            <?php if($this->loExambankQuestions !== false) :?>
+                <?php 
+                $exambankQuestLoFormat = Compass::getConfig('exambank_question_search_lo');
+                $exambankQuestionUrl = sprintf($exambankQuestLoFormat, $this->lo->auto_id);
+                ?>
+                <?php if($this->loExambankQuestions > 1) :?>
+                <a class="exambankQuestionUrl" target="_blank" href="<?php echo $exambankQuestionUrl;?>">There are <?php echo $this->loExambankQuestions; ?> exambank questions</a> linked to this learning objective.
+                <?php elseif($this->loExambankQuestions == 1) :?>
+                <a class="exambankQuestionUrl" target="_blank" href="<?php echo $exambankQuestionUrl;?>">There is <?php echo $this->loExambankQuestions; ?> exambank question</a> linked to this learning objective.
+                <?php else:?>
+                <a class="exambankQuestionUrl" target="_blank" href="<?php echo $exambankQuestionUrl;?>">There are 0 exambank questions</a> linked to this learning objective.
+                <?php endif;?>
+            <?php else :?>
+                <span class="error">Error !</span> Could not fetch questions linked to this learning objective from exambank.
+            <?php endif;?>
+            
+       </div>
+    </div>
+</div>

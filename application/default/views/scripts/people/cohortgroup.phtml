@@ -1,0 +1,44 @@
+<?php $customSortOrder = '[1,0]'; ?>
+<?php //$highlightSearchTable = true; ?>
+<?php include_once('../application/common/views/_tableSortJsAndCss.phtml'); ?>
+
+<h2>
+    PBL group information for cohort <?php echo $this->cohort;?>
+    <span style="font-size:14px;font-weight:bold; float: right;">
+        <a href="<?php echo $this->url( array( 'module'=>'default', 'controller'=>'people', 'action'=>'cohortgroup'), null, true).'/cohort/'.$this->cohort.'/csv/1';?>">Download CSV</a>
+    </span>
+</h2>
+
+<?php if(!empty($this->rows)):?>
+    <?php 
+    $customNoOfColumns = 7;
+    ?>
+    <table id="sortTable" class="tableSorter">
+        <thead>
+            <tr>
+                <?php foreach($this->rows[0] as $columnName => $columnVal): ?>
+                    <th><?php echo $columnName;?></th>
+                <?php endforeach;?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->rows as $row) :?>
+            <tr>
+                <?php foreach($row as $columnName => $columnVal):?>
+                <td>
+                    <?php if($columnName == 'UID') :?>
+                        <a href="<?php echo $this->url( array( 'module'=>'default', 'controller'=>'people', 'action'=>'view'), null, true).'/uid/'.$columnVal;?>" style="color:#306FDF;">
+                            <?php echo $columnVal;?>
+                        </a>
+                    <?php else :?>
+                        <?php echo $columnVal;?>
+                    <?php endif;?>
+                </td>
+                <?php endforeach;?>
+            </tr>
+            <?php endforeach;?>
+        </tbody>
+        <?php $paginationBg = 'bottom';?> 
+        <?php include('../application/common/views/_footerPagination.phtml'); ?>
+    </table>
+<?php endif;?>

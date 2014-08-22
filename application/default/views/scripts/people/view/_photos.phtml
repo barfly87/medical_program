@@ -1,0 +1,34 @@
+<div class="rhsbox">
+    <h3 class="rhsheading">Photos</h3>
+    <div class="mcontent">
+        <div>
+        	<?php 
+        		$largephotos = $this->largePhotoURLs;
+        		$smallphotos = $this->smallPhotoURLs;
+        		
+        		$defaultphoto = $this->defaultPhoto;
+        	?>
+        	<?php if (!$this->hideOfficialPhoto): ?>
+	        	Official Photo<br>
+	        	<img id="officialphoto" src="<?php echo $this->officialPhoto ?>"/><br>
+	        	Default Photo<br>
+        	<?php endif; ?>
+        	<img id="mainphoto" src="<?php echo $defaultphoto ?>"/><br>
+        	<?php if(count($smallphotos)>1):
+        		foreach($smallphotos as $ind => $smallphoto): ?>
+        	        	<a onclick="javascript:$('#mainphoto').attr('src','<?php echo $largephotos[$ind];?>')"><img src="<?php echo $smallphoto ?>"/></a>
+        	<?php endforeach;
+        		endif; ?>
+			<br>
+			<?php if($this->isMyProfile):?>
+			<span id="photomanagebutton"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'managephotos', 'uid'=>$this->uid),'default',true); ?>">Manage photos</a></span>
+			<span id="photoaddbutton"> | <a name="addbutton" href="#addbutton" onclick="javascript:$('#photoaddform').toggle(); $('#photoaddbutton').toggle();">Upload photo</a></span>
+			<div id="photoaddform" style="display:none"><form method="post" enctype="multipart/form-data" action="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'photoupload', 'uid'=>$this->uid),'default',true); ?>">
+				<input type="file" name="photo">
+				<input type="hidden" name="uid" value="<?php echo $this->escape($this->uid) ?>">
+				<input type="submit" value="Upload">
+			</form></div>
+			<?php endif; ?>
+        </div>
+    </div>
+</div>

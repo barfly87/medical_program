@@ -1,0 +1,29 @@
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/prototype.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/info.js"></script>
+<script type="text/javascript">
+function searchDocument() {
+	window.open(BASE_URL + '/search/index/searchtype/activity', 'myactivitywindow','resizable=1,scrollbars=1,menubar=1,toolbar=0,locationbar=0,left=0,top=0,width=780,height=658',false);
+}
+</script>
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<div style="float:left">
+<h2>Link a teaching activity to learning objective <a href="<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view')); ?>" /><b><?php echo $this->lo->auto_id ?></b></a></h2>
+<?php if ($this->errortxt): ?>
+<?php echo $this->errortxt; ?>
+<?php endif; ?>
+<form method="post" action="" name="addtaform">
+<p>Please complete the following information:</p>
+Teaching Activity ID: <input type="hidden" name="lo_id" value="<?php echo $this->lo->auto_id ?>">
+<input type="text" name="ta_id" size="15" onkeyup="getinfo('tainfo', this.value)" value="<?php echo $this->escape($this->qid); ?>">
+<a href="javascript:searchDocument()"><img src="<?php echo $this->baseUrl;?>/img/search_down.gif" border="0"></a>
+<span style="padding-left: 20px">Strength:</span>
+<select name="ta_strength">
+<?php foreach ($this->strengths as $k => $v) :?>
+  <option value="<?php echo $k ?>"><?php echo $v ?></option>
+<?php endforeach; ?>
+</select>&nbsp;&nbsp;
+<input id="submit" type="submit" value="Add">
+<input id="submit" type="button" onclick="javascript:window.location ='<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view')); ?>';" value="Cancel">
+</form>
+<div id="info" style="margin-top: 15px"></div>
+</div>

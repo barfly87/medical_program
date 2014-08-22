@@ -1,0 +1,178 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/evaluateLectureStats.css" media="all"  />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/form.css" />
+<?php 
+include '../application/common/views/_jquery142UI.phtml';
+$uidsDefaultJSValue = str_replace(PHP_EOL,'\n',EvaluateTaConst::getUidsDefaultValue());
+$eventsExist = Compass::isConnectedToEvents();
+?>
+<script type="text/javascript">
+$(document).ready(function() {
+try {
+    <?php if(EvaluateTaConst::isUserEvaluationAdmin()):?>
+        <?php if($eventsExist) :?>
+            $('input#<?php echo EvaluateTaConst::START_DATE; ?>').datepicker({
+                    dateFormat: 'dd-mm-yy',
+                    onClose: function (dateText, inst) {
+                        var startDate = $.datepicker.parseDate('dd-mm-yy' ,dateText);
+                        startDate.setDate(startDate.getDate() + 13);
+                        $('input#<?php echo EvaluateTaConst::END_DATE;?>').datepicker('setDate', startDate);
+                    }
+            }).click(function() {
+                $(this).val('');
+            });
+            $('input#<?php echo EvaluateTaConst::END_DATE;?>').datepicker({
+                dateFormat: 'dd-mm-yy',
+                //This would check if the end date is not greater than the start date
+                onClose: function(dateText, inst) {
+                    var startDate = $('input#<?php echo EvaluateTaConst::START_DATE; ?>').datepicker('getDate');
+                    if(startDate != null) {
+                        var endDate = $.datepicker.parseDate('dd-mm-yy', dateText);
+                        //endDate and startDate are in the epoch format
+                        if((endDate - startDate) <= 0) {
+                            alert('End date should be greater than the Start date');
+                            startDate.setDate(startDate.getDate() + 13);//Set the endDate to 13+ days to startDate
+                            $('input#end_date').datepicker('setDate', startDate);
+                            $('input#end_date').blur();
+                        }
+                    }
+                }
+            }).click(function() {
+                $(this).val('');
+            });
+        <?php endif;?>
+        
+        $('textarea[id=<?php echo EvaluateTaConst::UIDS;?>]').focus(function() {
+            var uidsVal = jQuery.trim($(this).val());
+            if(uidsVal == '<?php echo $uidsDefaultJSValue;?>') {
+                $(this).val('');
+            }
+            return true;
+        }).blur(function() {
+            var uidsVal = jQuery.trim($(this).val());
+            if(uidsVal == '') {
+                $(this).val('<?php echo $uidsDefaultJSValue;?>');
+            }
+            return true;
+        });
+    <?php endif;?>
+    
+    $('form#lectureCSV').submit(function() {
+        <?php if(EvaluateTaConst::isUserEvaluationAdmin()):?>
+            var uidsObj = $('textarea[id=<?php echo EvaluateTaConst::UIDS;?>]');
+            var uidsVal = jQuery.trim(uidsObj.val());
+            if(uidsVal == '<?php echo $uidsDefaultJSValue;?>') {
+                uidsObj.val('');
+            }
+            <?php if($eventsExist) :?>
+                var startDateObj = $('input#<?php echo EvaluateTaConst::START_DATE; ?>');
+                var startDateVal = jQuery.trim(startDateObj.val());
+                var endDateObj = $('input#<?php echo EvaluateTaConst::END_DATE;?>');
+                var endDateVal = jQuery.trim(endDateObj.val());
+                if(startDateVal != '' || endDateVal != ''){
+                    if(startDateVal == '') {
+                        alert('\'Start Date\' is required when \'End Date\' is present.');
+                        return false;
+                    } else if(endDateVal == '') {
+                        alert('\'End Date\' is required when \'Start Date\' is present');
+                        return false;
+                    }
+                }
+            <?php endif;?>
+        <?php endif;?>
+        var taTypeIdsObj = $('input[name="<?php echo EvaluateTaConst::TA_TYPE_IDS;?>[]"]');
+        var taTypeIdsSelected = false;
+        taTypeIdsObj.each(function() {
+            if($(this).attr('checked')) {
+                taTypeIdsSelected = true;
+            }
+        });
+        if(taTypeIdsSelected == false) {
+            alert('Please select a type of teaching activity and submit again');
+            return false; 
+        }
+        return true;
+    });
+} catch(e) {
+    
+}//End of try catch
+
+});//End of document.ready
+</script>
+
+<h2>Ta Evaluation - Data</h2>
+<?php if(property_exists($this, 'taTypes')) :?>
+    <form method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'evaluate','action'=>'tareportcsv'),null,true);?>" id="lectureCSV">
+    <table id="tableLectureStats">
+        <tbody>
+        
+        <?php //DISPLAY DATES AND UIDS FORM FIELDS ONLY FOR EVALUATION ADMINS?>
+        <?php if(EvaluateTaConst::isUserEvaluationAdmin()) :?>
+            <?php if($eventsExist) :?>
+            <tr>
+                <td id="tdDate">Date</td>
+                <td class="tdDates">
+                    <table style="border-collapse: collapse;">
+                        <tr>
+                            <td class="dateFormat"><i>dd-mm-yyyy</i></td>
+                            <td></td>
+                            <td class="dateFormat"><i>dd-mm-yyyy</i></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->formText(EvaluateTaConst::START_DATE, ''); ?></td>
+                            <td>&nbsp;-&nbsp;</td>
+                            <td><?php echo $this->formText(EvaluateTaConst::END_DATE, ''); ?></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <?php endif;?>
+            <tr>
+                <td style="vertical-align:top;">UIDs</td>
+                <td class="tdUids">
+                <textarea name="<?php echo EvaluateTaConst::UIDS;?>" id="<?php echo EvaluateTaConst::UIDS;?>" rows="10" cols="30"><?php echo EvaluateTaConst::getUidsDefaultValue();?></textarea>
+                </td>
+            </tr>
+        <?php endif;?>  
+        
+        <?php //ALLOW USER TO SELECT TA TYPE IF USER IS COMPASS ADMIN?>          
+            <tr>
+                <td style="vertical-align:top;">
+                    Ta Type:
+                    <img height="20" style="cursor:pointer;" border="0" 
+                            onclick="alert('The ta type checkboxes that are displayed are only the ones for which any feedback is received.');" 
+                                title="Click for more info" src="<?php echo $this->baseUrl;?>/img/info.png">
+                  </td>
+                <td>
+                    <?php $taTypeIds = Compass::getConfig('evaluate.ta.activitytypeids');?>
+                    <?php foreach($this->taTypes as $eval):?>
+                        <input name="<?php echo EvaluateTaConst::TA_TYPE_IDS;?>[]" id="<?php echo EvaluateTaConst::TA_TYPE_IDS;?>-<?php echo $eval['ta_type_id'];?>" type="checkbox" value="<?php echo $eval['ta_type_id'];?>">
+                        <label for="<?php echo EvaluateTaConst::TA_TYPE_IDS;?>-<?php echo $eval['ta_type_id'];?>">
+                            <?php echo $eval['ta_type']?>
+                        </label><br />
+                    <?php endforeach;?>
+                </td>
+            </tr>
+            
+        <?php //SHOW FORM FIELD WHERE USER CAN GET STUDENT IDS IN THE CSV ONLY IF THEY ARE SUPERADMINS?>    
+        <?php if(EvaluateTaConst::isUserEvaluationSuperAdmin()) :?>
+            <tr>
+                <td style="vertical-align:top;">Student UIDs:</td>
+                <td>
+                    <input name="<?php echo EvaluateTaConst::SHOW_STUDENT_UIDS;?>" id="<?php echo EvaluateTaConst::SHOW_STUDENT_UIDS;?>" type="checkbox" value="<?php echo EvaluateTaConst::SHOW_STUDENT_UIDS_YES;?>">
+                    <label for="<?php echo EvaluateTaConst::SHOW_STUDENT_UIDS;?>">
+                        Show student uids
+                    </label>
+                </td>
+            </tr>
+        <?php endif;?>
+            <tr>
+                <td></td>
+                <td><input type="submit" name="submit" id="submit" value="Download CSV" style="margin-top:10px;"/></td>
+            </tr>
+        </tbody>
+    </table>
+    </form>
+<?php else:?>
+    <?php echo 'Could not find any feedbacks that you can download.' ;?>
+<?php endif;?>
+

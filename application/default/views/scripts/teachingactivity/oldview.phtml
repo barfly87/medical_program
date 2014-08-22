@@ -1,0 +1,26 @@
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<link href="<?php echo $this->baseUrl;?>/css/form.css"  media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/lotaview.css"  media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css"     media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.7.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/lotaview.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        showHideRows('#taViewTableNoSorter', 12);
+        $('#relasedates').hide();
+        $('a#showhidelink').click(function() {
+            $('#relasedates').toggle('slow');
+            $('#showhidelink').text($('#showhidelink').text()=='Show dates'?'Hide dates':'Show dates');
+            return false;
+        });
+    });
+</script>
+<?php include_once('../application/common/views/_sort.phtml'); ?>
+<table>
+    <tr>
+        <td class="loViewContainerLeft"><?php include_once('view/view_left.phtml');?></td>
+        <td class="loViewContainerRight"><?php include_once('view/view_right.phtml');?></td>
+    </tr>
+</table>

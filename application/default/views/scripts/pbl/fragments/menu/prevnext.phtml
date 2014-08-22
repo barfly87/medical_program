@@ -1,0 +1,49 @@
+<?php
+//check for if resourcetypeid, typeid, resourceid are not present
+$pblBaseUrl = sprintf('%s/%s/%s',$this->baseUrl,$this->zendController,$this->zendAction);
+$pblDefaultUrl = '/type/lo';
+
+$pblUrlCreated = false;
+$pblPrevUrl = '';
+$pblNextUrl = '';
+
+$requestType = (isset($this->req['type'])) ? $this->req['type'] : '';
+switch($requestType) {
+    case 'ta':
+        if(isset($this->req['activityTypeId'])) {
+            $activityTypeIsSequence = false;
+            if(isset($this->req['reqConfig']['category']) && $this->req['reqConfig']['category'] == 'sequence') {
+                $activityTypeIsSequence = true;
+            }
+            if($activityTypeIsSequence == false) {
+                $pblUrlParts = sprintf('/type/%s/activitytypeid/%s', $requestType, $this->req['activityTypeId']);
+                $pblPrevUrl = $pblUrlParts.'/ref/'.$this->prevPbl;
+                $pblNextUrl = $pblUrlParts.'/ref/'.$this->nextPbl;
+                $pblUrlCreated = true;
+            }
+        }
+    break;
+    case 'pbl':
+        if(isset($this->req['resourceTypeId']) && isset($this->req['category'])){
+            $pblPrevUrl = sprintf('/type/%s/category/%s/typeid/%s/resourcetypeid/%s/ref/%s', $requestType, $this->req['category'], $this->prevPblId, $this->req['resourceTypeId'], $this->prevPbl);
+            $pblNextUrl = sprintf('/type/%s/category/%s/typeid/%s/resourcetypeid/%s/ref/%s', $requestType, $this->req['category'], $this->nextPblId, $this->req['resourceTypeId'], $this->nextPbl);
+            $pblUrlCreated = true;
+        }
+    break;
+}
+//If the type is 'lo' or if $pblUrlParts is empty then
+if(! $pblUrlCreated) {
+    $pblPrevUrl = $pblDefaultUrl.'/ref/'.$this->prevPbl;
+    $pblNextUrl = $pblDefaultUrl.'/ref/'.$this->nextPbl;
+}
+?>
+
+<div id="navlinks">
+    <?php if ($this->prevPbl != null) : ?>
+        <a id="prevlink" href="<?php echo $pblBaseUrl.$pblPrevUrl; ?>">&lt;&nbsp;<?php echo $this->prevPbl ?></a>
+    <?php endif; ?>
+    <a href="<?php echo $this->baseUrl ?>/pbl/top">Top</a>
+    <?php if ($this->nextPbl != null) : ?>
+        <a id="nextlink" href="<?php echo $pblBaseUrl.$pblNextUrl;?>"><?php echo $this->nextPbl ?>&nbsp;&gt;</a>
+    <?php endif; ?>
+</div>

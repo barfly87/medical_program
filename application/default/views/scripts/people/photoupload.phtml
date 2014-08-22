@@ -1,0 +1,9 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<div style="float:left; max-width:750px">
+  <h2>Photo uploaded</h2>
+  <img src="<?php echo $this->photoURL ?>"/><br>
+  <span id="photomanagebutton"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'managephotos', 'uid'=>$this->uid),'default',true); ?>">Manage photos</a></span> | 
+  <span id="returntoView"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$this->uid),'default',true); ?>">Return to My Profile</a></span> 
+  
+  </div>

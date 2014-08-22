@@ -1,0 +1,17 @@
+<?php if(isset($this->resources['content']) && !empty($this->resources['content'])) :?>
+<script type="text/javascript">
+    $(function() {
+        $('#tatextcontent table').css('border', '1px solid #ffe0af').css('border-collapse', 'collapse');
+    });
+</script>
+<div id="tatextcontent">
+    <h2>Content</h2><hr/>
+    <?php $allowEditResource = $this->ta->isUserAllowedToEditResource(); ?>
+    <?php $editResourceUrl = Compass::baseUrl() . '/resource/edit/type/ta/resourceid/%d/id/%d/resourcetypeid/%d' ;?>
+    <?php foreach($this->resources['content'] as $resource) :?>
+            <div style="position: relative">
+                <?php echo $this->action('taview','resource','default',array('mid' => $resource['resource_id'],'id' => $resource['auto_id']));?>
+            </div>
+    <?php endforeach;?>
+</div>
+<?php endif;?>

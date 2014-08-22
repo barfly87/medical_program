@@ -1,0 +1,6 @@
+<div>
+<h2>Thank you!</h2>
+  <?php $taurl = $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'view', 'id'=>$this->ta_id)) ?>
+  <p>The linkage between learning objective <?php echo $this->lo_id?> and teaching activity
+  <a href="<?php echo $this->escape($taurl) ?>"><?php echo $this->ta_id ?></a> has been archived.</p>
+</div>

@@ -1,0 +1,29 @@
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+<div style="float:left; max-width:750px">
+<h1><?php echo $this->escape($this->title);?></h1>
+<h2>The following learinng objective has been added successfully.</h2>
+<?php if(count($this->lo)) : ?>
+<table class="tableNoSorter">
+  <tr><th width="200">Id</th><td><?php echo $this->escape($this->lo->auto_id); ?></td></tr>
+  <tr><th>Learning Objective</th><td><?php echo $this->escape($this->lo->lo); ?></td></tr>
+  <tr><th>Main Discipline</th><td><?php echo $this->escape($this->lo->discipline1Name); ?></td></tr>
+  <tr><th>Curriculum Area 1</th><td><?php echo $this->escape($this->lo->curriculumarea1Name); ?></td></tr>
+  <tr><th>Additional Discipline(s)</th><td><?php echo $this->escape($this->lo->discipline2Name); ?></td></tr>
+  <tr><th>Curriculum Area 2</th><td><?php echo $this->escape($this->lo->curriculumarea2Name); ?></td></tr>
+  <tr><th>Additional Discipline(s)</th><td><?php echo $this->escape($this->lo->discipline3Name); ?></td></tr>
+  <tr><th>Curriculum Area 3</th><td><?php echo $this->escape($this->lo->curriculumarea3Name); ?></td></tr>
+  <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme1); ?></td></tr>
+  <tr><th>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme2); ?></td></tr>
+  <tr><th>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme3); ?></td></tr>
+  <tr><th>Skill</th><td><?php echo $this->escape($this->lo->skill); ?></td></tr>
+  <tr><th>System</th><td><?php echo $this->escape($this->lo->system); ?></td></tr>
+  <tr><th>Achievement</th><td><?php echo $this->escape($this->lo->achievement); ?></td></tr>
+  <tr><th>Review</th><td><?php echo $this->escape($this->lo->review); ?></td></tr>  
+  <tr><th>Keywords</th><td><?php echo $this->escape($this->lo->keywords); ?></td></tr>
+  <tr><th>Assessment Type</th><td><?php echo $this->escape($this->lo->assessment_type); ?></td></tr>
+  <tr><th>JMO</th><td><?php echo $this->escape($this->lo->jmo); ?></td></tr>
+  <tr><th>Graduate Attribute</th><td><?php echo $this->escape($this->lo->gradattrib); ?></td></tr>
+  <tr><th>Notes</th><td><?php echo $this->lo->notes ?></td></tr>
+</table>
+<?php endif; ?>
+</div>

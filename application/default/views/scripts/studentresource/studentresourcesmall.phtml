@@ -1,0 +1,224 @@
+<?php if(!isset($this->resourceloadingscriptoutput)):?>
+<?php include("studentresourceshared.phtml");?>
+<?php if($this->includeJquery != 'no'):?>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.js"> </script>
+<?php endif;?>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.base64.min.js"></script>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.typewatch.js"></script>
+
+<script type="text/javascript">
+var loadResources = new Array();
+
+function showresource(id, mid, mimetype) {
+	if(loadResources[id]==1) {
+		;
+	} else {
+		if(mimetype == 'text/html')
+			$('#'+id).load('<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'download','count'=>'true'),'default',true); ?>/mid/'+mid);
+		else if(mimetype == 'text/xml') {
+			$('#'+id).load('<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'showquestion','count'=>'true'),'default',true); ?>/id/'+id+'/mid/'+mid);
+		} else {
+			imageURL = '<?php echo MediabankResourceConstants::createCompassImageUrl('http://X/|X|X', null, 600, 600);?>';
+			encodedfakeMID='<?php echo base64_encode('http://X/|X|X');?>';
+			imageURL = imageURL.replace(encodedfakeMID,mid);
+			$('#'+id).html('<img src="'+imageURL+'">');
+		}
+		loadResources[id]=1;
+	}
+	$('#'+id).toggle();
+	if($('#toggle'+id).text() == 'Show')
+		$('#toggle'+id).text('Hide');
+	else
+		$('#toggle'+id).text('Show');
+}
+<?php ratingJS($this); ?>
+
+</script>
+<style>
+label.ratinglabel{
+    position:relative;
+    z-index:24; 
+    text-decoration:none}
+
+label.ratinglabel:hover{z-index:25; }
+
+label.ratinglabel span{display: none}
+
+label.ratinglabel:hover span{
+    display:block;
+    position:absolute;
+    top:2em; left:2em; width:25em;
+    border:1px solid #ccc;
+    background-color:#fff; color:#000;
+    text-align: center}
+
+div.lo_resourceholder, div.lo_resources {
+	padding-bottom: 2px;
+}
+div#studentResourcePanel, div#studentResourcePanel div.ratingbox, div#studentResourcePanel div.commentbox {
+	padding-bottom: 2px;
+	}
+div#studentResourcePanel div.ratingbox div, div#studentResourcePanel div.commentbox div {
+	padding-bottom: 2px;
+	}
+.ratingbox, .commentbox {
+	border: 1px solid #f0f0f0;
+	}
+div#talos div.resourceuploadsection {
+	margin-left: 12px;
+	margin-top: 8px;
+	padding-bottom: 0px;
+}
+.studentsummary {
+	overflow:auto;
+	max-height: 160px;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	padding-bottom: 0px;
+}
+.studentsummary #summarycontent {
+	padding-bottom: 0px;
+}
+#summarycontent p {
+	margin: 0px;
+}
+
+.studentsummaryshow {
+	display:none;
+}
+
+</style>
+<?php endif;$this->resourceloadingscriptoutput=1;?>
+<div id="studentResourcePanel">
+<?php if(isset($this->studentsummary)):?>
+		<b>&nbsp;&nbsp;Summary</b> <span id="togglesummary" 
+			style="color: rgb(48, 111, 223); text-decoration:underline; cursor:pointer"
+			onclick="javascript:$('#studentsummary<?php echo $this->studentsummary['auto_id'];?>').toggle();$('#studentsummaryshow<?php echo $this->studentsummary['auto_id'];?>').toggle();$('#studentsummaryhide<?php echo $this->studentsummary['auto_id'];?>').toggle();"
+			><small id="studentsummaryhide<?php echo $this->studentsummary["auto_id"]; ?>" class="studentsummaryhide">Hide</small><small id="studentsummaryshow<?php echo $this->studentsummary["auto_id"]; ?>" class="studentsummaryshow">Show</small></span>
+		<div id="studentsummary<?php echo $this->studentsummary["auto_id"]; ?>" class="studentsummary">	
+		<?php showsummary($this);?>
+		</div>
+<?php endif;?>
+<table>
+<tr>
+<?php 
+$brarray = array("\n" => "<br>\n");
+if(!isset($studentresourceinlinecount))
+	$studentresourceinlinecount=0;
+foreach($this->studentresources as $resource):
+	$studentresourceinlinecount++;
+	if($studentresourceinlinecount >= 4) break;
+?>
+
+	<td class="studentresourcemetadatacell">
+		<?php if($resource['mimetype'] == 'text/html' || !strncmp($resource['mimetype'],'image/',6)):?>
+			<a id="imgtoggleresourcecontent<?php echo $resource['auto_id'];?>" href="javascript:showresource('resourcecontent<?php echo $resource['auto_id'];?>','<?php echo base64_encode($resource['mid']);?>','<?php echo $resource['mimetype'];?>')">
+		<?php elseif($resource['mimetype'] == 'text/x-url' || $resource['mimetype'] == 'text/url'):?>
+			<a id="resourceurlim<?php echo $studentresourceinlinecount; ?>" 
+				name="resourceurlim<?php echo $studentresourceinlinecount; ?>" 
+				zhref="#resourceurlim<?php echo $studentresourceinlinecount; ?>" 
+				style="color: rgb(48, 111, 223); text-decoration:underline; cursor:pointer"
+				onMouseOver="window.status='<?php echo $resource['url'];?>';return true;"
+				onMouseOut="window.status='';return true;"
+				onclick="$.ajax({
+					url:'<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'extlinklog'),'default',true); ?>/url/<?php echo $resource['url'];?>',
+					complete: function() { document.location='<?php echo $resource['url'];?>'; }
+					});" 
+				title="<?php echo $resource['url'];?>">
+			
+		<?php elseif($resource['mimetype'] == 'text/xml'):?>
+			<a id="imgtoggleresourcecontent<?php echo $studentresourceinlinecount;?>" href="javascript:showresource('resourcecontent<?php echo $resource['auto_id'];;?>','<?php echo base64_encode($resource['mid']);?>','<?php echo $resource['mimetype'];?>')">
+		<?php else:?>
+			<a name="imgresource<?php echo $resource['auto_id']; ?>" href="<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'download', 'mid'=>base64_encode($resource['mid']),'count'=>'true'),'default',true); ?>" title="Download <?php echo $resource['mimetype'];?> file">
+		<?php endif;?>
+		
+			<img src="<?php if($resource['mimetype']=="text/html" || $resource['mimetype']=="text/plain")
+					echo MediabankResourceConstants::createCompassImageUrl($resource['mid'], null, 120, 120, 'crop');
+				else if($resource['mimetype']=="text/xml")
+					echo "/compass/img/question_block.png";
+				else 
+					echo MediabankResourceConstants::createCompassImageUrl($resource['mid'], null, 120, 120);?>">	<br/>
+		</a>
+	
+		<?php if(strlen(trim($resource['description']))>0):?>
+			<?php echo $resource['description'];?><br>
+		<?php endif;?>
+		<span class="studentresourcemetadata"><?php if($resource['private']=='true') echo 'Private ';?><?php echo $resource['category'];?>, from <a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$resource['uid']),'default',true); ?>"><?php echo $resource['cn']; ?></a> 
+		<?php if($this->showstudentresourceloid):?>
+		for LO <a href="<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view', 'id'=>$resource['currentloid']),'default',true); ?>"><?php echo $resource['currentloid'];?></a>
+		<?php endif;?>
+		- <?php echo date("j/M/Y",$resource['datecreated']); ?>
+		-
+		<?php if($resource['mimetype'] == 'text/html' || $resource['mimetype'] == 'text/xml' ||!strncmp($resource['mimetype'],'image/',6)):?>
+		<a id="toggleresourcecontent<?php echo $resource['auto_id'];?>" href="javascript:showresource('resourcecontent<?php echo $resource['auto_id'];?>','<?php echo base64_encode($resource['mid']);?>','<?php echo $resource['mimetype'];?>')">Show</a> | 
+		<?php endif;?>
+		<?php if($resource['mimetype'] == 'text/x-url' || $resource['mimetype'] == 'text/url'):?>
+			<a id="resourceurlim<?php echo $studentresourceinlinecount; ?>" 
+				name="resourceurlim<?php echo $studentresourceinlinecount; ?>" 
+				zhref="#resourceurlim<?php echo $studentresourceinlinecount; ?>" 
+				style="color: rgb(48, 111, 223); text-decoration:underline; cursor:pointer"
+				onMouseOver="window.status='<?php echo $resource['url'];?>';return true;"
+				onMouseOut="window.status='';return true;"
+				onclick="$.ajax({
+					url:'<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'extlinklog'),'default',true); ?>/url/<?php echo $resource['url'];?>',
+					complete: function() { document.location='<?php echo $resource['url'];?>'; }
+					});" 
+				title="<?php echo $resource['url'];?>">
+			Go to website</a>
+		<?php elseif($resource['mimetype'] != 'text/xml'): ?>		
+		<a name="resource<?php echo $resource['auto_id']; ?>" href="<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'download', 'mid'=>base64_encode($resource['mid']),'count'=>'true'),'default',true); ?>">Download</a></span>
+		<?php endif;?>
+		<div width="200">
+			<div style="float:left; width:35;padding-right: 5px;"><?php ratingthumbs($resource['auto_id'], $resource,$this);?></div>
+			<div style="float:left;"><span class="studentresourcecontrols">
+				<span class="studentresourcemetadata"><span id="studentrating<?php echo $resource['auto_id']; ?>">Rating: <?php if(isset($resource['count'])):?>
+		 		<?php echo $resource['score']; ?> 
+		 		<?php if(count($resource['ratingdescription'])>0): ?><small>(<?php echo implode(', ',$resource['ratingdescription']); ?>);</small><?php endif;?>
+		 		<?php else:?> not yet rated;<?php endif;?> </span> 
+
+				<br><span class="studentresourcemetadata">Downloaded <?php echo $resource['downloadcount'];?> times</span>
+				<span 
+					id="togglecomments<?php echo $resource['auto_id'];?>" 
+					style="color: rgb(48, 111, 223); text-decoration:underline; cursor:pointer"
+					onclick="javascript:$('#comments<?php echo $resource['auto_id'];?>').toggle();"
+					>Comments</a>
+				</span>
+				
+				</div>
+		</div>
+		<?php 
+			$this->widthhint=30;
+			ratingbox($resource['auto_id'], $resource,$this);
+		?>
+		</form>
+		<div id="resourcecontent<?php echo $resource['auto_id'];?>" style="display:none;" class="studentresourceinlinedisplay"></div>
+		<div id="comments<?php echo $resource['auto_id'];?>" class="commentbox" style="display:none;">
+		<?php 
+		//print_r($resource['comments']);
+		if(isset($resource['comments'])):
+			foreach($resource['comments'] as $comm):
+				if(strlen($comm['comment'])>0):?>
+				<?php echo strtr(trim($comm['comment']), $brarray);?> - <a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$comm['uid']),'default',true); ?>">by</a><br>
+			<?php endif; 
+			endforeach;
+		endif;?>
+		</div>
+	</td>
+<?php endforeach; ?>
+</tr>
+</table>
+<?php if($this->offertoshowmore):?>
+<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$this->person['uid'], 'resourcecount'=>$this->offertoshownum),'default',true); ?>#resource<?php echo $resource['auto_id']; ?>">Show <?php echo $this->offertoshownum; ?> recent resources</a>
+<?php endif;?>
+<div class="resourceuploadsection">
+<?php
+	$loid = $this->loid;
+	if(!isset($this->loid)) {
+		foreach($this->studentresources as $resource):
+			$loid = $resource['loid']; //pass to upload form
+			break;
+		endforeach;
+	} 
+	include('../application/default/views/scripts/studentresource/uploadresource.phtml');?>
+</div>
+</div>

@@ -1,0 +1,135 @@
+<script type="text/javascript">
+	$(function() {
+		$("#btindexsingle").bind('click', function() {
+			$('#indexresult').text("Loading...");
+			$('#indexresult').load('<?php echo $this->baseUrl;?>/admin/reindexdocument', $('#indexsingle').serializeArray());
+		});
+	});
+</script>
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<?php 
+$indexerStatusLink      = $this->url(array('module'=>'default','controller'=>'admin','action'=>'indexerstatus'),null,true);
+$optimizeIndexerLink    = $this->url(array('module'=>'default','controller'=>'admin','action'=>'optimizeluceneindex'),null,true);
+$smsLink                = $this->url(array('module'=>'default','controller'=>'sms','action'=>'index'),null,true);
+$meshCrawlerLink        = $this->url(array('module'=>'default','controller'=>'admin','action'=>'meshcrawler'),null,true);
+$blockHandbookLink      = $this->url(array('module'=>'default','controller'=>'admin','action'=>'blockhandbook'),null,true);
+$blockChairLink         = $this->url(array('module'=>'default','controller'=>'admin','action'=>'viewchair'),null,true);
+$stageCoordinatorLink   = $this->url(array('module'=>'default','controller'=>'admin','action'=>'viewcoordinator'),null,true);
+$pblCoordinatorLink     = $this->url(array('module'=>'default','controller'=>'admin','action'=>'viewpblcoordinator'),null,true);
+$domainAdminLink		= $this->url(array('module'=>'default','controller'=>'admin','action'=>'viewdomainadmin'),null,true);
+$staffAdminLink         = $this->url(array('module'=>'default','controller'=>'admin','action'=>'viewstaff'),null,true);
+$loChartLink            = $this->url(array('module'=>'default','controller'=>'chart','action'=>'pielo'),null,true);
+$loVsDiscLink           = $this->url(array('module'=>'default','controller'=>'chart','action'=>'barlodisc'),null,true);
+$ldapCacheLink          = $this->url(array('module'=>'default','controller'=>'admin','action'=>'clearldapcache'),null,true);
+$lectopiaCacheLink      = $this->url(array('module'=>'default','controller'=>'admin','action'=>'clearlectopiacache'),null,true);
+$zendCacheLink          = $this->url(array('module'=>'default','controller'=>'admin','action'=>'clearzendcache'),null,true);
+$echo360CacheLink       = $this->url(array('module'=>'default','controller'=>'admin','action'=>'clearecho360cache'),null,true);
+$metadataCacheLink       = $this->url(array('module'=>'default','controller'=>'admin','action'=>'clearmetadatacache'),null,true);
+$addLooseResourceLink   = $this->url(array('module'=>'default','controller'=>'resource','action'=>'loose'),null,true).'/upload';
+$healthCheckLink        = $this->url(array('module'=>'default','controller'=>'admin','action'=>'healthcheck'),null,true);
+$separator              = '<p class="dottedP"></p>';
+?>
+<style type="text/css">
+h3 {font-weight: bold; font-size: 100%; font-style:italic;}
+</style>
+<div style="width:90%; padding-top:20px;">
+
+<h3>Lucene Indexer</h3>
+<p>Click <a href="<?php echo $indexerStatusLink; ?>">here</a> to restart the indexer. Please note that depending on the 
+number of documents currently in Compass, the indexing process might take up to 20 minutes to finish.</p>
+
+<form id="indexsingle">
+  Index single or multiple document(s):
+  <input type="radio" name="type" checked="checked" value="ta">Teaching Activity
+  <input type="radio" name="type" value="lo">Learning Objective
+  <input type="text" name="id" id="type_id" size="10"/>
+  <input type="button" class="submitButton" id="btindexsingle" value="go" />e.g 1200 or 1200,1201
+  <span id="indexresult"></span>
+</form>
+<p>
+<a href="<?php echo $optimizeIndexerLink;?>">Optimize Lucene Index</a>
+</p>
+<?php echo $separator;?>
+
+<h3>SMS Tool</h3>
+<p>This tool allows you to <a href="<?php echo $smsLink; ?>">send SMS</a> to different LDAP groups.</p>
+
+<?php echo $separator;?>
+
+<h3>Mesh Crawler</h3>
+<p>Mesh crawler can be used to automatically generate keywords for learning objectives. Click <a href="<?php echo  $meshCrawlerLink; ?>">here</a> to invoke the crawler.</p>
+
+<?php echo $separator;?>
+
+<h3>User Management</h3>
+<p>Add or Remove <a href="<?php echo $domainAdminLink; ?>">Domain Administrator</a>, <a href="<?php echo $stageCoordinatorLink; ?>">Stage Coordinator</a>, <a href="<?php echo $blockChairLink; ?>">Block Chair</a>, <a href="<?php echo $pblCoordinatorLink; ?>">Case Coordinator</a> and Discipline Head.</p>
+<p><a href="<?php echo $staffAdminLink; ?>">Manage Staff Lists</a> for people pages.</p>
+
+<?php echo $separator;?>
+<h3>Block Handbooks</h3>
+<ul>
+<?php
+	foreach ($this->allblocks as $b_id => $b_name) {
+		if (!empty($b_name)) {
+			echo "<li><a href=\"$blockHandbookLink/blockid/$b_id\">$b_name</a></li>";
+		}
+	} 
+?>
+</ul>
+
+<?php echo $separator;?>
+
+<h3>Charts/Statistics</h3>
+<ul>
+  <li><a href="<?php echo $loChartLink; ?>">Learning objective</a></li>
+  <li><a href="<?php echo $loVsDiscLink; ?>">Learning objective Vs. Discipline</a></li>
+</ul>
+
+<?php echo $separator;?>
+
+<h3>Clear Cache</h3>
+<ul>
+    <li><a href="<?php echo $ldapCacheLink; ?>"><i>Ldap Cache</i></a></li>
+    <li><a href="<?php echo $lectopiaCacheLink; ?>"><i>Lectopia Cache</i></a></li>
+    <li><a href="<?php echo $zendCacheLink; ?>"><i>Zend Cache</i></a></li>
+    <li><a href="<?php echo $echo360CacheLink; ?>"><i>Echo360 Cache</i></a></li>
+    <li><a href="<?php echo $metadataCacheLink; ?>"><i>Mediabank metadata Cache</i></a></li>
+</ul>    
+
+<?php echo $separator;?>
+<h3>Loose Resource</h3>
+<ul>
+    <li><a href="<?php echo $addLooseResourceLink;?>">Add Loose Resource</a></li>
+</ul>
+
+<?php echo $separator;?>
+
+<?php include_once('index/evaluate.phtml');?>
+
+<?php echo $separator;?>
+
+<?php include_once('index/cms.phtml');?>
+
+<?php echo $separator;?>
+
+<?php include_once('index/medvid.phtml');?>
+
+<?php echo $separator;?>
+
+<?php include_once('index/learningtopic.phtml');?>
+
+<?php echo $separator;?>
+
+<?php include_once('index/lectopia.phtml');?>
+
+<?php echo $separator;?>
+
+<?php include_once('index/reindexmediabankcollection.phtml');?>
+
+<?php echo $separator;?>
+<?php include_once('index/manageLists.phtml');?>
+
+<?php echo $separator;?>
+<h3>Compass Health Check</h3>
+<a href="<?php echo $healthCheckLink;?>" target="_blank">Click to run health check</a>
+</div>

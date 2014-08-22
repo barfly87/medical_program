@@ -1,0 +1,22 @@
+<div id="linkContainer">
+    <div class="subHeadings">
+    	History
+    </div>
+    <div id="linkContent">
+<?php if (count($this->revisions)):?>
+    <table class="tableNoSorter">
+        <tr><th>&nbsp;</th><th>Version</th><th>Created by</th><th>Date</th></tr>
+        <?php foreach ($this->revisions as $revision) : ?>
+        <tr align="center">
+          <td><?php echo ($this->lo->version == $revision->version) ? ">>" : "&nbsp;"?></td>
+          <td><a href="<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=>$revision->auto_id, 'latest'=>'f'),null,true);?>">
+          <?php echo $revision->version; ?></a></td>
+          <td><?php echo Compass::userInfoHtml($this->escape($revision->created_by)); ?></td>
+          <td><?php echo $this->displayDate($revision->date_created); ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+<?php else: ?>
+    <p>None</p>
+<?php endif; ?>
+</div>

@@ -1,0 +1,16 @@
+<?php if(count($this->results['pbl']['found']) > 0 ):?>
+    <h2>PBL found : <?php echo count($this->results['pbl']['found'])?></h2>
+    <ul>
+    <?php foreach($this->results['pbl']['found'] as $result) :?>
+        <li><?php echo $result; ?></li> 
+    <?php endforeach;?>
+    </ul>
+<?php endif;?>
+<?php if(count($this->results['pbl']['notFound']) > 0 ):?>
+    <h2>PBL not found : <?php echo count($this->results['pbl']['notFound'])?></h2>
+    <ul>
+    <?php foreach($this->results['pbl']['notFound'] as $result) :?>
+        <li><?php echo $result; ?></li>    
+    <?php endforeach;?>
+    </ul>
+<?php endif;?>

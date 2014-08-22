@@ -1,0 +1,61 @@
+<style type="text/css">
+  a.ltheading:hover {text-decoration: inherit; color: inherit; background: inherit} 
+  .ltheading {font-weight:bold; text-decoration: none; color: black}
+</style>
+<?php if ($this->learningtopics === NULL): ?>
+  <h2>Essential readings handbook is not released yet.</h2>
+<?php else: ?>
+  <h2 align="center">ESSENTIAL READINGS - <?php echo strtoupper(Zend_Registry::get('Zend_Translate')->_('Block'))?> <?php echo $this->block?></h2>
+  <hr />
+  <h3><?php echo $this->blockname ?></h3>
+  <ul>
+  <?php
+    $i = 0;
+    foreach ($this->learningtopics as $key => $learningtopic_arr) {
+		echo "<li>", $key, ' - ',$learningtopic_arr[0]->pbl, "</li>";
+		echo "<ol>";
+		foreach ($learningtopic_arr as $learningtopic) {
+			echo "<li><a href=\"#section-$i\">{$learningtopic->name}</a></li>";
+			$i++;
+		}
+    	echo "</ol>";
+    }
+  ?>
+  </ul>
+
+  
+  <?php
+    $i = 0;
+    foreach ($this->learningtopics as $learningtopic_arr) {
+    	foreach ($learningtopic_arr as $learningtopic) {
+	        echo "<p style=\"page-break-before: always;\">ESSENTIAL READINGS - ";
+	        echo "<a name=\"section-$i\" class=\"ltheading\">{$learningtopic->name}</a></p>\n";
+	        echo "<hr />\n";
+	        echo '<div style="padding: 5px">';
+	
+	        $contents = $learningtopic->getResourcesContentByType(8);
+	        if(!empty($contents)) {
+	            foreach($contents as $content) {
+	                echo $this->partial('resource/_resourceTaPartial.phtml', array('row' => $content));
+	            }
+	        }
+	        $references = $learningtopic->getResourcesContentByType(9);
+	        if(!empty($references)) {
+	            foreach($references as $reference) {
+	                echo $this->partial('resource/_resourceTaPartial.phtml', array('row' => $reference));
+	            }
+	        }
+	        echo '</div>';
+	        $p_teachers = $learningtopic->principal_teacher_uid_arr;
+	        if (count($p_teachers) > 0) {
+	            echo "<hr />\n";
+	            foreach ($p_teachers as $teacher) {
+	                echo "<p><b>Author:</b> ".UserService::getUidFullNameAndOrg($teacher)."</p>";
+	            }
+	        }
+	        $i++;
+    	}
+    }
+  ?>
+  
+<?php endif; ?>

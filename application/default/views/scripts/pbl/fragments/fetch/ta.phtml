@@ -1,0 +1,7 @@
+
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css"           media="screen" rel="stylesheet" type="text/css" />
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<?php //$lectureId, $navigate defined in pbl/lectures.phtml ?>
+<div class="pblSingleElem">
+    <?php echo $this->action('view','teachingactivity','default',array('id'=>$taId, 'layout'=>'pblview', 'pblTaTypePrev'=>$navigate['prev'], 'pblTaTypeNext'=>$navigate['next']));?>
+</div>

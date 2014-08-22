@@ -1,0 +1,53 @@
+<script src="<?php echo $this->baseUrl;?>/js/lotalinkage_history.js" type="text/javascript"></script>
+<link href="<?php echo $this->baseUrl;?>/css/form.css" rel="stylesheet" type="text/css" media="all" />
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<?php $customSortOrder = '[0,1]';?>
+<?php include_once('../application/common/views/_tableSortJsAndCss.phtml'); ?>
+<?php 
+    $controller = 'learningobjective';
+    if($this->type == 'ta') {
+        $controller = 'teachingactivity';                 
+    }
+    $href = $this->url(array('module'=>'default','controller'=> $controller, 'action'=>'view', 'id'=>$this->id),null,true);
+?>
+
+<div id='history'>
+    <?php if(isset($this->rows) && count($this->rows) > 0) :?>
+        <h2>History for <?php echo $this->typeMessage;?> : <a href="<?php echo $href;?>"/><b><?php echo $this->id; ?></b></a></h2>
+        <?php $customNoOfColumns = 6;?>
+        <table class="tableSorter">
+            <?php $paginationBg = 'top';?>
+            <?php include('../application/common/views/_footerPagination.phtml'); ?>
+        </table>
+        <table id="sortTable" class="tableSorter">
+            <thead>
+                <tr>
+                    <th><?php echo $this->typeColumnName; ?> ID</th>
+                    <th>Action</th>
+                    <th>Submitted By</th>
+                    <th>Date Submitted</th>
+                    <th>Approved By</th>
+                    <th>Date Approved</th>
+                </tr> 
+            </thead>
+            <tbody>
+            <?php foreach ($this->rows as $row) : ?>     
+            <tr>
+            	<td><?php echo $row[$this->type_id]; ?></td>
+            	<td><?php echo ($row->status == Status::$RELEASED) ? 'Addition' : 'Deletion' ?></td>
+            	<td><?php echo Compass::userInfoHtml($row->created_by); ?></td>
+                <td><?php echo $row->date_created; ?></td>
+                <td><?php echo Compass::userInfoHtml($row->approved_by); ?></td>
+                <td><?php echo $row->date_approved; ?></td>
+            </tr>
+            <?php endforeach; ?>   
+            </tdbody>
+            <?php $paginationBg = 'bottom';?>
+            <?php include('../application/common/views/_footerPagination.phtml'); ?>
+        </table>
+        <p><b><a href="<?php echo $href;?>">Return</a></b></p>
+    <?php else :?>
+        <h3 style="color:red;">No history found for <?php echo $this->typeMessage; ?> : <a style="color:red;" href="<?php echo $href;?>"/><b><?php echo $this->id; ?></b></a></h3>
+        <p><b><a href="<?php echo $href;?>">Return</a></b></p>
+    <?php endif;?>        
+</div>

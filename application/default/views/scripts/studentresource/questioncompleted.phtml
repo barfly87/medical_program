@@ -1,0 +1,41 @@
+Your average score: <?php echo sprintf("%d",$this->avg * 100); ?>% (<?php echo $this->numcorrect;?> correct from <?php echo $this->totalresponses; ?> responses)
+<script type="text/javascript">
+var data = {
+  "elements": [
+    {
+      "type": "bar",
+      "fill": "#0066CC",
+      "text": "Average Score",
+      "font-size": 12,
+      "values": [
+      <?php 
+      	foreach($this->byweekresults as $week) {
+      		$avgs[] = sprintf('{"top": %s, "tip": "%d%% over %d question attempts"}',$week['totalresponses']==0?"null":sprintf("%d",$week['avg']*100), $week['avg']*100, $week['totalresponses']);
+		}
+		echo implode(',',$avgs); ?>
+      ]
+}
+  ],
+  "title": {
+    "text": "Weekly average scores"
+  },
+  "x_axis": {
+    "labels": {
+      "rotate": 45,
+      "labels": [
+        <?php foreach($this->byweekresults as $week) $weekstarts[] = '"'.date("Y-m-d",$week['weekstart']).'"';echo implode(',',$weekstarts);; ?>
+      ]
+    }
+  },
+  "y_axis": {
+    "min": 0,
+    "max": 100,
+    "steps": 10
+  }
+};
+
+//$("#my_chart_<?php echo $this->midencoded; ?>").html("<h2>ping!</h2>");
+swfobject.embedSWF("/compass/open-flash-chart.swf", "my_chart_<?php echo $this->midencoded; ?>", "400", "300", "9.0.0");
+$("#my_chart_<?php echo $this->midencoded; ?>").show();
+
+</script>

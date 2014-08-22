@@ -1,0 +1,38 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<div id="tacontainer">
+  <div id="tatop">
+	<h2><?php if(isset($this->group['description']) && strlen($this->group['description'][0])>0)
+			echo $this->groupname.' - '.$this->group['description'][0];
+		else
+			echo $this->groupname; ?>
+		<?php if (!empty($this->roomname)): ?>
+			<span style="position:absolute; right:0.5em;">Room: <?php echo $this->escape($this->roomname); ?></span>
+		<?php endif; ?>
+</h2>	</div>
+  <div id="tametadata">
+	<table>
+	<?php foreach($this->members as $member):
+		$uid = $member['uid'][0];
+		$cn = $member['cn'][0];
+		if($cn == strtoupper($cn))
+			$cn = ucwords(strtolower($cn));
+		?>
+			<tr>
+				<td><a
+					href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$uid),'default',true); ?>">
+				<img
+					src="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'viewdefaultphoto', 'uid'=>$uid, 'size'=>120),'default',true); ?>">
+				</a></td>
+				<td><a
+					href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$uid),'default',true); ?>">
+					<?php echo $cn;?> </a></td>
+			</tr>
+	<?php endforeach; ?>
+	</table>
+	</div>
+  <div id="tacontent">
+  		<h3>Recently uploaded resources</h3>
+		<?php echo $this->render('studentresource/studentresourcelarge.phtml')?>
+	</div>
+</div>

@@ -1,0 +1,35 @@
+#header, #menu, #searchForm, .pagerOne, #footer, #resultPrintContainer, #scrn-read {
+    display: none;
+}
+#pad {
+    margin: 0px;
+    padding:0px;
+}
+table {
+    border-collapse: collapse;
+}
+
+#sortTable thead tr th{
+    border: 1px solid #8F8F8F;
+    font-size: 90%;
+}
+
+#sortTable tbody tr td{
+    border: 1px solid #8F8F8F;
+    font-size: 90%;
+}
+
+a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+    color: black;
+}
+
+.tableInner {
+	margin: 1px;
+}
+
+.tableInnerTh {
+    font-weight: bold !important;
+    border: 1px solid #BFBFBF;
+    background-color: #EFEFEF;
+}

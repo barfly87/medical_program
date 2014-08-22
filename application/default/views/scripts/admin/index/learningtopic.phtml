@@ -1,0 +1,14 @@
+<?php 
+$learningtopicLinkage  = $this->url(array('module'=>'default','controller'=>'admin','action'=>'learningtopicconnector'),null,true);
+?>
+
+<script type="text/javascript">
+function confirmLearningTopicAction() {
+    var confirmTxt = 'Are you sure you want to link essential readings from mediabank to compass';
+    var answer = confirm(confirmTxt);
+    return answer;
+}
+</script>
+
+<h3>Link essential readings from Mediabank to compass</h3>
+<a href="<?php echo $learningtopicLinkage; ?>" onclick="javascript: return confirmLearningTopicAction();">Click here</a>

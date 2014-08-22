@@ -1,0 +1,89 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+
+    	$('#TB_configuredSearchSubmit').click(function(){
+            $('form[@name=customSearchForm] :input[@type=checkbox]').each(function(){
+                if(this.disabled) {
+                    this.disabled = false;
+                }
+            });  
+            return true;
+    	});
+        
+        $('#TB_Reset').click(function(){
+        	$('form[@name=customSearchForm] :input[@type=checkbox]').each(function(){
+                if(!this.disabled) {
+                	this.checked = false;
+                }
+            });  
+        });
+        
+        <?php foreach($this->searchConfigure as $key => $value) :?>
+            var <?php echo $key;?>SystemDefaults        = new Array ('<?php echo implode("','", $value['systemDefaults'])?>');
+            var <?php echo $key;?>ConfiguredColumns     = new Array ('<?php echo implode("','", $value['configuredColumns'])?>');
+            var <?php echo $key;?>Title                 = '<?php echo $value['title'];?>';
+            var <?php echo $key;?>Heading               = '<?php echo $value['heading'];?>';
+            var <?php echo $key;?>MandatoryColumns      = new Array('<?php echo implode("','",$value['mandatoryColumns'])?>');
+        <?php endforeach;?>
+        
+        <?php if(isset($this->searchConfigure['lo']) && isset($this->searchConfigure['ta'])): ?>
+            <?php $context = (strlen($this->fp->context) > 0) ? $this->fp->context : 'lo' ;?>
+            var context = '<?php echo $context;?>';
+            
+            $(':input[@name=context]').click(function(){
+                var contextClickValue = $(this).val();
+                if(contextClickValue == 'lo') {
+                    processSearchType(contextClickValue,loTitle,loHeading,loMandatoryColumns,loConfiguredColumns,loSystemDefaults);
+                } else if (contextClickValue == 'ta') {
+                	processSearchType(contextClickValue,taTitle,taHeading,taMandatoryColumns,taConfiguredColumns,taSystemDefaults);
+                }
+            });
+            $('#printContainer a.searchConfigure').attr('title',<?php echo $context;?>Title);
+            processSearchType(context,<?php echo $context;?>Title,<?php echo $context;?>Heading,<?php echo $context;?>MandatoryColumns,<?php echo $context;?>ConfiguredColumns,<?php echo $context;?>SystemDefaults);
+        <?php else :?>
+            <?php foreach($this->searchConfigure as $key=>$value) :?>
+                $('#printContainer a.searchConfigure').attr('title',<?php echo $key;?>Title);
+                processSearchType('<?php echo $key;?>',<?php echo $key;?>Title,<?php echo $key;?>Heading,<?php echo $key;?>MandatoryColumns,<?php echo $key;?>ConfiguredColumns,<?php echo $key;?>SystemDefaults);
+                <?php break;?>
+            <?php endforeach;?>              
+        <?php endif;?>
+        
+    });
+
+    function processSearchType(context,title,heading,mandatoryColumns,configcol,sysdef){
+        $('#printContainer a.searchConfigure').attr('title',title);
+        $("#configureSearchType").val(context);
+        tickCheckBoxes(configcol, context,mandatoryColumns);
+        $('#TB_defaultSearch').click(function(){
+            tickCheckBoxes(sysdef, context,mandatoryColumns);
+        });
+        $('#TB_configuredSearch').click(function(){
+            tickCheckBoxes(configcol, context,mandatoryColumns);
+        });
+    }
+    
+    function tickCheckBoxes(columns, context,mandatoryColumns){ 
+        $('form[@name=customSearchForm] :input[@type=checkbox]').each(function(){
+            var chk = 0;
+            var val = $(this).val();
+            this.disabled = false;
+            for(var i=0; i < columns.length; i++) {
+                if( val == columns[i]) {
+                    chk = 1;
+                }
+            }
+            if(chk == 1) {
+                this.checked = true;
+            } else {
+                this.checked = false;
+            }
+            for(var x=0; x < mandatoryColumns.length ; x++) {
+                if(val == mandatoryColumns[x]) {
+                    this.checked = true;
+                    this.disabled = true;
+                }
+            }
+        });  
+    }
+</script>
+

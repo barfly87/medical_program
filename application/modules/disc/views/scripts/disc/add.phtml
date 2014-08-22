@@ -1,0 +1,53 @@
+<?php include_once('_DisciplineJsAndCss.phtml'); ?>
+<?php include_once('../application/common/views/_listOfDisciplinesJsAndCss.phtml'); ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+    	listOfDisciplines(new Array('discipline'));
+    });
+</script>
+
+
+<h2>Enter Discipline details:</h2>
+<div class="discipline_add_red">
+    <?php if(isset($this->errors) && count($this->errors) > 0) :?>
+    <ul>
+        <?php foreach ($this->errors as $error) :?> 
+            <li><?php echo $error; ?></li>
+        <?php endforeach; ?>   
+    </ul>
+    <?php endif;?>
+</div>
+<form method="post" action="" id="addForm">
+<table>
+  <tr>
+    <td>Name:<span id="discipline_add_name_required" class="discipline_add_red">    
+                <?php if(isset($this->errors['nameEmpty']) || isset($this->errors['nameExist'])):?> * <?php endif;?>
+            </span></td>
+    <td><?php echo $this->formText('name', $this->name, array('size'=>60)) ?></td>
+  </tr>
+  <tr>
+    <td>Synonym of discipline:</td>
+    <td><?php echo $this->formText('synonym', $this->synonym,  array('size'=>60)) ?></td>
+  </tr>
+  <tr>
+    <td>Type:<span id="discipline_add_type_required" class="discipline_add_red">
+                <?php if(isset($this->errors['typeEmpty'])):?> * <?php endif;?>
+             </span></td>
+    <td>
+        <?php foreach ($this->types as $type => $type_value) :?>
+            <?php echo $this->formCheckbox('types[]', $type_value, array('id' => $type_value)) . '<label for="'.$type_value.'">' . $type . '</label>'; ?>
+        <?php endforeach; ?>
+    </td>
+  </tr>
+  <tr>
+    <td>Discipline:</td>
+    <td><?php echo $this->formSelect('discipline', $this->values,  array('style '=> ''), $this->disciplines) ?></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>
+      <?php echo $this->formSubmit('submit', 'Submit', array('accesskey'=>'S')) ?>
+    </td>
+  </tr>
+</table>
+</form>

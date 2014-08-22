@@ -1,0 +1,104 @@
+<style type="text/css">
+
+tr.header td {font-style: italic;}
+tr.special td {border-top: 1px solid #ff0000; }
+span.bname {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 4px 6px 5px 20px;
+}
+span.biglabel {
+  display: block;
+  font-size: 20px;
+  float: left;
+}
+td.pname {
+  border-left: 1px solid #ff0000;
+  padding: 0px 5px;
+  font-size: 95%;
+}
+
+td.pnum {
+  border-left: 1px solid #ff0000;
+  padding: 0px 5px;
+}
+
+td a {text-decoration: none ;}
+
+</style>
+
+
+<script type="text/javascript">
+  $(function() {
+	  $('td.pnum, td.pname').hover(function() {
+		      $('td.pnum, td.pname', $(this).parent()).css('background-color', '#ffeccf');
+		  }, function() {
+			  $('td.pnum, td.pname', $(this).parent()).css('background-color', '#FFFFFF');
+		  })
+  });
+</script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/ui/ui.core.1.6.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/ui/effects.core.1.6.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/ui/ui.sortable.1.6.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#pbltop tbody.content9").sortable({
+			stop: function(event, ui) { var order = $("#pbltop tbody.content9").sortable("toArray");
+			                        	$.post('/compass/admin/reorder', {'b9order[]' : order},
+					                        	function(data){
+				                        	 		if (data=='true') { 
+					                        	 		alert('Reordering is done for block 9.');
+														location.reload(true);;
+				                        	 		} 
+												});
+   			                          }
+        });
+		$("#pbltop tbody.content9").disableSelection();
+		
+
+		$("#pbltop tbody.content8").sortable({
+			stop: function(event, ui) { var test8 = $("#pbltop tbody.content8").sortable("serialize");
+										alert(test8)}
+		});
+		$("#pbltop tbody.content8").disableSelection();
+		
+	});
+</script>
+&nbsp;
+<?php echo $test; ?>
+<table id="pbltop" cellspacing="0" cellpadding="0" border="0">
+
+  <tr class="header">
+    <td>Block</td>
+    <td align="center">#</td>
+    <td style="padding-left: 2px;">Common name</td>
+    <td style="padding-left: 2px;">Clinical name</td>
+  </tr>
+ <?php
+    $num_blocks = count($this->releasedPbls)-1;
+    foreach($this->releasedPbls as $block => $value) {
+    	$rowspan = count($value);
+    	echo "<tr class=\"special\">\n  <td width=\"200\" valign=\"top\" rowspan=\"$rowspan\">";
+    	echo "<span class=\"biglabel\">$num_blocks</span> <span class=\"bname\">$block</span></td>";
+    	echo "<td class=\"pnum\"></td>\n  ";
+    	echo "<td class=\"pname\"></td>\n  ";
+    	echo "<td class=\"pname\"></td>\n";
+    	echo "</tr>\n";
+    	
+    	echo "<tbody class=content$num_blocks>";   
+    	$num = sizeof($value); 	
+        foreach($value['pbls'] as $v) {       	
+        	echo "<tr id=rpbl_$v[0]>\n";
+        	echo "<td></td>";
+        	echo "<td class=\"pnum\">$v[0]</td>\n  ";
+        	echo "<td class=\"pname\"><a href=\"{$this->baseUrl}/pbl/index/ref/{$v[0]}\">$v[1]</a></td>\n  ";
+        	echo "<td class=\"pname\"><a href=\"{$this->baseUrl}/pbl/index/ref/{$v[0]}\">$v[2]</a></td>\n  ";
+        	echo "</tr>";	
+        }
+        echo "</tbody>";
+        $num_blocks--;        
+    }
+ ?>
+
+</table>

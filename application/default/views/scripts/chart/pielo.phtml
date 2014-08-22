@@ -1,0 +1,23 @@
+<div>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/json2.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-ui-1.6.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/swfobject.js"></script>
+<script type="text/javascript">
+$(function(){
+	swfobject.embedSWF("<?php echo $this->baseUrl;?>/open-flash-chart.swf", "my_chart", "100%", "100%", "9.0.0");
+    $("#resize").resizable();
+});
+
+function open_flash_chart_data() {
+    return JSON.stringify(data);
+}
+var data = <?php echo $this->chart->toPrettyString(); ?>;
+</script>
+<br />
+<div id="resize" style="width:600px; height:400px; padding: 10px;">
+  <div id="my_chart"></div>
+</div>
+<p><i>To resize the chart, click and drag the bottom right corner.</i></p>
+</div>
+     
+

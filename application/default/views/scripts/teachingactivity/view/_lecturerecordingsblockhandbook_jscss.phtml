@@ -1,0 +1,12 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	var recordingsHeight = 50;
+    $('#recordings-container .recording').each(function(){
+       if($(this).height() > recordingsHeight) {
+    	   recordingsHeight = $(this).height() ;
+       }
+    });
+    $('#recordings-container .recording').css('min-height',recordingsHeight + 'px');  
+});
+</script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/recordings.css" media="all"  />

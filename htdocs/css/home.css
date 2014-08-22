@@ -1,0 +1,32 @@
+#mainText {
+	width:800px;
+	overflow:hidden;
+}
+#homeContainer {
+    color:#2F1F06;
+}
+#maintText p.info {
+    color:#2F1F06;
+    padding-left:10px;
+    padding-right:10px;
+    font-size:105%;
+}
+#mainText .mainImage {
+    border: 3px solid #FFF2DF;
+    float: left;
+    padding-right:0px;
+    padding-bottom:0px;
+    margin-right: 10px;
+}
+.helpimg {
+    border:0 none;
+    margin-left:4px;
+    vertical-align:middle;
+}
+#mainText .clickHere {
+    color:#306FDF;
+    font-weight:bold;
+}
+#mainText .clickHere a{
+    color:#005DFF;
+}

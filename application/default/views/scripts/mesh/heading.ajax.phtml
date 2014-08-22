@@ -1,0 +1,22 @@
+<b><?php echo $this->find_name ?> [<?php echo $this->find ?>] &gt;&gt;</b>
+<div style="padding-left: 24px">
+  <?php foreach ($this->results as $k => $nextLine):?>
+  <?php
+	    	$treenumber_arr = explode(',', $nextLine['treenumbers']);
+			$cur_treenumber = '';
+			foreach ($treenumber_arr as $v) {
+				if (strpos($v, $this->find) === 0) {
+					$cur_treenumber = $v;
+				}
+			}
+	?>
+  <div id="heading<?php echo $nextLine['uid'] ?>">
+    <?php if ($this->showLinks[$k] == true) :?>
+    [<a href="javascript:expandTree('<?php echo $cur_treenumber ?>', '<?php echo $nextLine['uid'] ?>')">+</a>] 
+    <?php else: ?>
+    [-]
+    <?php endif; ?>
+    <a href="javascript:pick('<?php echo $nextLine['headingtext'] ?>');"><?php echo $nextLine['headingtext'] ?> [<?php echo $cur_treenumber ?>]</a>
+  </div>
+  <?php endforeach;?>
+</div>

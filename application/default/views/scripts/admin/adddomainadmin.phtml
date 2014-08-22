@@ -1,0 +1,45 @@
+<link href="<?php echo $this->baseUrl;?>/css/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.autocomplete.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+	  $('td:first-child').css('text-align', 'right');
+	  $("#uid").autocomplete(BASE_URL + "/service/allusers", {
+		    width: 240,
+		    delay: 200,
+		    multiple: false,
+		    matchContains: true,
+		    mustMatch: true,
+		    selectFirst: true,
+	        formatItem: function(data, i, n, value) {
+		        var tmp = value.split(" ");
+		        var uid = tmp.splice(tmp.length-1,1);
+		        return tmp.join(" ") + " [" + uid +"]";
+		    },
+	        formatResult: function(data, value) {
+		        var result = (data + "").split(" ");
+		        return result[result.length-1];
+	        }
+	    });
+  });
+</script>
+<div>
+<h2>To add a domain administrator, please complete the following form</h2>
+<form action="<?php echo $this->escape($this->form->getAction()) ?>" method="<?php echo $this->form->getMethod() ?>">
+<table cellspacing="5">
+  <tbody>
+  <tr>
+  	<td valign="top">Domain::</td>
+  	<td><?php echo $this->form->domain ?></td>
+  </tr>  
+  <tr>
+    <td valign="top">User ID:</td>
+    <td><?php echo $this->form->uid ?></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td><?php echo $this->form->submit ?></td>
+  </tr>
+  </tbody>
+</table>
+</form>
+</div>

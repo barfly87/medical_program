@@ -1,0 +1,135 @@
+<?php
+$customToolTip = 'compass-resource-link'; 
+include_once('../application/common/views/_tooltip.phtml');
+include('../application/common/views/_impromptu27JsCss.phtml'); 
+?>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/resource.js"></script>
+<script type="text/javascript">
+<!--
+<?php $newId = ($this->typeId == 'new') ? '/id/new' : '/id/'.$this->typeId ;?>
+<?php $columns = ($this->typeId == 'new') ? 4 : 6 ;?>
+
+$(document).ready(function(){
+    <?php if(isset($this->addedResources) && count($this->addedResources) > 0 ) :?>
+    tdArray = new Array('<?php echo implode("','", $this->addedResources );?>');
+    for(var x=0; x<tdArray.length; x++) {
+        arOldHref = $('#addResource_' + tdArray[x] + ' a').attr('href');
+        arNewHref = arOldHref.replace(/addResource/,"removeResource");
+        changeCssAddResource(tdArray[x], arNewHref);
+    }
+    <?php endif;?>
+    
+    <?php if(isset($this->tempResource)):?>
+        changeUIForExistingMids('<?php echo $this->type;?>');
+    <?php endif;?>
+});
+
+function showUrl(url) {
+    var promptText = '<span style="font-size:120%;"><textarea id="url-textarea" style="background-color:#FFF; font-size:9px;" cols="150" rows="1">'+url+'</textarea></span>';
+    $.prompt(promptText,{buttons: { Ok: true},loaded: function() {
+                      $('#url-textarea').select();
+    }});
+}
+
+var linkSearchInfoUrl = BASE_URL + '/resource/linksearchinfo/mid/';
+
+function showInfo(mid, count) {
+    try {
+        $.ajax({
+            url: linkSearchInfoUrl + mid + '/midcount/' + count,
+            async: false,
+            type: "GET",
+            success: function(data) {
+                $('div#midInfoTemp_' + count).html(data);
+            }
+        });   
+        $('div#midInfo_' + count).html($('div#midInfoTemp_' + count + ' div#mid-info-detail-' + count).html());
+        var promptText = $('div#mid-info-detail-' + count).html();
+        $.prompt(
+            promptText,
+            {
+                buttons: {Ok: true}
+            }
+        );
+    } catch (e) {
+        alert(e);
+    }
+}
+-->
+</script>
+<p class="resultContainer">Total no of resources found: <?php echo $this->fp->resourceCount ;?></p>
+<table class="tableLinkExistingResources">
+<?php 
+$countMoreThanOne = (count($this->fp->results)) > 1 ;
+$count = 1;
+$imgFormat = $this->url(array('module'=>'default','controller'=>'resource','action'=>'image'),null,true).'/size/128?mid=%s';
+$resourceViewUrlFmt = $this->url(array('module'=>'default','controller'=>'resource','action'=>'view','type'=> $this->type),null,true);
+$resourceViewUrlFmt .= $newId.'?mid=%s';
+$viewOrDownloadUrlFmt = 'http://'.$_SERVER['HTTP_HOST'].$this->url(array('module'=>'default','controller'=>'resource', 'action'=>'viewordownload','type'=>$this->type), null, true);
+$viewOrDownloadUrlFmt .= '/mid/%s/id/'.$this->typeId;
+?>
+<?php foreach($this->fp->results as $key=>$value) :?>
+    <?php $valueCount = count($value); ?>
+    <tr>
+    <?php foreach($value as $subvalue) :?>
+        <td id="resource_<?php echo $count;?>" <?php isset($subvalue['selected']) ? print 'class="resourceSelected"' : print '';?>>
+            <?php //ADD RESOURCE FUNCTIONALITY ?>
+            <div id="addResource_<?php echo $count;?>" class="add">
+                <?php 
+                $resourceEditable   = (stristr(MediabankResourceConstants::sanitizeMid($subvalue['mid']), '|'.MediabankResourceConstants::$cid.'|')) ? 'yes' : 'no';
+                $addResourceParams = sprintf("'%s', '%s', '%s', '%s', '%s', '%s'", $this->type, $this->typeId, $this->resourceTypeId, $resourceEditable, urlencode($subvalue['mid']), $count);
+                ?>
+                <a href="javascript:addResource(<?php echo $addResourceParams?>);"
+                class="highlightAdd">Add</a>
+            </div>
+            <?php //RESOURCE IMAGE AND TITLE ?>
+            <div class="content">
+                <span style="display:none;" class="hiddenMid" id="td_<?php echo $count;?>"><?php echo $this->escape($subvalue['mid']);?></span>
+                <?php $resourceViewUrl = sprintf($resourceViewUrlFmt,$this->escape($subvalue['mid']));?>
+                <a class="compass-resource-link-tooltip" id="midImage_<?php echo $count;?>" title="<?php echo base64_decode($subvalue['mid']);?>" href="<?php echo $resourceViewUrl;?>">
+                    <img border="0" src="<?php printf($imgFormat,$this->escape($subvalue['mid']));?>"/>
+                </a><br />
+                <a href="<?php echo $resourceViewUrl;?>">
+                    <?php echo $this->escape($subvalue['title']);?>
+                </a><br />
+            </div>
+            <?php //RESOURCE ACTIONS ?>
+            <div class="actions">
+            </div>
+            <div id="mid-info-summary-<?php echo $count;?>">
+                <table style="border: 0px; text-align: left;">
+                    <tr>
+                        <td style="border: 0px; font-weight: bold; text-align: left;">Collection:&nbsp;</td>
+                        <td style="border: 0px; text-align: left;"><?php echo $subvalue['collection']; ?></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px; font-weight: bold; text-align: left;">Description:&nbsp;</td>
+                        <td style="border: 0px; text-align: left;" class="compass-resource-link-tooltip" title="<?php echo $subvalue['description300chars']; ?>">
+                            <?php echo $subvalue['description30chars']; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px; text-align: left;" colspan="2">
+                            <div class="actions">
+                				<?php //RESOURCE ACTION - URL - LINK?>
+                				<?php $viewOrDownloadUrl = sprintf($viewOrDownloadUrlFmt, $this->escape($subvalue['mid']));?>
+                				<a href="javascript:void(0);" onclick="javascript:showUrl('<?php echo $viewOrDownloadUrl;?>');">url</a>
+                				<?php //RESOURCE ACTION - MORE INFO - LINK ?>
+                				<a style="padding: 0px;" href="javascript:showInfo('<?php echo $this->escape($subvalue['mid']);?>', '<?php echo $count; ?>')">more info</a>
+            				</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>            
+            <div id="midInfoDetail_<?php echo $count;?>"></div>
+            <div id="midInfoTemp_<?php echo $count;?>" style="display: none;"></div>
+        </td>
+        <?php $count++;?>
+    <?php endforeach;?>
+    <?php if($countMoreThanOne && $valueCount < $columns) :?>
+        <?php echo str_repeat('<td class="empty">&nbsp;</td>', $columns - $valueCount);?>
+    <?php endif;?>
+    </tr>
+<?php endforeach;?>
+</table>
+<br />

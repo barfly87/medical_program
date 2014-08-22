@@ -1,0 +1,35 @@
+<h1 align="center"><?php echo $this->escape($this->title); ?></h1>
+<div align="center" style="margin-bottom: 300px; margin-top: 50px">
+<fieldset style="width: 350px; margin-top: 50px"><legend>Please log in here</legend>
+<form method="POST" action="<?php echo $this->url(array('module'=>'default','controller'=>'auth', 'action'=>'identify'),'default',true); ?>" 
+    name="login" id="login-form" style="margin: 10px">
+  <?php $redirectUrl = str_replace(Compass::baseUrl(),'',$_SERVER['REQUEST_URI']);?>
+  <input type="hidden" name="redirecturl" value="<?php echo $redirectUrl; ?>">
+  <table>
+    <tr>
+      <td><label>Username</label></td>
+      <td><input type="text" name="username" value="" style="width: 150px" autocorrect="off" autocapitalize="off"/></td>
+    </tr>
+    <tr>
+      <td><label>Password</label></td>
+      <td><input type="password" name="password" value="" style="width: 150px"/></td>
+    </tr>
+    <?php if(property_exists($this, 'userTypes') && !empty($this->userTypes)):?>
+    <tr>
+        <td></td>
+        <td>
+            <?php foreach($this->userTypes as $value => $userTypeText) :?>
+                <input type="checkbox" name="usertype" value="<?php echo $value;?>" /><?php echo $userTypeText;?> <br />            
+            <?php endforeach;?>
+        </td>
+    </tr>
+    <?php endif;?>
+    <tr>
+      <td>&nbsp;</td>
+      <td><input type="submit" name="login" value="Login" /></td>
+    </tr>
+   </table>
+</form>
+<?php echo $this->actionErrors();?>
+</fieldset>
+</div>

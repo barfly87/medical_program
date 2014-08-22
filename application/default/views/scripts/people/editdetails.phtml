@@ -1,0 +1,51 @@
+<script>
+$(document).ready(function() {
+	var mobilephone = $("#mobile_phone");
+	$("#studentinfo").submit(function() {
+		if (mobilephone.val() != "") {
+			var reg = new RegExp(/^\+61\s\d{3}\s\d{3}\s\d{3}$/);
+			if (!reg.test(mobilephone.val())) {
+				$("#mobile_error").text("Wrong Mobile Number").css('color', 'red');
+				return false;
+			}
+		}
+	});
+});
+</script>
+<div class="rhsbox">
+    <h3 class="rhsheading">Edit my details</h3>
+    <div class="mcontent">
+    <div id="mobile_error"></div>
+    <form id="studentinfo" action="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'doeditdetails'),'default',true); ?>" method="post">
+    	<table>
+    		<tr>
+    			<td>Mobile Phone:</td>
+    			<td><input type="text" name="mobile_phone" id="mobile_phone" maxlength="15" value="<?php echo trim($this->studentInfo[0]["mobile_phone"]);?>" /> (+61 XXX XXX XXX)</td>
+    		</tr>
+    		<tr>
+    			<td>Mobile Phone Publicity:</td>
+    			<td>
+    				<select name="mobile_publicity">
+    					<option value="0" <?php if ($this->studentInfo[0]["mobile_publicity"] == 0) echo "selected=\"selected\"" ?>>Keep secret</option>
+    					<option value="1" <?php if ($this->studentInfo[0]["mobile_publicity"] == 1) echo "selected=\"selected\"" ?>>Public</option>
+    				</select>
+    			</td>
+    			
+    		</tr>
+    		<tr>
+    			<td>Educational Background:</td>
+    			<td><textarea name="education" cols="60"><?php echo $this->studentInfo[0]["education"];?></textarea></td>
+    		</tr>
+    		<tr>
+    			<td>Interests:</td>
+    			<td><textarea name="interests" cols="60"><?php echo $this->studentInfo[0]["interests"];?></textarea></td>
+    		</tr>
+       		<tr>
+    			<td></td>
+    			<td><input type="submit" value="Update"></td>
+    		</tr>
+    		
+    		
+    	</table>
+    </form>
+</div>

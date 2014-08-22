@@ -1,0 +1,30 @@
+<?php $this->placeholder('limit')->captureStart();?>
+    <?php echo $this->formSelect('limit', '10' ,array('style' => ''),array('10'=>'10','20'=>'20','30'=>'30','40'=>'40','50'=>'50','100'=>'100'))?>
+<?php $this->placeholder('limit')->captureEnd() ?>
+
+<?php $this->placeholder('qq_disciplines')->captureStart();?>
+    <?php unset($this->disciplines[1]);?>
+    <?php //echo $this->formSelect('discipline[]', '' ,array('style' => '','multiple'=>false),array('' => 'Any') + $this->disciplines,'&nbsp;&nbsp;')?>
+    <?php unset($this->disciplines[1]);?>
+    <select name="discipline[]" id="discipline" style="">
+        <option value="">Any</option>
+    <?php foreach($this->disciplines as $k=>$v) :?>
+        <?php          
+        $split = split("/",$v);
+        $count = count($split);
+        $css = '';
+        if($count > 1) {
+            $v = "&nbsp;&nbsp; - ".$split[$count - 1];
+        } else {
+            $css =  ' style="font-weight: bold;"';
+        }                  
+        ?>
+        <option value="<?php echo $k; ?>" <?php  echo $css;?> <?php if(isset($this->fp->selected[$k])) { echo ' selected="selected"' ;}?> ><?php echo $v;?></option>
+    <?php endforeach;?>
+    </select>
+<?php $this->placeholder('qq_disciplines')->captureEnd() ?>
+
+<?php $this->placeholder('qq_acttype')->captureStart();?>
+    <?php echo $this->formSelect('acttype[]', $this->fp->acttype,array('style' => 'font-style:normal;','multiple'=>''),array('' => 'Teaching Activity') + $this->types)?>
+<?php $this->placeholder('qq_acttype')->captureEnd() ?>
+

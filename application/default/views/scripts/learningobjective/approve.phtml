@@ -1,0 +1,55 @@
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+
+<?php $href = $this->url(array('module'=>'default','controller'=> 'learningobjective', 'action'=>'view')); ?>
+<div style="float:left; max-width:750px; min-width:600px;">
+<h2><?php echo $this->escape($this->title);?> : <a href="<?php echo $href;?>"><b><?php echo $this->lo->auto_id;?></b></a></h2>
+<?php if(count($this->lo)) : ?>
+<table class="tableNoSorter">
+  <tr><th width="200">Learning Objective</th><td><?php echo $this->escape($this->lo->lo); ?></td></tr>
+  <tr><th>Main Discipline</th><td><?php echo $this->escape($this->lo->discipline1Name); ?></td></tr>
+  <tr><th>Curriculum Area</th><td><?php echo $this->escape($this->lo->curriculumarea1Name); ?></td></tr>
+  <tr><th>Additional Discipline</th><td><?php echo $this->escape($this->lo->discipline2Name); ?></td></tr>
+  <tr><th>Curriculum Area</th><td><?php echo $this->escape($this->lo->curriculumarea2Name); ?></td></tr>
+  <tr><th>Additional Discipline</th><td><?php echo $this->escape($this->lo->discipline3Name); ?></td></tr>
+  <tr><th>Curriculum Area</th><td><?php echo $this->escape($this->lo->curriculumarea3Name); ?></td></tr>
+  <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme1); ?></td></tr>
+  <tr><th>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme2); ?></td></tr>
+  <tr><th>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme3); ?></td></tr>
+  <tr><th>Clinical Skills</th><td><?php echo $this->escape($this->lo->skill); ?></td></tr>
+  <tr><th>System</th><td><?php echo $this->escape($this->lo->system); ?></td></tr>
+  <tr><th>Curriculum Review</th><td><?php echo $this->escape($this->lo->review); ?></td></tr>
+  <tr><th>Keywords</th><td>
+  <?php
+    $keywords_arr = explode('|', $this->lo->keywords);
+    if (count($keywords_arr) > 0) {
+    	sort($keywords_arr);
+    	echo "<ul>";
+    	foreach ($keywords_arr as $word) {
+    		if (trim($word) !== '')
+    			echo "<li>".$this->escape($word)."</li>";
+    	}
+    	echo "</ul>";
+    }
+  ?>
+  </td></tr>
+  <tr><th>Assessment Methods</th><td><?php echo $this->escape($this->lo->assessment_type); ?></td></tr>
+  <tr><th>Level of achievement</th><td><?php echo $this->escape($this->lo->achievement); ?></td></tr>  
+  <tr><th>JMO</th><td><?php echo $this->lo->jmo ?></td></tr>
+  <tr><th>Graduate attribute</th><td><?php echo $this->lo->gradattrib ?></td></tr>
+  <tr><th>Notes</th><td><?php echo $this->escape($this->lo->notes); ?></td></tr>
+  <tr><th>Status</th><td><?php echo $this->lo->status ?></td></tr>
+  <tr><th>Submitted by</th><td><?php echo Compass::userInfoHtml($this->lo->created_by); ?></td></tr>
+  <tr><th>Date Submitted</th><td><?php echo $this->displayDate($this->lo->date_created); ?></td></tr>
+  <tr><th>Modified by</th><td><?php echo Compass::userInfoHtml($this->lo->modified_by); ?></td></tr>
+  <tr><th>Date modified</th><td><?php echo $this->displayDate($this->lo->date_modified); ?></td></tr>
+</table>
+  <form method="post">
+    <p><input type="radio" name="sure" value="yes" /> Yes
+    <input type="radio" name="sure" value="no" checked="checked" /> No</p>
+    <input type="hidden" name="id" value="<?php echo $this->lo->auto_id ?>" />
+    <p><input type="submit" value="Submit" id="submit"/>&nbsp;&nbsp;<input id="submit" type="button" onclick="javascript:window.location ='<?php echo $href;?>';" value="Cancel"></p>
+  </form>
+<?php endif; ?>
+</div>

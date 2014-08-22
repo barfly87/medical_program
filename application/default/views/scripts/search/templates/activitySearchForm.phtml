@@ -1,0 +1,27 @@
+  <tr>
+    <td>Search Text</td>
+    <td colspan="4">
+        <?php echo $this->placeholder('qstr') ?>
+        <?php echo $this->placeholder('qoption') ?>
+    </td>
+  </tr>
+   <tr>
+    <td><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?></td>
+    <td>
+     <?php echo $this->placeholder('stage') ?>&nbsp;&nbsp;
+     <?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?>&nbsp;<?php echo $this->placeholder('block') ?>&nbsp;&nbsp;
+     <?php echo Zend_Registry::get('Zend_Translate')->_('Week') ?>&nbsp;<?php echo $this->placeholder('blockweek') ?>
+    </td>    
+  </tr>
+  <tr>
+    <td>PBL</td>
+    <td id="pbl_td">
+        <?php echo $this->placeholder('pbl') ?>&nbsp;&nbsp;
+        <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?>&nbsp;<?php echo $this->placeholder('theme') ?>
+    </td>     
+  </tr>
+  <tr>
+    <td class="topText" style="padding-top:6px;">Activity Type</td>
+    <td id="acttype_td"><?php echo $this->placeholder('acttype') ?> <?php echo $this->placeholder('hiddenTaContext') ?>
+    </td>
+  </tr>

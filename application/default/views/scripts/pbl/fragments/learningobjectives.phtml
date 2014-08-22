@@ -1,0 +1,63 @@
+<?php 
+$core = (isset($this->coreResults) && $this->coreResults === true) ? 'CORE - ': '';
+?>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.tablesorter.min.js"          type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.tablesorter.highlight.js"    type="text/javascript"></script>
+<link href="<?php echo $this->baseUrl;?>/css/table.css" media="screen" rel="stylesheet" type="text/css" />
+<style>
+a:visited.resourceButtonHref, a:link.resourceButtonHref,a:active.resourceButtonHref,a:hover.resourceButtonHref {
+    border:1px solid #2F1D03;
+    color:#2F1D03;
+    background-color:#FFD79F;
+    cursor:pointer;
+    font-weight:bold;
+    margin-right:6px;
+    padding:2px 4px;
+    font-size: 11px;
+    font-family: sans,verdana, arial;
+    text-decoration: none;
+}
+
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#sortTable").tablesorter({sortList: [[0,1]],widgets: ['zebra', 'columnHighlight']});
+    }); 
+    function showloresources(loid) {
+    	var taloresourceurl = '<?php echo $this->url(array("controller"=>"studentresource", "action"=>"studentresourcesmall"), null, true); ?>/id/'+loid;
+    	$('#studentresourcepanel_'+loid).load(taloresourceurl);
+    }
+        
+</script>
+<div id="learning_objectives_id" class="pblElem">
+    <p class="pblElemHeading"><?php echo $core;?>Learning Objectives</p>
+    <div id="pblLoSearch">
+        <?php if(isset($this->learningObjectives) && !empty($this->learningObjectives) && !isset($this->learningObjectives['error'])):?>
+        
+        <?php $loHrefFormat = $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view'),null,true).'/id/%d';?>
+        <table id="sortTable" class="tableSorter">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Disciplines</th>
+                    <th>Student Resources</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach($this->learningObjectives as $lo) :?>
+                <?php $loHref = sprintf($loHrefFormat,$lo['lo_auto_id']);?>
+                <tr>
+                    <td><a href="<?php printf($loHrefFormat,$lo['lo_auto_id']);?>"><?php echo $lo['lo_title'];?></a>
+                    <div id="studentresourcepanel_<?php echo $lo['lo_loid'];?>"></div>
+                    </td>
+                    <td><?php echo $lo['lo_discipline_names'];?></td>
+                    <td><a href="javascript:showloresources(<?php echo $lo['lo_loid'];?>)"><?php if($lo['lo_numStudentResources']==0): ?><span style="color:#888888;"><?php else: ?><b><?php endif; ?><?php echo $lo['lo_numStudentResources'];?> Resource<?php if($lo['lo_numStudentResources']!=1): ?>s<?php endif; ?><?php if($lo['lo_numStudentResources']==0): ?></span ><?php else: ?></b><?php endif; ?></a></td>
+                </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+        <?php else :?>
+            <?php PblConst::printErrorOrNoneFound($this->learningObjectives['error']);?>
+        <?php endif;?>
+    </div>
+</div>

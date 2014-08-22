@@ -1,0 +1,258 @@
+<?php 
+$isMobileBrowser = UserService::isMobileBrowser();
+$pblLink = $this->url(array('controller'=>'pbl', 'action'=>'display', 'type'=>'ta', 'activitytypeid'=>'2', 'typeid'=> $this->ta->auto_id, 'ref'=> $this->ta->block_no.'.'.$this->ta->block_week_zero_padded),null,true);
+$evaluationExist = false;
+if($this->evaluation !== false) {
+    $evaluationExist = true;
+}
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/evaluateLecture.css" media="all"  />
+<?php if( $isMobileBrowser === true) :?>
+    <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/evaluateLectureMobile.css" media="all"  />
+<?php endif; ?>
+<link href="<?php echo $this->baseUrl;?>/css/form.css" rel="stylesheet" type="text/css" />
+
+<?php if($this->formValid === true): ?>
+    <?php if($this->databaseError === true):?>
+        <h3><span class="error"><b>Database Error !</b></h3>Could not capture the information submitted.</span>
+    <?php else:?>
+        <h3>
+            Successfully submitted. <br /><br />
+            <a class="returnUrl" href="<?php echo $pblLink?>">Return</a>
+        </h3>
+    <?php endif;?>
+<?php else:?>
+    <?php if($evaluationExist === true && $this->formSubmitted === false) :?>
+        <h3 class="error">We have already received your feedback for this teaching activity.<br />If you wish to modify your earlier feedback please make changes and re-submit.</h3>
+    <?php elseif($this->formSubmitted === true) :?>
+        <h3 class="error"><b>Error!</b><br />It seems that this form contains errors please check any fields marked in red.</h3>
+    <?php endif;?>
+    
+    <div class="lectureEvaluateBody">
+    <h2>Teaching Evaluation</h2>
+    <p>
+    The purpose of these questions is to help improve the lecture component of the Sydney Medical Program. 
+    Please provide your frank and constructive feedback. All reports will ensure anonymity of individual responses.
+    </p>
+    <p> 
+    <b><?php echo $this->ta->type;?> title</b> : 
+        <a href="<?php echo $pblLink;?>">
+            <?php echo $this->escape($this->ta->name)?>
+        </a> <br />
+    </p>
+    <p>
+    <form method="post" id="form-evaluate-ta" action="<?php echo $this->url( array( 'module'=>'default', 'controller'=>'evaluate', 'action'=>'ta', 'ta_id'=>$this->ta->auto_id), null, true);?>">
+    
+    <?php echo $this->render('evaluate/taplaceholders.phtml')?>
+    <table id="table-evaluate-lecture">
+        <tbody>
+            <?php $count = 1;?>
+            <?php //All the placeholders are defined in evaluate/taplaceholders.phtml?>
+            <?php foreach($this->questions as $question):?>
+            <tr class="<?php echo $this->placeholder($question.'TR_CLASS');?>">
+                <td><span class="questionNo"><?php echo $count;?></span></td>
+                <td><?php echo $this->placeholder($question);?></td>
+            </tr>
+            <?php $count++;?>
+            <?php endforeach;?>
+            <tr>
+                <td class="noBorder"></td>
+                <td class="noBorder"><?php echo $this->form->submit;?></td>
+            </tr>
+        </tbody>
+    </table>     
+<?php endif;?>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    <?php if(isset($this->questionsTitle[EvaluateTaConst::$STUDENT_ATTENDANCE])):?>
+        $('#form-evaluate-ta').submit(function() {
+            if($.trim($('input[name="<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE;?>"]:checked').val()) == '4') {
+                $(this).children().find("input, textarea").each(function() {
+                    var name = $(this).attr('name');
+                    if(name != 'submit' && name.indexOf('<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE;?>') == -1) {
+                        $(this).attr('disabled', true);
+                    }
+                });
+            }
+            return true;
+        });
+        var studentAttendance = $.trim($('input[name="<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE;?>"]:checked').val());
+        if(studentAttendance != '' && studentAttendance != '4') {
+            $('table#table-evaluate-lecture tr.hideElem').each(function(){
+                $(this).show();
+            });
+        } 
+        $('input[name="<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE;?>"]').click(function(){
+            var obj = $('#<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE;?>_container');
+            var tr = $('table#table-evaluate-lecture tr.hideElem');
+            if($(this).val() == '4') {
+                obj.show();
+                tr.each(function(){
+                    $(this).hide();
+                });
+            } else {
+                $('textarea[name="<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT;?>"]').val('');
+                obj.hide();
+                tr.each(function(){
+                    $(this).show();
+                });
+            }
+        });
+    <?php endif;?>
+    
+    <?php if(isset($this->questionsTitle[EvaluateTaConst::$OVERLAP])):?>
+    	$('input[name="<?php echo EvaluateTaConst::$OVERLAP;?>"]').click(function(){
+            var obj = $('#<?php echo EvaluateTaConst::$OVERLAP;?>_present_container');
+            if($(this).val() == 'ye') {
+                obj.show();
+            } else {
+                $('textarea[name="<?php echo EvaluateTaConst::$OVERLAP_EXPLANATION;?>"]').val('');
+                obj.hide();
+            }
+        });
+	<?php endif;?>
+	
+    $('label').hover(
+        function () {
+            $(this).addClass("radioHover");
+        },
+        function () {
+            $(this).removeClass("radioHover");
+        }
+    );
+<?php if($isMobileBrowser === true ) :?>
+    $('textarea').each(function() {
+        $(this).attr('cols', '120');
+        $(this).attr('rows', '20');
+    });
+<?php endif;?>
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php /* 
+<table id="table-evaluate-lecture">
+    <tbody>
+        <tr>
+            <td><span class="questionNo">1</span></td>
+            <td>
+                <span class="questionText"><?php //echo EvaluateTaConst::$QUES_1;?></span><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$STUDENT_ATTENDANCE);?>  
+                <div id="student_attendance_container" class="<?php ($this->form->getValue(EvaluateTaConst::$STUDENT_ATTENDANCE) != '4') ? print 'hideElem' : print ''; ?>">
+                    <div id="student_attendance_comment_container">
+                        <?php //echo EvaluateTaConst::$QUES_1A;?><br />
+                        <?php echo $this->form->getElement(EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT);?>
+                    </div>
+                </div>       
+            </td>
+        </tr>
+
+        <tr class="hideElem">
+            <td><span class="questionNo">2</span></td>
+            <td>
+                <span class="questionText"><?php //echo EvaluateTaConst::$QUES_2;?></span><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$DELIVERY_OF_TA);?>
+            </td>
+        </tr>
+        
+        <tr class="hideElem">
+            <td><span class="questionNo">3</span></td>
+            <td>
+                <span class="questionText"><?php //echo EvaluateTaConst::$QUES_3;?></span><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$CONTENT_MATCH_LO);?>
+            </td>
+        </tr>
+        
+        <tr class="hideElem">
+            <td><span class="questionNo">4</span></td>
+            <td>
+                <span class="questionText"><?php //echo EvaluateTaConst::$QUES_4;?></span><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$INFORMATION_COVERED);?>
+            </td>
+        </tr>
+        
+        <tr class="hideElem">
+            <td><span class="questionNo">5</span></td>
+            <td>
+                <span class="questionText"><?php //echo EvaluateTaConst::$QUES_5;?></span><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$SCIENTIFIC_LEVEL);?>
+            </td>
+        </tr>
+        
+        <tr class="hideElem">
+            <td><span class="questionNo">6</span></td>
+            <td>
+                <span class="questionText"><?php //echo EvaluateTaConst::$QUES_6;?></span><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$OVERLAP);?>
+                <div id="overlap_present_container" class="<?php ($this->form->getValue(EvaluateTaConst::$OVERLAP) != 'ye') ? print 'hideElem' : print ''; ?>">
+                    <div id="overlap_explanation_container">
+                        <?php //echo EvaluateTaConst::$QUES_6A;?><br />
+                        <?php echo $this->form->getElement(EvaluateTaConst::$OVERLAP_EXPLANATION);?>
+                    </div>
+                </div>       
+            </td>
+        </tr>
+        
+        <tr class="hideElem">
+            <td><span class="questionNo">7</span></td>
+            <td>
+                <span class="questionText"><?php //echo EvaluateTaConst::$QUES_7;?></span><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$OVERALL_RATING);?>
+            </td>
+        </tr>
+        
+        <tr class="hideElem">
+            <td><span class="questionNo">8</span></td>
+            <td>
+                <span class="questionText"><?php //echo EvaluateTaConst::$QUES_8;?></span><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$SUGGESTIONS);?>
+            </td>
+        </tr>
+        <?php if($evaluationExist === true):?>
+        
+        <?php endif;?>
+        <tr>
+            <td class="noBorder"></td>
+            <td class="noBorder"><?php echo $this->form->submit;?></td>
+        </tr>
+    </tbody>
+</table>
+</form>
+*/?> 
+

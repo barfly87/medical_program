@@ -1,0 +1,85 @@
+<style>
+div.progressbar {
+	clear:both;
+	height: 20px;
+}
+div.progressbox {
+	float:left;
+	height: 20px;
+	width: 30px;
+	border: 1px solid #aaaaaa;
+	background-color: #DDDDDD;
+	cursor:pointer;
+	
+}
+div.progressscore0 {
+	background-color: #FF6666;
+}
+div.progressscore1 {
+	background-color: #66FF66;
+}
+
+div.progresscurrent {
+	background-color: #EEEEEE;
+	cursor:default;
+}
+div.progresstitle {
+	background-color: #EEEEEE;
+	cursor:default;
+	width: auto;;
+}
+
+	</style>
+<div class="progressbar"><div class="progressbox progresstitle">Quiz Progress: </div>
+<?php 
+	if($this->quizcomplete) {
+		$q = -1;
+		$quizid = -1;
+		
+	} else {
+		$q = $this->currentquestion;
+		$quizid = 	$this->quizid;
+		
+	}
+	$past = true;
+	foreach($this->studentresources as $key => $resource):
+		if($current)
+			$nextq = $key;
+		$current=false;
+		if($resource['auto_id']==$quizid) {
+			//we are at the current question
+			$past = false;
+			$current=true;
+		} 
+		$numquestions ++;
+		$totalscore += $resource['qscore'];
+		$clickurl = $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'quiz','quizids'=>implode(',',$this->quizids), 'quizid'=>$key, 'return' => $this->return),'default',true);
+		if($current)
+			echo '<div class="progressbox progresscurrent"></div>'; //current box
+		else if($past)
+			echo '<div class="progressbox progressscore'.$resource['qscore'].'" onclick="window.location=\''.$clickurl.'\';"></div>';
+		else
+			echo '<div class="progressbox" onclick="window.location=\''.$clickurl.'\';"></div>';;
+		
+	endforeach;	
+	?>
+	</div>
+<?php 
+	if($this->quizcomplete) {
+?>
+		<br><br>Quiz complete. You scored <?php echo $totalscore; ?>/<?php echo $numquestions;?>. <a href="<?php echo base64_decode($this->return); ?>">Return</a>.
+<?php 
+	} else {
+?>
+<div id="questionholder"></div>
+<script>
+	$('#questionholder').load('<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'showquestion','count'=>'true', 'return' => $this->return, 'hidestats'=>'true'),'default',true); ?>/id/<?php echo $q['auto_id'];?>/mid/<?php echo base64_encode($q['mid']);?>');
+</script>
+
+<?php if(isset($nextq)) {?>
+<br><a href="<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'quiz','quizids'=>implode(',',$this->quizids), 'quizid'=>$nextq, 'return' => $this->return),'default',true); ?>">Next</a>
+<?php } else { ?>
+<br><a href="<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'quiz','quizids'=>implode(',',$this->quizids), 'complete' => 'true', 'return' => $this->return),'default',true); ?>">Finish Quiz</a>
+<?php }?>
+
+<?php } // end if($this->quizcomplete) else?>

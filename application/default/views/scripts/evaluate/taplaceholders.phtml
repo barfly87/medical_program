@@ -1,0 +1,84 @@
+<?php //STUDENT ATTENDANCE ?>
+<?php if(in_array(EvaluateTaConst::$STUDENT_ATTENDANCE, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$STUDENT_ATTENDANCE)->captureStart();?>
+        <span class="questionText"><?php echo EvaluateTaConst::$STUDENT_ATTENDANCE_QUES;?></span><br />
+        <?php echo $this->form->getElement(EvaluateTaConst::$STUDENT_ATTENDANCE);?>  
+        <div id="<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE;?>_container" class="<?php ($this->form->getValue(EvaluateTaConst::$STUDENT_ATTENDANCE) != '4') ? print 'hideElem' : print ''; ?>">
+            <div id="<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT;?>_container">
+                <?php echo EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT_QUES;?><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT);?>
+            </div>
+        </div>       
+    <?php $this->placeholder(EvaluateTaConst::$STUDENT_ATTENDANCE)->captureEnd();?>
+<?php endif;?>
+
+<?php //DELIVERY OF TA ?>
+<?php if(in_array(EvaluateTaConst::$DELIVERY_OF_TA, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$DELIVERY_OF_TA.'TR_CLASS')->captureStart();?>hideElem<?php $this->placeholder(EvaluateTaConst::$DELIVERY_OF_TA.'TR_CLASS')->captureEnd();?>
+    <?php $this->placeholder(EvaluateTaConst::$DELIVERY_OF_TA)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$DELIVERY_OF_TA_QUES, strtolower($this->ta->type));?></span><br />
+        <?php echo $this->form->getElement(EvaluateTaConst::$DELIVERY_OF_TA);?>
+    <?php $this->placeholder(EvaluateTaConst::$DELIVERY_OF_TA)->captureEnd();?>
+<?php endif;?>
+
+<?php //CONTENT MATCHED LO ?>
+<?php if(in_array(EvaluateTaConst::$CONTENT_MATCH_LO, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$CONTENT_MATCH_LO.'TR_CLASS')->captureStart();?>hideElem<?php $this->placeholder(EvaluateTaConst::$CONTENT_MATCH_LO.'TR_CLASS')->captureEnd();?>
+    <?php $this->placeholder(EvaluateTaConst::$CONTENT_MATCH_LO)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$CONTENT_MATCH_LO_QUES, strtolower($this->ta->type));?></span><br />
+        <?php echo $this->form->getElement(EvaluateTaConst::$CONTENT_MATCH_LO);?>
+    <?php $this->placeholder(EvaluateTaConst::$CONTENT_MATCH_LO)->captureEnd();?>
+<?php endif;?>
+
+<?php //INFORMATION COVERED ?>
+<?php if(in_array(EvaluateTaConst::$INFORMATION_COVERED, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$INFORMATION_COVERED.'TR_CLASS')->captureStart();?>hideElem<?php $this->placeholder(EvaluateTaConst::$INFORMATION_COVERED.'TR_CLASS')->captureEnd();?>
+    <?php $this->placeholder(EvaluateTaConst::$INFORMATION_COVERED)->captureStart();?>
+        <span class="questionText"><?php echo EvaluateTaConst::$INFORMATION_COVERED_QUES;?></span><br />
+        <?php echo $this->form->getElement(EvaluateTaConst::$INFORMATION_COVERED);?>
+    <?php $this->placeholder(EvaluateTaConst::$INFORMATION_COVERED)->captureEnd();?>
+<?php endif;?>
+
+<?php //SCIENTIFIC LEVEL ?>
+<?php if(in_array(EvaluateTaConst::$SCIENTIFIC_LEVEL, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$SCIENTIFIC_LEVEL.'TR_CLASS')->captureStart();?>hideElem<?php $this->placeholder(EvaluateTaConst::$SCIENTIFIC_LEVEL.'TR_CLASS')->captureEnd();?>
+    <?php $this->placeholder(EvaluateTaConst::$SCIENTIFIC_LEVEL)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$SCIENTIFIC_LEVEL_QUES, strtolower($this->ta->type));?></span><br />
+        <?php echo $this->form->getElement(EvaluateTaConst::$SCIENTIFIC_LEVEL);?>
+    <?php $this->placeholder(EvaluateTaConst::$SCIENTIFIC_LEVEL)->captureEnd();?>
+<?php endif;?>
+
+<?php //OVERLAP ?>
+<?php if(in_array(EvaluateTaConst::$OVERLAP, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$OVERLAP.'TR_CLASS')->captureStart();?>hideElem<?php $this->placeholder(EvaluateTaConst::$OVERLAP.'TR_CLASS')->captureEnd();?>
+    <?php $this->placeholder(EvaluateTaConst::$OVERLAP)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$OVERLAP_QUES, strtolower($this->ta->type));?></span><br />
+        <?php echo $this->form->getElement(EvaluateTaConst::$OVERLAP);?>
+        <div id="<?php echo EvaluateTaConst::$OVERLAP;?>_present_container" class="<?php ($this->form->getValue(EvaluateTaConst::$OVERLAP) != 'ye') ? print 'hideElem' : print ''; ?>">
+            <div id="<?php echo EvaluateTaConst::$OVERLAP_EXPLANATION;?>_container">
+                <?php echo EvaluateTaConst::$OVERLAP_EXPLANATION_QUES;?><br />
+                <?php echo $this->form->getElement(EvaluateTaConst::$OVERLAP_EXPLANATION);?>
+            </div>
+        </div>       
+    <?php $this->placeholder(EvaluateTaConst::$OVERLAP)->captureEnd();?>
+<?php endif;?>
+
+<?php //OVERALL RATING ?>
+<?php if(in_array(EvaluateTaConst::$OVERALL_RATING, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$OVERALL_RATING.'TR_CLASS')->captureStart();?>hideElem<?php $this->placeholder(EvaluateTaConst::$OVERALL_RATING.'TR_CLASS')->captureEnd();?>
+    <?php $this->placeholder(EvaluateTaConst::$OVERALL_RATING)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$OVERALL_RATING_QUES, strtolower($this->ta->type));?></span><br />
+        <?php echo $this->form->getElement(EvaluateTaConst::$OVERALL_RATING);?>
+    <?php $this->placeholder(EvaluateTaConst::$OVERALL_RATING)->captureEnd();?>
+<?php endif;?>
+
+<?php //SUGGESTIONS ?>
+<?php if(in_array(EvaluateTaConst::$SUGGESTIONS, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$SUGGESTIONS.'TR_CLASS')->captureStart();?>hideElem<?php $this->placeholder(EvaluateTaConst::$SUGGESTIONS.'TR_CLASS')->captureEnd();?>
+    <?php $this->placeholder(EvaluateTaConst::$SUGGESTIONS)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$SUGGESTIONS_QUES, strtolower($this->ta->type));?></span><br />
+        <?php echo $this->form->getElement(EvaluateTaConst::$SUGGESTIONS);?>
+    <?php $this->placeholder(EvaluateTaConst::$SUGGESTIONS)->captureEnd();?>
+<?php endif;?>
+
+

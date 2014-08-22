@@ -1,0 +1,63 @@
+
+<?php /* 
+Please don't change the name of class 'tableInnerTh', 'bogusClass' and 'bogusTableSorterTr'. 
+You are ** WARNED *** :-)
+*/?>
+<?php ob_start();?>
+<tbody>
+    <?php foreach($this->results['context'] as $id => &$idDetails) :?>
+        <tr class="bogusTableSorterTr">
+            <?php foreach($idDetails as $luceneField => &$data) :?>
+                <td valign="top">
+                    <?php $escape = (!in_array($luceneField,array('lo_title','ta_resource_links_staff','ta_resource_links_student','ta_block'))) ? true : false ;?>
+                    <?php if(!isset($this->results['href'][$id][$luceneField])) :?>
+                        <?php ($escape) ? print $this->escape($data) : print $data; ?>
+                    <?php else: ?>
+                        <a href="<?php echo $this->escape($this->results['href'][$id][$luceneField]);?>">
+                            <?php if(strlen(trim($data)) == 0):?>
+                                <?php $escape = false;?>
+                                <?php $data = '&nbsp;&nbsp;&nbsp;';?>
+                            <?php endif;?>
+                            <?php ($escape) ? print $this->escape($data) : print $data; ?>
+                        </a>
+                    <?php endif;?>
+                </td>
+            <?php endforeach ;?>
+            <?php if(isset($this->results['subContext']) && count($this->results['subContext']) > 0 ): ?>
+            <td>
+                <?php if(isset($this->results['subContext'][$id])): ?>
+                    <table class="tableInner" style="width: 100%">
+                        <tr>
+                            <?php foreach($this->columns['subColumn'] as &$subColumnName):?>
+                                <td class="tableInnerTh" style="background-color: #FFE0AF; "><?php echo $this->escape($subColumnName); ?></td>
+                            <?php endforeach;?>
+                        </tr>
+                        <?php foreach($this->results['subContext'][$id] as $key => &$subIdDetails): ?>
+                            <tr class="tableNoSorter">
+                                <?php foreach($subIdDetails as $subLuceneField => &$subData) :?>
+                                    <?php $escape = (!in_array($subLuceneField,array('lo_title','ta_resource_links_student','ta_resource_links_staff','ta_block'))) ? true : false ;?>
+                                    <td style="background-color: #FFECCF" class="bogusClass">
+                                        <?php if(!isset($this->results['href'][$id][$subLuceneField])) :?>
+                                           <?php ($escape) ? print $this->escape($subData) : print $subData; ?>
+                                        <?php else: ?>
+                                            <?php if(strlen(trim($subData)) == 0):?>
+                                                <?php $escape = false;?>
+                                                <?php $subData = '&nbsp;&nbsp;&nbsp;';?>
+                                            <?php endif;?>
+                                            <a href="<?php echo $this->escape($this->results['href'][$id][$subLuceneField]);?>">
+                                                <?php ($escape) ? print $this->escape($subData) : print $subData; ?>
+                                            </a>
+                                        <?php endif;?>
+                                    </td>
+                                <?php endforeach;?>
+                            </tr>    
+                        <?php endforeach;?>
+                    </table>
+                <?php endif;?>
+            </td>
+            <?php endif;?>
+        </tr>
+    <?php endforeach;?>
+</tbody>
+<?php ob_end_flush();?>      
+      

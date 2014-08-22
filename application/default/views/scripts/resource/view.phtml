@@ -1,0 +1,23 @@
+<?php if (!isset($this->error)) :?>
+    <link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css"   media="screen" rel="stylesheet" type="text/css" />
+    <link href="<?php echo $this->baseUrl;?>/css/tableViewResource.css"   media="screen" rel="stylesheet" type="text/css" />
+    <link href="<?php echo $this->baseUrl;?>/css/lotaview.css"   media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/resourceview.js"></script>
+    <table id="mainTable">
+        <tr>
+            <td><?php include_once('view/details.phtml');?></td>
+            <?php if(('simple' != $this->layout) && (!isset($this->tempResource) || $this->tempResource != true)) :?>
+            <td class="mainTableRightTd">
+            	<?php include_once('view/actions.phtml');?>
+            	<?php include_once('view/attachedLoTa.phtml');?>
+                <?php include_once('view/metadata.phtml');?>
+            </td>
+            <?php endif;?>
+        </tr>
+    </table>    
+<?php else:?>
+	<h3 class="error">Error !</h3>
+<?php endif;?>
+<?php if ('simple' != $this->layout) : ?>
+	<?php include_once('view/return.phtml');?>
+<?php endif; ?>

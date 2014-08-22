@@ -1,0 +1,11 @@
+<div class="rhsbox">
+    <h3 class="rhsheading">Manage Photos</h3>
+    <div class="mcontent">
+        <div>
+        <?php if($this->success):?>
+  <h2>Photo removed</h2>
+  <a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'managephotos', 'uid'=>$this->uid),'default',true); ?>">Return to Manage Photos screen</a>
+        </div>
+    </div>
+    <?php endif;?>
+</div>

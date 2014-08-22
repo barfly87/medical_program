@@ -1,0 +1,16 @@
+<link type="text/css" rel="stylesheet" media="screen" href="<?php echo $this->baseUrl;?>/css/tableNoSort.css">
+<link href="<?php echo $this->baseUrl;?>/css/curriculumareas.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+
+<div id="curriculumAreaMenuContainer">
+    <div class='curriculumAreaMenuItem <?php if($this->actionName == 'list'){ echo 'curriculumAreaMenuSelected';}?>'><a href="<?php echo $this->url(array('module'=>'disc','controller'=>'curriculumareas', 'action'=>'list','disc_id' => $this->disciplineId),null,true); ?>">List</a></div>
+    <div class='curriculumAreaMenuItem <?php if($this->actionName == 'add' ){ echo 'curriculumAreaMenuSelected';}?>'><a href="<?php echo $this->url(array('module'=>'disc','controller'=>'curriculumareas','action'=>'add','disc_id' => $this->disciplineId),null,true); ?>">Add</a></div>
+</div>
+<br /><br />
+<div id="curriculumAreaTitle">
+    <?php if($this->actionName == 'list'){ echo 'List of';}?> <?php if($this->actionName == 'add'){ echo 'Add';}?> Curriculum Area<?php if($this->actionName != 'add'){ echo 's';}?> for <span class="curriculumAreaDisciplineName"><?php echo $this->disciplineName; ?></span>
+</div>
+<div id="curriculumAreaEditTitle" style="display:none">
+    Edit Curriculum Area for <span class="curriculumAreaDisciplineName"><?php echo $this->disciplineName; ?></span>
+</div>
+<br />

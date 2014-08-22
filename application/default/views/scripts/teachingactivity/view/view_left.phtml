@@ -1,0 +1,7 @@
+<h2 style="text-align: middle;"><b><?php echo $this->escape($this->title);?></b></h2>
+<!--   <h2>Learning objective detail:</h2> -->
+<?php if(count($this->ta)) : ?>
+    <?php include_once('details.phtml');?>
+    <br/>
+    <?php include_once('history.phtml');?>
+<?php endif; ?>

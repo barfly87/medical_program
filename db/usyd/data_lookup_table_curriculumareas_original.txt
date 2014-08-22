@@ -1,0 +1,63 @@
+BEGIN;
+--Addiction medicine
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Alcohol harms' FROM lk_discipline WHERE name ='Addiction Medicine';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Alcohol treatment' FROM lk_discipline WHERE name ='Addiction Medicine';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Opioid dependents' FROM lk_discipline WHERE name ='Addiction Medicine';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Other illicits' FROM lk_discipline WHERE name ='Addiction Medicine';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Tobacco' FROM lk_discipline WHERE name ='Addiction Medicine';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Other addiction' FROM lk_discipline WHERE name ='Addiction Medicine';
+
+--Gynaecology
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Women''s health and Reproductive endocrinology' FROM lk_discipline WHERE name ='Gynaecology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Care of women with common gynaecological disorders' FROM lk_discipline WHERE name ='Gynaecology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Investigation and care of women with gynaecological tumours' FROM lk_discipline WHERE name ='Gynaecology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Family Planning' FROM lk_discipline WHERE name ='Gynaecology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Urogynaecology' FROM lk_discipline WHERE name ='Gynaecology';
+
+--Neonatology
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Substance use during pregnancy and parenting and neonatal abstinence syndrome' FROM lk_discipline WHERE name ='Neonatology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Care of the healthy newborn' FROM lk_discipline WHERE name ='Neonatology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Resuscitation' FROM lk_discipline WHERE name ='Neonatology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Postnatal maladaption in the infant' FROM lk_discipline WHERE name ='Neonatology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Respiratory distress' FROM lk_discipline WHERE name ='Neonatology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Perinatal infection' FROM lk_discipline WHERE name ='Neonatology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Growth' FROM lk_discipline WHERE name ='Neonatology';
+
+--Obstetrics
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Care of women and fetus during normal pregnancy' FROM lk_discipline WHERE name ='Obstetrics';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Care of women and babies during abnormal or high risk pregnancy' FROM lk_discipline WHERE name ='Obstetrics';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Care of women and babies during normal labour' FROM lk_discipline WHERE name ='Obstetrics';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Early pregnancy problems' FROM lk_discipline WHERE name ='Obstetrics';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Lactation' FROM lk_discipline WHERE name ='Obstetrics';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Care of women and babies during complicated labour' FROM lk_discipline WHERE name ='Obstetrics';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'The puerperium' FROM lk_discipline WHERE name ='Obstetrics';
+
+--Haematology
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Abrupt onset of anaemia (haemolysis, blood/products transfusion)' FROM lk_discipline WHERE name ='Haematology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Unexpected abnormal blood results: chronic leukaemia and myelodysplasia' FROM lk_discipline WHERE name ='Haematology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Purpura (thrombocytopaenia [ITP, DIC, HUS etc.])' FROM lk_discipline WHERE name ='Haematology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'PBL Getting worse (Back pain, myeloma, assessment of paraprotein)' FROM lk_discipline WHERE name ='Haematology';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'PBL A lump in the neck (DD lymphadenopathy, lymphoproliferative disorders)' FROM lk_discipline WHERE name ='Haematology';
+
+--Surgery
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Overarching principles' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Abdominal swellings and massess' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Central abdominal pain' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Lower abdominal pain' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Right iliac fossa pain' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Acute epigastric pain' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Lump in the groin' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Jaundice' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Dyspepsia' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Rectal bleeding' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Constipation' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Voiding disorder' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Painful leg' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Leg ulceration' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'haemoptysis' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Constipation with vomiting' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Skin lesions' FROM lk_discipline WHERE name ='Surgery';
+INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Subcutaneous lumps' FROM lk_discipline WHERE name ='Surgery';
+
+
+COMMIT;

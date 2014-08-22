@@ -1,0 +1,113 @@
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.autocomplete.min.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/userautocomplete.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/taform.js" type="text/javascript"></script>
+<div style="float:left;">
+<p><label class="required"></label> = Required<p>
+<h2><?php if ($this->useraction == 'edit'):?>Edit<?php else:?>Enter<?php endif;?> teaching activity detail:
+<?php if(isset($this->ta_auto_id)):?>
+    <b><a href="<?php echo $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'view')); ?>">
+    <?php echo $this->ta_auto_id;?>
+    </a></b>
+<?php endif;?>
+</h2>
+<form method="post" action="">
+<table width="90%">
+  <tr>
+    <td width="200"><label class="required">Title</label></td>
+    <td><?php echo $this->formText('name', $this->name, array('size'=>60)) ?></td>
+  </tr>
+  <tr>
+    <td><label class="required">Type</label></td>
+    <td><?php echo $this->formSelect('type', $this->type, null, $this->types) ?></td>
+  </tr>
+  <tr>
+    <td><label class="required"><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?></label></td>
+    <td><?php echo $this->formSelect('stage', $this->stage, null, $this->stages) ?></td>
+  </tr>
+  <?php 
+    $config = Zend_Registry::get('config');
+  	$taform_hidden_fields = $config->taform->hiddenfields->toArray();
+  ?>
+  <?php if (!in_array('year', $taform_hidden_fields)): ?>
+  <tr>
+    <td><label>Year</label></td>
+    <td><?php echo $this->formSelect('year', $this->year, array('style'=>'width:37px'), $this->years) ?></td>
+  </tr>
+    <?php endif; ?>
+  <tr>
+    <td><label class="required"><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></label></td>
+    <td><?php echo $this->formSelect('block', $this->block, null, $this->blocks) ?></td>
+  </tr>
+  <?php if (!in_array('block_week', $taform_hidden_fields)): ?>
+  <tr>
+    <td><?php echo Zend_Registry::get('Zend_Translate')->_('Week') ?></td>
+    <td><?php echo $this->formSelect('block_week', $this->block_week, null, $this->weeks) ?></td>
+  </tr>
+  <?php endif; ?>
+  <?php if (!in_array('pbl', $taform_hidden_fields)): ?>
+  <tr>
+    <td>PBL/CRS</td>
+    <td><?php echo $this->formSelect('pbl', $this->pbl, null, $this->pbls) ?></td>
+  </tr>
+  <?php endif; ?>
+  <?php if (!in_array('sequence_num', $taform_hidden_fields)): ?>
+  <tr>
+    <td>Sequence No.</td>
+    <td><?php echo $this->formSelect('sequence_num', $this->sequence_num, null, $this->nums) ?></td>
+  </tr>
+  <?php endif; ?>
+  <?php if (!in_array('term', $taform_hidden_fields)): ?>
+  <tr>
+    <td>Term</td>
+    <td><?php echo $this->formSelect('term', $this->term, null, $this->terms) ?></td>
+  </tr>
+  <?php endif; ?>
+  <tr>
+    <td>Student Group</td>
+    <td><?php echo $this->formSelect('student_grp', $this->student_grp, null, $this->grps) ?></td>
+  </tr>
+  <tr>
+    <td>Principal Teacher</td>
+    <td><?php echo $this->formText('principal_teacher', $this->principal_teacher, array('size'=>60)) ?></td>
+  </tr>
+  <tr>
+    <td>Current Teacher</td>
+    <td><?php echo $this->formText('current_teacher', $this->current_teacher, array('size'=>60)) ?></td>
+  </tr>
+  <?php if (count($this->linked_los_old_arr) > 0): ?>
+  <tr>
+    <td colspan="2">
+    <h3>Please select the learning objective(s) this teaching activity should link to:</h3><p>
+    <?php $loFinder = new LearningObjectives();?>
+    <?php foreach ($this->linked_los_old_arr as $loid) : ?>
+      <?php $checked = (array_search($loid, $this->linked_los_new_arr) !== false) ? 'checked="checked"' : '' ?>
+      <label><input type="checkbox" name="linkedlo[]" <?php echo $checked ?> value="<?php echo $loid ?>" />
+      Learning objective <?php echo $loid ?>: <?php echo $loFinder->fetchRow("auto_id=$loid")->lo ?></label><br/>
+    <?php endforeach; ?>
+    </p>
+    </td>
+  </tr>
+    <tr>
+    <td colspan="2">
+    <h3>Do you want to archive the old teaching activity?</h3><p>
+    <?php $do_archive = ($this->archive_option == 'y') ?>
+    <label><input type="radio" name="archiveoption" <?php if ($do_archive) echo 'checked="checked"' ?> value="y" />Yes</label>
+    <label><input type="radio" name="archiveoption" <?php if (!$do_archive) echo 'checked="checked"' ?> value="n" />No</label>
+    </p>
+    </td>
+  </tr>
+  <?php endif; ?>
+  <tr>
+    <td>&nbsp;</td>
+    <td>
+      <?php echo $this->formSubmit('submit', 'Submit Teaching Activity', array('style'=>'margin-top: 10px','accesskey'=>'S')) ?>&nbsp;&nbsp;
+      <?php if(isset($this->ta_auto_id)):?>
+      <input id="submit" type="button" onclick="javascript:window.location ='<?php echo $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'view')); ?>';" value="Cancel">      
+      <?php endif;?>
+    </td>
+  </tr>
+</table>
+</form>
+</div>

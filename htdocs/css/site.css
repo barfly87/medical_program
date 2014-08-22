@@ -1,0 +1,658 @@
+
+/*** The Essential Code ***/
+/* Based on http://www.alistapart.com/articles/holygrail/ */
+@media print {
+	#header {
+		display: none;
+	}
+	#menu {
+		display: none;
+	}
+	#tacontainer {
+		border: none;
+		margin-bottom: 2px;
+	}
+	#tametadata {
+		display:none;
+	}
+	#tacontent {
+		width: 95%;
+	}
+	span.prevnextlink {
+		display:none;
+	}
+	span.mainedit {
+		display:none;
+	}
+	p {
+		widows: 1;
+		orphans: 1;
+	}
+	span.hidefromprint {
+		display:none;
+	}
+	.pblBarLeft, .pblBarRight, #pblContainerLeft {
+        display:none;
+    }
+	
+}
+
+@media screen {
+	body {
+	    min-width: 1024px;
+	}
+}
+
+#container {
+	margin-top: 2em;
+	padding: 0.5em 1em;
+    line-height: 1.4;
+    min-height:400px;
+}
+
+#tacontainer {
+	margin-bottom: 5em;
+	border: 1px solid #FFE0AF;
+}
+
+#pblContainer {
+	margin-top: -1em;
+}
+
+#tatop {
+	padding: 0.4em 1em;
+    background: #fff9ef;
+    position: relative;
+}
+
+#tatop h2{
+	padding: 4px 0px;
+	margin: 0;
+}
+
+#tacontent h2{
+	padding: 0px;
+	margin: 0;
+}
+
+#tacontent {
+	margin-right: 360px;
+	/*background: #f1f2ea;*/
+	padding: 1em;
+	min-width: 600px;
+}
+div#tacontent.eventsResources {
+    margin-right: 0px !important; 
+}
+
+#tacontent div {
+	padding-bottom: 15px;
+}
+
+#tametadata {
+	width: 344px;
+	float: right;
+	margin: 0px 10px;
+}
+
+#tapadding {
+	clear: both;
+}
+
+#tametadata h3 {
+	padding: 1px 6px;
+	margin: 10px 0px 0px 0px;
+}
+
+.rhsheading {
+	font-size: 105%;
+	font-weight: bold;
+	color: #2f1d03;
+	background-color: #ffe0af;
+}
+
+.rhsheading .editlink {
+	float: right;
+}
+
+#metadata th, #releasedate th, #owneraudience th{
+	font-style: italic;
+	font-weight: normal;
+	text-align: right;
+	padding-right: 2px;
+}
+
+#edithistory {
+	margin-bottom: 10px;
+}
+
+#edithistory th, #releasedate th {
+	font-style: italic;
+	font-weight: normal;
+}
+
+.currentversion {
+	font-weight: bold;
+}
+
+.rhsbox {
+	background: #fff9ef;
+}
+
+.rhsbox .mcontent{
+	padding: 4px 6px;
+}
+
+#popup_pad {
+	padding: 10px;
+}
+
+#right {
+    width: 110px; /* RC width */
+    padding: 0 0; /* RC padding */
+    margin-right: -100%;
+}
+
+#footer {
+    clear: both;
+    text-align: center;
+    padding-top: 10px;
+    border-top: 1px solid;
+}
+
+#loggedIn {
+	white-space:nowrap;
+}
+
+/*** End of The Essential Code ***/
+
+#scrn-read {
+    display:none
+}
+
+body,html {
+    font-size:100%;
+    padding:0;
+    margin:0;
+}
+
+body {
+    background: #FFF;
+    font-size:0.8em;
+}
+
+td,div,body {
+    font-family:Verdana,Arial,Helvetica,sans-serif
+}
+
+#header {
+    padding: 0;
+    background: #ffff00 url(http://smp.sydney.edu.au/compass/img/compass_banner_back.jpg) repeat-x;
+    height: 77px;
+    text-align: right;
+}
+#header img.right {
+    height: 77px;
+    padding: 0;
+    margin: 0;
+    border: 0px 
+}
+#header img#first {
+    border-left: none;
+}
+
+#footer {
+    padding: 0.3em ;
+    background: #fff;
+    color: #888;
+    font-size: 0.8em;
+}
+
+#left {
+    background: #fff;
+}
+
+#center {
+    background: #fff;
+}
+
+#right {
+    background: #fff;
+}
+
+#container .column {
+    padding-top: 1em;
+}
+
+h1,h2,h3,h4,h5 {
+    color: #306FDF;
+    font-weight: normal;
+}
+
+a {
+    color: #306FDF;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #16448A;
+    text-decoration: underline;
+}
+
+#reviews {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#reviews li {
+    margin-bottom: 2em;
+}
+
+#menu {
+    border-top:4px solid #FA9300;
+    background-color: #FA9300;
+    width: 100%;
+    text-align: right;
+    float: left;
+}
+
+#search {
+    margin-left: 0;
+    margin-bottom: 10px;
+    width: 110px;
+    clear: right;
+}
+#search h3 {
+    margin:0;
+    padding: 0;
+}
+
+
+dd {
+    margin-left: -1px;
+}
+
+.editable {
+    background-color: #ffff99;
+    padding: 3px;
+}
+.editor_ok_button {
+    background-color: #36f;
+    color: #fff;
+    margin-right: 20px;
+}
+.editor_cancel_button {
+    background-color: #000;
+    color: #fff;
+}
+.saving {
+    background-color: #930;
+    color: #fff;
+    padding: 3px;
+}
+
+.error {
+    color: #FF0000;
+}
+.username {
+	color:blue;
+	cursor:pointer;
+	border-bottom: 1px blue dotted;
+}
+
+ul.errors li {
+	color: #FF0000;
+    list-style: none;
+    margin-left: -40px;
+}
+
+.noBorder {
+    border: 0px;    
+}
+.noWrap {
+    white-space:nowrap;
+}
+.noUnderlineText {
+    text-decoration: none;
+}
+.underlineText {
+	text-decoration: underline;
+}
+.boldText {
+	font-weight: bold;
+}
+.italicText {
+    font-style: italic;
+}
+.hide {
+	display:none;
+}
+.centerText {
+    text-align: center;
+}
+.leftText {
+    text-align:left;
+}
+.topText {
+    vertical-align: top;
+}
+.middleText {
+    vertical-align: middle;
+}
+.leftFloat {
+    float: left;
+}
+.rightFloat {
+    float: right;
+}
+.inlineDisplay {
+    display: inline;
+}
+.blockDisplay {
+    display: block;
+}
+.padding2px {
+    padding: 2px;
+}
+.padding4px {
+    padding: 4px;
+}
+.padding6px {
+    padding: 6px;
+}
+
+.helpimg {
+    cursor: pointer;
+}
+.bHeader {
+    color: #2F1D03;
+    font-weight: bold;
+}
+.dottedP {
+    border-bottom: 1px solid #D6DFFF;
+    width:100%;
+}
+.notice {
+	border-style:solid;
+	border-color:red;
+	border-width:2px;
+	padding: 2px
+}
+#tooltip {
+  position: absolute;
+  z-index: 3000;
+  opacity: 0.85;
+  background-color: #FEECA4;
+  width: auto;
+  padding: 5px;
+}
+#tooltip h3, #tooltip div {
+    margin: 0;
+}
+#tooltip.resource-link {
+  position: absolute;
+  z-index: 3000;
+  opacity: 1;
+  background-color: #EFE3D1;
+  font-weight:bold;
+  width: auto;
+  border: solid 1px gray ;
+  padding: 5px;
+  width: 500px;
+}
+#tooltip.resource-link h3{
+    font-size: 110%;
+}
+
+.notAuthorized {
+    opacity:0.15;  
+    filter:alpha(opacity=15);
+}
+a.buttonLink:visited, a.buttonLink:link, a.buttonLink:active, a.buttonLink:hover {
+	background-color:#A0522D;
+	color:#FFECCF !important;
+	font-weight:bolder;
+	padding:2px 5px;
+	text-decoration:none;
+}
+.listSquare {
+    list-style-image: url('/compass/img/list.png');;
+    padding-left: 20px;
+}
+
+#taresource .rlink, .recording-desc-other .rlink {
+	text-decoration: none;
+}
+
+#taresource img {
+	border: none;
+}
+
+#taresource ul.column{
+	width: 100%;
+	padding: 0;
+	margin: 10px 0 50px;
+	list-style: none;
+}
+
+#taresource {
+    clear:left;
+}
+
+#taresource ul.column li {
+	float: left;
+	padding: 0;
+	margin: 5px 0;
+	display: inline;
+}
+
+#taresource .block {
+	position: relative;
+	height: 250px;
+	font-size: 1em;
+	margin-right: 10px;
+	padding: 5px;
+	border: 1px solid #fff9ef;
+	background: #fff9ef;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+#taresource .block img {
+	padding: 5%;
+	margin: auto auto;
+	display: block;
+}
+
+.deletersc {
+	display: none;
+}
+.staffonly-resource {
+    position: absolute;
+    top: 0;
+    right: 0;   
+}
+.resource-author {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 3px;
+}
+
+#taresource .block img.staffonly-resource {
+    padding: 0px;
+    margin: auto auto;
+    display:block;   
+}
+/* START ## Recordings css on teaching activity page */
+#recordings-container {
+    display:block;
+}
+
+#recordings-container ul.recordings-ul  {
+    padding: 0;
+    margin: 0px 0px 0px 0px;
+    list-style-type: none;
+    display:block;
+}
+
+#recordings-container ul.recordings-ul li {
+    width: 205px;
+    padding: 0;
+    float:left;
+}
+
+#recordings-container ul.recordings-ul .recording {
+    padding: 5px;
+    background-color: #FFF9EF;
+    border: 1px solid #FFF;
+    margin-right: 10px;
+    position:relative;
+}
+
+#recordings-container ul.recordings-ul .recording:hover  {
+    padding: 5px;
+    background-color: #FFF9EF;
+    border: 1px solid #FFE0AF;
+    margin-right: 10px;
+}
+
+#recordings-container .recording-desc {
+    text-align:center;
+}
+
+#recordings-container .recording-desc-other {
+    text-align:left;
+}
+
+#recordings-container .recording-other-img {
+    text-align:center;
+}
+
+#recordings-container .recording-other-img img{
+    border: 0px;
+}
+
+#recordings-container .recording-links {
+    padding-left:10px;
+}
+
+#recordings-container a.recording-delete {
+    bottom: 0px;
+    position:absolute;
+    right: 0px;
+    display:none;
+    text-decoration:none;
+}
+
+#recordings-container a.recording-delete img {
+    border:0px;
+}
+/* END ## Recordings css on teaching activity page */
+
+
+.locontrol, .tacontentcontrol {
+	position: absolute;
+	bottom: 0.1em;
+	right: 0.3em;
+	display:none
+}
+
+.selectedlo, .selectedtacontent {
+	background-color: #fff9ef;
+}
+
+#talos > div {
+	padding-bottom: 5px;
+}
+
+
+#talos ol li ol li {
+    list-style-type: lower-alpha;
+}
+
+#talos ol li ol li ol li {
+    list-style-type: lower-roman;
+}
+
+a.editlink {
+	text-decoration: none;
+}
+
+a:hover.editlink {
+	text-decoration: underline;
+}
+
+.mainedit {
+	float:right;
+	font-size:80%;
+}
+
+.black {
+	color: black;
+}
+
+.prevnextlink {
+	position: absolute;
+	bottom: 0.1em;
+	right: 0.5em;
+}
+
+.prevnextlink a img{
+	border: 0;
+}
+
+div#loader {
+    display: none;
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background:#FFF;
+    text-align:center;
+    padding:10px;
+    font:normal 16px Tahoma, Geneva, sans-serif;
+    margin-left: -50px;
+    margin-top: -50px;
+    z-index:2;
+    overflow: auto; 
+    border: 0px;
+}
+
+.taListImage {
+    min-height:20px;
+    max-height:30px;
+    min-width:20px;
+    max-width:35px;
+    
+    border:1px solid #FFF;
+}
+.taListImage:hover {
+    border:1px solid #C1C0BD;
+}
+
+img.resource-info {
+    position:absolute;
+    bottom:0;
+    right:0;
+    padding:0px !important;
+}
+
+img.resource-delete {
+    position:absolute;
+    bottom:0;
+    right:0;
+    padding:2px !important;
+}
+
+img.resource-info-with-delete {
+    position:absolute;
+    bottom:0;
+    right:0;
+    padding:0px !important;
+}
+div.resource-info-container {
+    height: 8px;
+}

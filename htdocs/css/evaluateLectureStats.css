@@ -1,0 +1,24 @@
+ul.errors {
+    margin: 0px;
+    margin-left: 5px;
+}
+ul.errors li {
+    margin-top: 0px;
+    margin-bottom: 2px;
+}
+
+ul.errors {
+    margin: 0px;
+}
+ul.errors li {
+}
+
+table#tableLectureStats #tdDate{
+    vertical-align:bottom;
+    padding-bottom:4px;
+}
+table#tableLectureStats .dateFormat {
+    font-size: 85%;
+}
+table#tableLectureStats .tdUids {
+}

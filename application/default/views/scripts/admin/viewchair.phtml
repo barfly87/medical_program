@@ -1,0 +1,35 @@
+<style type="text/css">
+.user{ border: solid 1px #bbbbbb; background-color: #eeeeee;}
+.horizontal1 {float: left; margin: 4px; width: 60px; }
+.horizontal2 {float: left; margin: 4px; width: 60px; text-align: center;}
+.horizontal3 {float: left; margin: 4px; width: 350px; padding-left: 20px;}
+.horizontal4 {float: left; margin: 4px; width: 300px; }
+.horizontal5 {float: left; margin: 4px; width: 60px; }
+.deleteimg {border: 0px; padding-left:16px; }
+</style>
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.2.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/removeuser.js"></script>
+
+<?php if (count($this->blockchairs) > 0) :?>
+<table>
+  <thead><tr align="left"><th><div class="horizontal1">Delete</div><div class="horizontal2">Block No.</div><div class="horizontal3">Block Name</div><div class="horizontal4">Block Chair</div><div class="horizontal5">Domain</div></th></tr></thead>
+  <tbody>
+  <?php foreach ($this->blockchairs as $chair): ?>
+    <tr class="user" id="userid<?php echo $chair['id'] ?>">
+      <td>
+         <div class="horizontal1"><a href="javascript:;" onclick="removeUser('deletechair', <?php echo $chair['id']?>, '<?php echo $chair['uid']?>');"><img src="<?php echo $this->baseUrl;?>/img/delete.gif" class="deleteimg"></a></div>
+         <div class="horizontal2"><?php echo $chair['block']?></div>
+         <div class="horizontal3"><?php echo $chair['name']?></div>
+         <div class="horizontal4"><span class="userid"><?php echo $chair['uid'] ?></span><div class="userdetail"></div></div>
+         <div class="horizontal5"><?php echo $chair['domain'] ?></div>
+      </td>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
+<?php else : ?>
+<p>No block chair found.</p>
+<?php endif; ?>
+
+<p><a href="<?php echo $this->url(array('action' => 'addchair', 'controller' => 'admin'), null, true); ?>">Add Block Chair</a></p>

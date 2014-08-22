@@ -1,0 +1,44 @@
+<?php if(empty($this->result)):?>
+    <?php 
+    $startDate = $this->form->getValue(EvaluateLectureStatsConst::START_DATE);
+    $endDate = $this->form->getValue(EvaluateLectureStatsConst::END_DATE);
+    ?>
+    <h3>
+        <span class="error boldText">Nothing Found !</span><br />
+        Enable to find any teaching activities from events for dates between '<?php echo $startDate;?>' - '<?php echo $endDate;?>'<br />
+        Please try again with different set of dates.
+    </h3>
+<?php else:?>
+    <?php 
+    include_once('../application/common/views/_tableSortJsAndCss.phtml');
+    $totalTitles = count($this->result['titles']);
+    //Since the first heading is UID and second heading is %Finished we need to minus them
+    $totalTas = $totalTitles - 1;
+    $customNoOfColumns = $totalTitles;
+    ?>
+    <table id="sortTable" class="tableSorter">
+        <thead>
+            <tr>
+            <?php foreach($this->result['titles'] as $title) :?>
+                <th><?php echo nl2br($title);?></th>
+            <?php endforeach;?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->result['evaluations'] as $uid => $data) :?>
+                <tr>
+                    <td style="min-width:100px;"><?php echo $uid;?><?php echo Compass::userInfoHtml($uid);?></td>
+                    <?php for($i=1; $i<$totalTitles; $i++):?>
+                        <td class="centerText">
+                            <?php if(isset($data[$i])) :?>
+                                <?php echo $data[$i];?>
+                            <?php endif;?>
+                        </td>
+                    <?php endfor;?>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+        <?php $paginationBg = 'bottom';?>
+        <?php include('../application/common/views/_footerPagination.phtml'); ?>
+    </table>
+<?php endif;?>

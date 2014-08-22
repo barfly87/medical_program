@@ -1,0 +1,46 @@
+<?php 
+$userDetails = '';
+
+if(isset($this->user['title']) && isset($this->user['faculty']) ) {
+    $userDetails .= $this->user['title']. ', '.$this->user['faculty'];
+} else if(isset($this->user['faculty'])) {
+    $userDetails .= $this->user['faculty'];
+} else if(isset($this->user['title'])) {
+    $userDetails .= $this->user['title'];    
+}
+if(!empty($userDetails)) {
+    $userDetails .= '<br />';
+}
+if(isset($this->user['phone'])) {
+    $userDetails .= $this->user['phone'].'<br />';
+}
+
+if(isset($this->user['email'])) {
+    $userDetails .= "<a href='mailto:{$this->user['email']}'>{$this->user['email']}</a>&nbsp;&nbsp;&nbsp;"; 
+}
+if(isset($this->user['profile'])) {
+    $userDetails .= "<a href='{$this->user['profile']}'>profile</a>&nbsp;&nbsp;&nbsp;";
+}
+if(isset($this->user['account_tool'])) {
+    $userDetails .= "<a href='{$this->user['account_tool']}'>account tool</a>&nbsp;&nbsp;";    
+}
+
+?>
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+<table class="tableNoSorter" style="margin:auto;font-weight:bold;">
+    <tr>
+    <?php if(!empty($this->user)) :?>
+        <?php if(isset($this->user['image'])) :?>
+            <td style="background-color:#FFF;"> 
+                <img class="uidimages" width="80" src="<?php echo $this->user['image'];?>" onerror="this.src='<?php echo $this->baseUrl;?>/img/noimage/empty1x1.gif'; this.width='1';"/>
+            </td> 
+        <?php endif;?>
+        <td style="background-color:#FFF;" valign="top">    
+            <?php echo $userDetails;?>
+        </td>
+    <?php else:?>
+        <td  style="background-color:#FFF;"><span class="error">Unable to retrieve profile.</span></td>
+    <?php endif;?>        
+    </tr>
+</table>
+

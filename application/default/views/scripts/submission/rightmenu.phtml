@@ -1,0 +1,10 @@
+<div id="actionscontent" style="border: 1px solid #FFE0AF; background-color: #FFECCF"><b>Actions</b><hr/>
+<ul>
+<?php if (isset($this->actions['edit'])) :?><li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'submission','action'=>'editloandta','id'=>$this->link_id),null,true); ?>">Edit</a> this submission</li><?php endif; ?>
+<?php if (isset($this->actions['submit'])) :?><li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'submission','action'=>'submitloandta','id'=>$this->link_id),null,true); ?>">Submit</a> for approval</li><?php endif; ?>
+<?php if (isset($this->actions['approve'])) :?><li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'submission','action'=>'approveloandta','id'=>$this->link_id),null,true); ?>">Approve</a> this submission</li><?php endif; ?>
+<?php if (isset($this->actions['reject'])) :?><li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'submission','action'=>'rejectloandta','id'=>$this->link_id),null,true); ?>">Reject</a> this submission</li><?php endif; ?>
+<?php if (isset($this->actions['sendback'])) :?><li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'submission','action'=>'resubmitloandta','id'=>$this->link_id),null,true); ?>">Send back</a> to author for resubmission</li><?php endif; ?>
+<?php if (isset($this->actions['archive'])) :?><li><a href="<?php echo $this->url(array('module'=>'default','controller'=>'lotalinkage','action'=>'approvedelete','taid'=>$this->ta_id, 'loid'=>$this->lo_id),null,true); ?>">Approve</a> this deletion</li><?php endif; ?>
+</ul>
+</div>

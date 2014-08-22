@@ -1,0 +1,41 @@
+<?php 
+/**
+ * #### WARNING #### 
+ * This view is shared using $this->action from various views.
+ * 
+ * Model files are namely  
+ * ResourceManageTa.php
+ * ResourceManageLo.php
+ * ResourceManagePbl.php
+ * ResourceManageBlock.php
+ * 
+ * Please be careful when changing this files.
+ */
+?>
+<link href="<?php echo $this->baseUrl;?>/css/manageresources.css"   media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/form.css"   media="screen" rel="stylesheet" type="text/css" />
+<?php include('../application/common/views/_impromptu22JsCss.phtml');?>
+
+<?php include('manage/manage_js.phtml');?>
+
+<div class="sectionContainer">
+    <?php include('manage/manage_form.phtml');?>
+</div>
+<br />
+
+<div class="sectionContainer">
+    <?php include('manage/manage_loose_resource.phtml');?>
+</div>
+<br />
+
+<div class="sectionContainer">
+    <?php include('manage/resource_history.phtml');?>
+</div>
+<br />
+
+<?php if($this->pageType == ResourceConstants::$TYPE_ta) :?>
+<div class="sectionContainer">
+    <?php include('manage/copy_ta_resources.phtml');?>
+</div>
+<br />
+<?php endif;?>

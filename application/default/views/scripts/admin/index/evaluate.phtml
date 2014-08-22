@@ -1,0 +1,11 @@
+<?php 
+$taEvaluateLink    = $this->url(array('module'=>'default','controller'=>'evaluate','action'=>'studentta'),null,true);
+$completionReport  = $this->url(array('module'=>'default','controller'=>'evaluate','action'=>'completionreport'),null,true);
+$taCsvLink         = $this->url(array('module'=>'default','controller'=>'evaluate','action'=>'tareport'),null,true);
+?>
+<h3>Evaluation</h3>
+<ul>
+    <li><a target="_blank" href="<?php echo $taEvaluateLink;?>">Student evaluation on teaching activity</a></li>
+    <li><a target="_blank" href="<?php echo $completionReport;?>">Ta Evaluation - Completion Report</a></li>
+    <li><a target="_blank" href="<?php echo $taCsvLink;?>">Ta Evaluation - Data</a></li>
+</ul>

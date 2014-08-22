@@ -1,0 +1,47 @@
+<?php
+$objectId = MediabankResourceConstants::getObjectId($this->resourceAddedMid);
+$compassUrlError = true;
+$compassUrl = '';
+if(trim($objectId) != '') {
+    $compassUrl = 'http://'.$_SERVER['HTTP_HOST'].Compass::baseUrl().MediabankResourceConstants::$compassViewOrDownloadUrlBasePath;
+    $compassUrl .= '/mid/'.base64_encode($this->resourceAddedMid).'/type/loose/id/'.$objectId;
+    $compassUrlError = false;
+    Zend_Registry::get('logger')->warn(PHP_EOL.'Loose resource url created : '.$compassUrl.PHP_EOL.'From mid :'.$this->resourceAddedMid.PHP_EOL);
+}
+?>
+<h3>
+    Successfully added resource to mediabank.<br />
+</h3>
+<link type="text/css" rel="stylesheet" media="screen" href="<?php echo $this->baseUrl;?>/css/tableNoSort.css">
+<script type="text/javascript">
+$(document).ready(function() {
+    var mediabankIdOrgVal = '<?php echo $this->resourceAddedMid;?>';
+    var compassUrl = '<?php echo $compassUrl;?>';
+    $('#input-mediabank-id').keyup(function() {
+        $(this).val(mediabankIdOrgVal);
+    });
+    $('#input-compass-url').keyup(function() {
+        $(this).val(compassUrl);
+    });
+});
+</script>
+<table class="tableNoSorter">
+    <tr>
+        <th>Mediabank ID</th>
+        <td><input size="80" type="text" id="input-mediabank-id" value="<?php echo $this->resourceAddedMid; ?>" /></td>
+    </tr>
+    <tr>
+        <th>Compass URL</th>
+        <td>
+        <?php if($compassUrlError === true) :?>
+            <span class="error">
+                <b>Error !</b><br />
+                Could not create URL using this mid.<br />
+                Please contact Compass Staff with the above Mediabank ID to get the URL.
+            </span>
+        <?php else: ?>
+            <textarea rows="3" cols="80" id="input-compass-url"><?php echo $compassUrl;?></textarea>
+        <?php endif;?>
+        </td>
+    </tr>
+</table>      

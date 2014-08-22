@@ -1,0 +1,12 @@
+<br />
+<?php $topUrl = $this->url(array('module'=>'default','controller'=>'pbl','action'=>'top'),null,true);?>
+<h1>
+    <a href="<?php echo $topUrl?>">
+        <?php echo $this->blockName; ?>
+    </a>
+</h1>
+<?php
+echo $this->action('manage', 'resource', 'default', array('page'=>'block', 'ref' => $this->blockId));
+?>
+
+<p><b>&nbsp;<a href="<?php echo $topUrl?>">Return</a></b></p>

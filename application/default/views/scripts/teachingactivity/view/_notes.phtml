@@ -1,0 +1,27 @@
+<?php if (UserAcl::isStaffOrAbove()) :?>
+<?php $posturl = "{$this->baseUrl}/teachingactivity/addnotes/taid/{$this->ta->auto_id}"; ?>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.jeditable.mini.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.jeditable.autogrow.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.autogrow.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.edit_area').editable('<?php echo $posturl;?>', { 
+        type      : 'autogrow',
+        cancel    : 'Cancel',
+        submit    : 'OK',
+        indicator : '<img src="<?php echo $this->baseUrl;?>/img/indicator.gif">',
+        tooltip   : 'Click to edit...',
+		autogrow : {
+			lineHeight : 16,
+			minHeight  : 32
+		}
+    });
+});
+</script>
+<?php endif; ?>
+<div id="notes" class="rhsbox">
+	<h3 class="rhsheading">Notes (Staff Only)</h3>
+    <div class="mcontent">
+		<div class="edit_area" id="notestext"><?php echo $this->ta->notes ?></div>
+    </div>
+</div>

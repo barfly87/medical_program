@@ -1,0 +1,121 @@
+<?php 
+//TABLE SORTER LOGIC
+echo $this->partial('pbl/fragments/sortable.phtml', array('customSortableId' => null));
+?>
+<?php 
+$core = ((isset($this->coreResults) && ($this->coreResults==1)) || (isset($this->requestParams['coreResults']) && $this->requestParams['coreResults'] === true)) ? 'CORE - ': '';
+$config = Zend_Registry::get('config');
+$taform_hidden_fields = $config->taform->hiddenfields->toArray();
+?>
+<div id="tasDiv"  class="pblElem">
+    <p class="pblElemHeading"><?php echo $core;?><?php echo ucwords($this->requestParams['taTypeName']);?></p>
+        <?php if(isset($this->tas) && !empty($this->tas) && !isset($this->tas['error'])):?>
+        <?php
+        $idType = '' ;
+        $idText = '#';
+        if (isset($this->tas['display']) && !empty($this->tas['display'])) {
+            $idType = $this->tas['display'];
+            unset($this->tas['display']);
+        }
+        if($idType == 'term') {
+            $idText = 'Term';
+        } else if ($idType == 'week') {
+            $idText = 'Week';
+        }
+
+        ?>
+        <table width="100%" id="tasTable" class="tableSorter">
+            <thead>
+            <tr class="rhsheading">
+            <?php if (!in_array('block_week', $taform_hidden_fields)): ?>
+              <th><?php echo $idText;?></th>
+            <?php endif; ?>
+              <th>Title</th>
+              <th>Discipline</th>
+              <th><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th>
+              <th>Slides</th>
+              <th>Recordings</th>
+              <th>Other Resources</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ($this->tas as $ta) {
+                $slides = array();;
+                $recordings = array();
+                $otherresources = array();
+                $resourceLinks = (UserAcl::isStaffOrAbove()) ? $ta['ta_resource_links_staff'] : $ta['ta_resource_links_student'];
+                $parts = preg_split('~(</a[^>]*>)~', $resourceLinks, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+                foreach($parts as $part) {
+                    if (trim($part) == '') {
+                        continue;
+                    }
+                    $fileType = '';
+                    if (preg_match('/rel="([^"]*)"/', $part, $matches)) {
+                        if(isset($matches[1])) {
+                            $explode = explode('|', $matches[1]);
+                            foreach($explode as $relConfig) {
+                                if(strpos($relConfig, 'fileType:') !== false){
+                                    $fileType = str_replace('fileType:', '', $relConfig);
+                                    if(strpos($fileType,'powerpoint') !== false) {
+                                        $fileType = 'powerpoint';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if($fileType != '') {
+                        switch($fileType) {
+                            case 'pdf':
+                            case 'ppt':
+                            case 'powerpoint':
+                                $slides[] = $part;
+                                break;
+                
+                            case 'mp3':
+                            case 'richmedia':
+                            case 'avi':
+                            case 'mp4':
+                            case 'm4v':
+                            case 'mpeg':
+                            case 'zip':
+                                $recordings[] = $part;
+                                break;
+                
+                            default:
+                                $otherresources[] = $part;
+                                break;
+                        }
+                    }
+                }
+                
+                $sequence_num = empty($ta["sequence"]) ? '' : $ta["sequence"] . '.';
+                $hash = '';
+                if($idType == 'term') {
+                    $hash = $ta['ta_term'];
+                } else if ($idType == 'week') {
+                    $hash = $ta['ta_block_week'];
+                } else {
+                    $hash = $sequence_num; 
+                }
+            ?>
+            <tr>
+            <?php if (!in_array('block_week', $taform_hidden_fields)): ?>
+                <td class="centerText topText">&nbsp;<?php echo $hash; ?>&nbsp;</td>
+            <?php endif; ?>
+                <td class="topText"><a class="" href="<?php printf($taUrlFormat,$ta['ta_auto_id']); ?>"><?php echo $ta['name'];?></a></td>
+                <td class="topText"><?php echo $this->escape($ta['disciplines'])?></td>
+                <td class="topText"><?php echo $this->escape($ta['theme'])?></td>
+                <td class="topText"><?php echo join(' ', $slides) ?></td>
+                <td class="topText"><?php echo join(' ', $recordings) ?></td>
+                <td class="topText"><?php echo join(' ', $otherresources) ?></td>
+            </tr>
+        <?php } ?>
+            </tbody>
+        </table>
+        <?php else :?>
+            <?php $taError = (isset($this->tas['error'])) ? $this->tas['error'] : null; ?>
+            <?php PblConst::printErrorOrNoneFound($taError);?>
+        <?php endif;?>
+    </p>
+</div>

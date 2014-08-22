@@ -1,0 +1,26 @@
+<link media="screen" rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/form.css"/>
+<link media="screen" rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/resource.css"/>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/resourceupload.js"></script>
+
+
+
+<?php $showForm = true;?>
+<?php if(property_exists($this, 'tempResourceDetails') && is_array($this->tempResourceDetails) && count($this->tempResourceDetails) > 0) :?>
+	<?php include('uploadedit/temp_resource.phtml');?>
+<?php endif;?>
+<h2>
+    <?php echo $this->page->actionName?> Resource for <?php echo $this->page->typeName; ?>
+    <?php if($this->request->typeId != 'new'): ?>: 
+    <a href="<?php echo $this->page->returnUrl;?>">
+        <b><?php echo $this->page->returnUrlTitle; ?></b>
+    </a><?php endif;?>
+</h2>
+<?php include('uploadedit/error.phtml');?>
+
+<?php if($showForm == true) :?>
+    <?php include('uploadedit/form.phtml');?>
+<?php endif;?>
+
+<?php if($this->request->tempResource !== true) : ?>
+	<p><b><a href="<?php echo $this->page->returnUrl;?>">Return</a></b></p>
+<?php endif;?>

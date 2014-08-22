@@ -1,0 +1,39 @@
+<?php 
+$mid                    = $this->mid;
+$collection             = MediabankResourceConstants::getCollection($mid);
+$description            = (isset($this->dc['description'])) ? $this->dc['description'] : '';
+$creator                = (isset($this->dc['creator'])) ? $this->dc['creator'] : '';
+?>       
+
+<div id="mid-info-container-<?php echo $this->midCount; ?>">
+<?php if(!empty($this->dc)) :?>
+<?php //CREATE MID DETAILS?>
+<div id="mid-info-detail-<?php echo $this->midCount; ?>">
+    <div id="info-prompt-container">
+        <div id="info-prompt-content">
+            <table class="mid-info-url">
+            	<tr>
+            		<td class="heading boldText">Mid</td>
+            		<td id="mid" class="fixWidth"><?php echo $mid; ?></td>
+            	</tr>
+            	<tr>
+            		<td class="heading boldText">Collection</td>
+            		<td id="collection" class="fixWidth"><?php echo $collection; ?></td>
+            	</tr>
+            	<tr>
+            		<td class="heading boldText">Description</td>
+            		<td id="description" class="fixWidth"><?php echo $description; ?></td>
+            	</tr>
+            	<tr>
+            		<td class="heading boldText">Creator</td>
+            		<td id="creator" class="fixWidth"><?php echo $creator; ?></td>
+            	</tr>
+            </table>
+            <div id="info-prompt-container-detail" style="display: none"></div>
+        </div>
+    </div>
+</div>
+<?php else: ?>
+    <span class="error">Error! Could not fetch any data.</span>
+<?php endif;?>
+</div>

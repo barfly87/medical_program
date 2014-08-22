@@ -1,0 +1,40 @@
+<?php 
+$resourceTypeId     = (!empty($this->tempResourceDetails['resourceTypeId'])) ?
+                        $this->tempResourceDetails['resourceTypeId'] : 0;
+$resourceTitle      = (!empty($this->tempResourceDetails['title'])) ?
+                        $this->tempResourceDetails['title'] : ''; 
+$resourceMid        = (!empty($this->tempResourceDetails['mid'])) ? 
+                        MediabankResourceConstants::encode($this->tempResourceDetails['mid']) : '';
+$resourceEditable   = (stristr($this->tempResourceDetails['mid'], '|'.MediabankResourceConstants::$cid.'|')) ? 
+                        'yes' : 'no';
+$actionName         = (!empty($this->tempResourceDetails['actionName'])) ? 
+                        $this->tempResourceDetails['actionName'] : '';
+$div                = (!empty($this->tempResourceDetails['div'])) ? 
+                        $this->tempResourceDetails['div'] : '';
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+<?php if($actionName == 'upload') :?>
+    createResourceHtmlForAddAction(
+            '<?php echo $this->type;?>',
+            '<?php echo $resourceTitle;?>', 
+            '<?php echo $resourceMid;?>',
+            '<?php echo $resourceEditable?>',
+            '<?php echo $resourceTypeId;?>');
+<?php elseif($actionName == 'edit'):?>
+    <?php if(!empty($div)):?>
+        updateResourceHtmlForEditAction(
+                '<?php echo $this->type;?>',
+                '<?php echo $div;?>',
+                '<?php echo $resourceMid;?>',
+                '<?php echo $resourceTitle;?>',
+                '<?php echo $resourceTypeId;?>');    
+    <?php endif;?>
+<?php endif;?>
+});
+
+</script>
+
+<?php if($actionName == 'edit') :?>
+	<?php $showForm = false;?>
+<?php endif;?>

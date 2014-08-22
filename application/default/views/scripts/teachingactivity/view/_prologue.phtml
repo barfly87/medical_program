@@ -1,0 +1,37 @@
+<?php if(isset($this->resources['prologue']) && !empty($this->resources['prologue'])) :?>
+    <?php if (UserAcl::isStaffOrAbove()): ?>
+    <script type="text/javascript">
+    $(function() {
+        $('#prologue-container > div').hover(
+            function() {
+                $('.tacontentcontrol', this).show();
+                $(this).addClass('selectedtacontent');
+            },
+            function() {
+                $('.tacontentcontrol', this).hide();
+                $(this).removeClass('selectedtacontent');
+            }
+        );
+    });
+    </script>
+    <?php endif; ?>
+    <script type="text/javascript">
+        $(function() {
+            $('#prologue-container table').css('border', '1px solid #ffe0af').css('border-collapse', 'collapse');
+        });
+    </script>
+    <div id="prologue-container">
+        <?php $allowEditResource = $this->ta->isUserAllowedToEditResource(); ?>
+        <?php $editResourceUrl = Compass::baseUrl() . '/resource/edit/type/ta/resourceid/%d/id/%d/resourcetypeid/%d' ;?>
+        <?php foreach($this->resources['prologue'] as $resource) :?>
+                <div style="position: relative">
+                    <?php echo $this->action('taview','resource','default',array('mid' => $resource['resource_id'],'id' => $resource['auto_id']));?>
+                    <?php if($allowEditResource === true) :?>
+                    <span class="tacontentcontrol">
+                        <a href="<?php printf($editResourceUrl, $resource['auto_id'], $resource['type_id'], $resource['resource_type_id']);?>">Edit</a>
+                    </span>
+                    <?php endif;?>
+                </div>
+        <?php endforeach;?>
+    </div>
+<?php endif;?>

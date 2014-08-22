@@ -1,0 +1,17 @@
+<h3><b>History:</b></h3>
+<?php if (count($this->revisions)):?>
+<table class="tableNoSorter" width="100%">
+    <tr><th>&nbsp;</th><th>Version</th><th>Created by</th><th>Date</th></tr>
+    <?php foreach ($this->revisions as $revision) : ?>
+        <tr align="center">
+          <td valign="top"><?php echo ($this->ta->version == $revision->version) ? ">>" : "&nbsp;"?></td>
+          <td valign="top"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'view','id'=>$revision->auto_id),null,true); ?>">
+          <?php echo $revision->version; ?></a></td>
+          <td align="left" valign="top"><?php echo Compass::userInfoHtml($this->escape($revision->created_by)) ?></td>
+          <td valign="top"><?php echo $this->displayDate($revision->date_created); ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php else: ?>
+    <p>None</p>
+<?php endif; ?>

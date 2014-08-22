@@ -1,0 +1,13 @@
+<?php $href = $this->url(array('module'=>'default','controller'=> 'teachingactivity', 'action'=>'view', 'id'=>$this->ta->auto_id)); ?>
+<div>
+<h2>Thank you!</h2>
+<?php if ('blockchair' != Zend_Auth::getInstance()->getIdentity()->role) :?>
+  <p>Teaching activity <a href="<?php echo $href; ?>"><?php echo $this->ta->auto_id ?></a> has been archived.</p>
+<?php else:?>
+  <p>A request for archiving <a href="<?php echo $href; ?>">teaching activity <?php echo $this->ta->auto_id ?></a> 
+  has been sent to the course designer(s).</p>
+  <!-- <p>You will receive an email notice once the request has been approved.</p> -->
+  <?php $workflowurl = $this->url(array('module'=>'default','controller'=> 'workflow', 'action'=>'index')); ?>
+  <p>You may find all your submissions in <a href="<?php echo $workflowurl ?>">workflow queue</a>.</p>
+<?php endif;?>
+</div>

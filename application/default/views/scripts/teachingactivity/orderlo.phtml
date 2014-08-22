@@ -1,0 +1,45 @@
+<style type="text/css">
+#lo-list {
+	list-style: none;
+	margin-left: -40px;
+}
+#lo-list li {
+	display: block;
+	padding: 10px 10px; margin-bottom: 3px;
+	background-color: #efefef;
+}
+
+#lo-list li img.handle {
+	margin-right: 20px;
+	padding-right: 10px;
+	cursor: move;
+	float:left;
+}
+</style>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/ui/ui.core.1.6.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/ui/effects.core.1.6.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/ui/ui.sortable.1.6.min.js"></script>
+<script type="text/javascript">
+  // When the document is ready set up our sortable with it's inherant function(s)
+  $(document).ready(function() {
+    $("#lo-list").sortable({
+      handle : '.handle',
+      update : function () {
+		  var order = $('#lo-list').sortable('serialize');
+  		  $.get("<?php echo $this->baseUrl;?>/teachingactivity/saveorder?ta_id=" + <?php echo $this->ta->auto_id ?> + "&" + order);
+      }
+    });
+});
+</script>
+<div>
+<p>Please use the handle on the left to order the learning objectives.</p>
+<ul id="lo-list">
+  <?php 
+    //echo count($this->released_los);
+    foreach ($this->released_los as $lo) {
+    	echo '<li id="listItem_', $lo['auto_id'], '"><img src="', $this->baseUrl, '/img/sort_arrow.gif" alt="move" width="24" height="24" class="handle" />', $lo['lo'], '</li>';
+    }
+  ?>
+</ul>
+<p><a href="<?php echo $this->baseUrl;?>/teachingactivity/view/id/<?php echo $this->ta->auto_id ?>"><b>DONE</b></a></p>
+</div>

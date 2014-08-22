@@ -1,0 +1,24 @@
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.7.min.js"></script>
+
+<?php if($this->allowEdit == true) :?>
+    <?php if(!isset($this->tempResource) || $this->tempResource != true) :?>
+        <?php $editUrl  = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'edit','type' =>$this->type, 'resourceid' => $this->resourceid));?>
+    <?php else :?>
+    	<?php $editUrl  = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'edit'));?>
+    	<?php $editUrl .= '?mid='.$this->mid;?>
+    <?php endif;?>
+<?php endif;?>
+
+<?php if(isset($this->addUrl) && $this->addUrl == false): ?>
+	<?php $addUrl = "javascript:addResource('".$this->type."','".$this->typeController."','".$this->id."','".$this->mid."','".$this->resourceTypeId."' );"  ;?>
+<?php endif;?>
+
+<h3>
+	<?php if($this->allowEdit == true):?>
+	<b><a href = "<?php echo $editUrl;?>">Edit</a></b>
+	<?php endif;?>
+	<?php if(isset($addUrl)): ?>
+	&nbsp;<b><a href = "<?php echo $addUrl;?>">Add</a></b>
+	<?php endif;?>
+</h3>

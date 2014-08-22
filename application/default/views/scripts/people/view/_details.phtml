@@ -1,0 +1,59 @@
+<div id="metadata" class="rhsbox">
+	<h3 class="rhsheading">Details</h3>
+	<div class="mcontent">
+		<table width="100%">
+			<tr>
+				<th>Email:</th>			
+				<td><a href="mailto:<?php echo $this->email?>"><?php echo $this->email?></a></td>
+			</tr>
+			<?php if(isset($this->person["chsstudentclinicalschool"][0])): ?>			
+				<tr>
+					<th>Clinical School:</th>			
+					<td><?php echo $this->person["chsstudentclinicalschool"][0]?></td>
+				</tr>
+			<?php endif;?>
+			
+			<?php if(isset($this->person["chsstudentenrolledyear"][0])): ?>		
+			<tr>
+				<th>Enrolled Year:</th>			
+				<td><?php echo $this->person["chsstudentenrolledyear"][0]?></td>
+			</tr>
+			<?php endif;?>
+
+		<?php if($this->isMyProfile || $this->studentInfo[0]["mobile_publicity"]) :?>
+			<?php if(isset($this->studentInfo[0]["mobile_phone"]) && strlen(trim($this->studentInfo[0]["mobile_phone"]))>0): ?>
+			<tr>
+				<th>Mobile Phone:</th>			
+				<td><?php echo $this->studentInfo[0]["mobile_phone"];?></td>
+			</tr>
+				
+			<tr>
+				<th>Mobile Publicity:</th>			
+				<td><?php echo $this->studentInfo[0]["mobile_publicity"] ? "Yes" : "No";?></td>
+			</tr>
+			<?php endif;?>
+		<?php endif;?>
+			
+			<?php if(isset($this->studentInfo[0]["education"]) && strlen($this->studentInfo[0]["education"])>0): ?>		
+			<tr>
+				<th>Educational <br />Background:</th>			
+				<td><?php echo $this->studentInfo[0]["education"];?></td>
+			</tr>
+			<?php endif;?>
+
+			<?php if(isset($this->studentInfo[0]["interests"])&& strlen($this->studentInfo[0]["interests"])>0): ?>		
+			<tr>
+				<th>Interests:</th>			
+				<td><?php echo $this->studentInfo[0]["interests"];?></td>
+			</tr>
+			<?php endif;?>
+			<?php if($this->isMyProfile): ?>		
+			<tr>
+				<th>Edit:</th>			
+				<td><a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'editdetails'),'default',true); ?>">Edit my details</a></td>
+			</tr>
+			<?php endif;?>
+			
+		</table>
+	</div>
+</div>

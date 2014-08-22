@@ -1,0 +1,11 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<div style="float:left; max-width:750px">
+  <h2>Recently submitted learning objectives</h2>
+  <?php if(count($this->objectives)) : ?>
+  <table>
+  <?php echo $this->partialLoop('learningobjective/_objectiveRow.phtml', $this->objectives) ?>
+  </table>
+  <?php endif; ?>
+  Total number of learning outcomes in compass: <?php echo $this->lo_total; ?>
+</div>

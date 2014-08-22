@@ -1,0 +1,19 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+  <h2>PBL Groups</h2>
+  <table width="80%">
+  	<tr>
+  	<?php foreach($this->groups as $yearnum => $year): ?>
+  	<td valign="top" width="30%">
+  	    <?php if(UserAcl::isAdmin()):?>
+  		    <h3><a href="<?php echo $this->url( array( 'module'=>'default', 'controller'=>'people', 'action'=>'cohortgroup'), null, true).'/cohort/'.$yearnum;?>">Cohort <?php echo $yearnum?></a></h3>
+  		<?php else:?>
+  		    <h3>Cohort <?php echo $yearnum?></h3>
+  		<?php endif;?>
+  		<?php foreach($year as $groupnum => $cn):?>
+  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'group', 'gid'=>$cn),'default',true); ?>">Group <?php echo $groupnum;?></a><br>
+  		<?php endforeach;?>
+  	</td>
+  	<?php endforeach;?>
+  	</tr>
+  </table>

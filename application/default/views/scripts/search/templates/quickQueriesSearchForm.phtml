@@ -1,0 +1,30 @@
+<div>
+<?php foreach ($this->quickQueries as $group=>$config): ?>
+    <?php if($group == 'staff' && UserAcl::isStaffOrAbove() === false) :?>
+        <?php continue; ?>
+    <?php endif;?>
+    <h2><?php print $config['title']?></h2>
+    <?php $count = 1;?>
+    <?php foreach($config['queries'] as $key => $query): ?>
+        <p class="quickQueriesPara"><form name="quickQueries<?php echo $group.$count;?>" method="get" action="<?php echo $this->url(array('module'=>'default','controller'=>'search','action'=>'index','searchtype'=>$this->searchType),null,true);?>"></p>
+        <div class="quickQuery">
+        <span class="quickQueriesCount"><?php echo $count?></span>
+        <?php 
+                $explode = explode('###',$query['question']);
+                $explode_count = count($explode);                   
+                for($z=1; $z<$explode_count; $z+=2) {
+                   $explode[$z] = $this->placeholder($explode[$z])->toString();
+                }
+                echo implode('',$explode);
+        ?>
+        <?php echo $this->formHidden('process', $group.'|'.$count ,array('style' => ''))?>
+        <input type="submit" class="submitButton" value="Go" onclick="javascript:document.quickQueries<?php echo $group.$count;?>.submit();" />
+        <br />
+        <img src="<?php echo $this->baseUrl;?>/img/quickQueries/quickQueriesLine.jpg" height="1" width="800" />
+        </div>
+        </form>
+    <?php $count++;?>
+    <?php endforeach;?>
+    <?php unset($count);?>
+<?php endforeach;?>
+</div>

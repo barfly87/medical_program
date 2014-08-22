@@ -1,0 +1,26 @@
+<?php echo $this->doctype('XHTML1_TRANSITIONAL'); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--[if lt IE 8]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE8.js"></script>
+<![endif]-->
+        <link href="<?php echo $this->baseUrl;?>/css/site.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="<?php echo $this->baseUrl;?>/css/menu.css" media="screen" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.js"> </script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/main.js"> </script>
+        <title><?php
+        	$title = strip_tags($this->headTitle()->__toString());
+        	echo substr($title, 0, strpos($title, PageTitle::TITLE_DELIMITER)); 
+        ?></title>
+        <script type="text/javascript">
+            var BASE_URL = '<?php echo $this->baseUrl;?>';
+        </script>
+    </head>
+    <body>
+    <div id="popup_pad">
+        <?php echo $this->layout()->content; ?>
+    </div>
+    <?php echo $this->partial("_jqueryAjaxLoader.phtml"); ?>
+    </body>
+</html>

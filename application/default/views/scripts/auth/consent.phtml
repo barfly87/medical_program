@@ -1,0 +1,40 @@
+<div align="left" style="margin-bottom: 300px; margin-top: 20px">
+<?php 
+$identity = Zend_Auth::getInstance()->getIdentity();
+$name = $identity->firstname[0].' '.$identity->lastname[0];
+?>
+<h2>Participant consent form: Social Networks in e-Learning Systems</h2>
+<p>A study into the use of social resource sharing tools within the Compass system is being conducted. You are invited to participate in this study, by allowing your contributions to and usage of the system to be analysed. Your participation will not involve any special activity above and beyond using the eLearning system as you normally would. For more information about the study, please click here:</p>
+
+<p><a href="/compass/htdocs/Human_ethics_PIS_data_gathering.doc">Participant Information Statement</a></p>
+<table style="border-collapse:collapse;">
+<tr>
+<td width="50%" style="border: 1px solid black;padding:5px;vertical-align:top">
+<?php $redirectUrl = ($this->redirecturl==null)?str_replace(Compass::baseUrl(),'',$_SERVER['REQUEST_URI']):$this->redirecturl;?>
+<form id="yes" action="<?php echo $this->url(array('module'=>'default','controller'=>'auth', 'action'=>'setconsent', 'consent'=>'true'),'default',true); ?>">
+<input type="hidden" name="redirecturl" value="<?php echo $redirectUrl; ?>">
+<a href="javascript:document.forms['yes'].submit();">I, <?php echo $name; ?>, give consent to my participation in the research project.
+</a>
+</form>
+<p>In giving my consent I acknowledge that:</p>
+
+<ol>
+<li>The procedures required for the project and the time involved have been explained to me, and any questions I have about the project have been answered to my satisfaction.
+
+<li>I have read the Participant Information Statement and have been offered the opportunity to discuss the information and my involvement in the project with the researcher/s.
+
+<li>I understand that being in this study is completely voluntary - I am not under any obligation to consent.
+
+<li>I understand that my involvement is strictly confidential. I understand that any research data gathered from the results of the study may be published however no information about me will be used in any way that is identifiable.
+
+<li>I understand that I can withdraw from the study at any time, without affecting my relationship with the researcher(s) or the University of Sydney now or in the future.
+</ol></td>
+<td width="50%" style="border: 1px solid black;padding:5px;vertical-align:top">
+<form id="no"action="<?php echo $this->url(array('module'=>'default','controller'=>'auth', 'action'=>'setconsent', 'consent'=>'false'),'default',true); ?>">
+<input type="hidden" name="redirecturl" value="<?php echo $redirectUrl; ?>">
+<a href="javascript:document.forms['no'].submit();">I, <?php echo $name; ?>, do not wish to participate in the research project.</a>
+</form>
+</td>
+</tr>
+</table>
+</div>

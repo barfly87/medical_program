@@ -1,0 +1,147 @@
+<?php //STUDENT ATTENDANCE ?>
+<?php if(in_array(EvaluateTaConst::$STUDENT_ATTENDANCE, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$STUDENT_ATTENDANCE)->captureStart();?>
+        <span class="questionText"><?php echo EvaluateTaConst::$STUDENT_ATTENDANCE_QUES;?></span><br />
+        <div style="width:350px;height:300px;">
+            <div id="<?php echo EvaluateTaConst::$STUDENT_ATTENDANCE;?>"></div>
+        </div>
+        <div>
+            <?php echo EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT_QUES;?><br />
+            <?php $studentAttendanceNoneFound = true;?>
+            <?php if(isset($this->data[EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT]) 
+                            && !empty($this->data[EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT]['text'])) :?>
+                <?php $studentAttendanceCommentCounter = 1;?>
+                <table class="tableAnswers">
+                <?php foreach($this->data[EvaluateTaConst::$STUDENT_ATTENDANCE_COMMENT]['text'] as $text): ?>
+                    <?php if(strlen(trim($text)) > 0) :?>
+                    <?php $studentAttendanceNoneFound = false;?>
+                    <tr>
+                        <td><span class="answersList"><?php echo $studentAttendanceCommentCounter;?></span></td>
+                        <td><?php echo nl2br(trim($text));?></td>
+                    </tr>
+                    <?php endif;?>
+                    <?php $studentAttendanceCommentCounter++;?>
+                <?php endforeach;?>
+                </table>
+            <?php endif;?>
+            <?php if($studentAttendanceNoneFound == true):?>
+                <b class="error">N/A</b><br />
+            <?php endif;?>
+        </div>
+    <?php $this->placeholder(EvaluateTaConst::$STUDENT_ATTENDANCE)->captureEnd();?>
+<?php endif;?>
+
+<?php  //DELIVERY OF TA ?>
+<?php if(in_array(EvaluateTaConst::$DELIVERY_OF_TA, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$DELIVERY_OF_TA)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$DELIVERY_OF_TA_QUES, strtolower($this->ta->type));?></span><br />
+        <div style="width:350px;height:300px;">
+            <div id="<?php echo EvaluateTaConst::$DELIVERY_OF_TA;?>"></div>
+        </div> 
+    <?php $this->placeholder(EvaluateTaConst::$DELIVERY_OF_TA)->captureEnd();?>
+<?php endif;?>
+
+<?php  //CONTENT MATCHED LO ?>
+<?php if(in_array(EvaluateTaConst::$CONTENT_MATCH_LO, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$CONTENT_MATCH_LO)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$CONTENT_MATCH_LO_QUES, strtolower($this->ta->type));?></span><br />
+        <div style="width:335px;height:300px;">
+            <div id="<?php echo EvaluateTaConst::$CONTENT_MATCH_LO;?>"></div>
+        </div>                     
+    <?php $this->placeholder(EvaluateTaConst::$CONTENT_MATCH_LO)->captureEnd();?>
+<?php endif;?>
+
+<?php  //INFORMATION COVERED ?>
+<?php if(in_array(EvaluateTaConst::$INFORMATION_COVERED, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$INFORMATION_COVERED)->captureStart();?>
+        <span class="questionText"><?php echo EvaluateTaConst::$INFORMATION_COVERED_QUES;?></span><br />
+        <div style="width:220px;height:300px;">
+            <div id="<?php echo EvaluateTaConst::$INFORMATION_COVERED;?>"></div>
+        </div>                     
+    <?php $this->placeholder(EvaluateTaConst::$INFORMATION_COVERED)->captureEnd();?>
+<?php endif;?>
+
+<?php //SCIENTIFIC LEVEL ?>
+<?php if(in_array(EvaluateTaConst::$SCIENTIFIC_LEVEL, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$SCIENTIFIC_LEVEL)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$SCIENTIFIC_LEVEL_QUES, strtolower($this->ta->type));?></span><br />
+        <div style="width:210px;height:300px;">
+            <div id="<?php echo EvaluateTaConst::$SCIENTIFIC_LEVEL;?>"></div>
+        </div>                     
+    <?php $this->placeholder(EvaluateTaConst::$SCIENTIFIC_LEVEL)->captureEnd();?>
+<?php endif;?>
+
+<?php //OVERLAP ?>
+<?php if(in_array(EvaluateTaConst::$OVERLAP, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$OVERLAP)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$OVERLAP_QUES, strtolower($this->ta->type));?></span><br />
+        <div style="width:270px;height:300px;">
+            <div id="<?php echo EvaluateTaConst::$OVERLAP;?>"></div>
+        </div>
+        <div id="<?php echo EvaluateTaConst::$OVERLAP;?>_present_container">
+            <div id="<?php echo EvaluateTaConst::$OVERLAP_EXPLANATION;?>_container">
+                <?php echo EvaluateTaConst::$OVERLAP_EXPLANATION_QUES;?><br />
+                <?php $overlapExplanationNoneFound = true;?>
+                <?php if(isset($this->data[EvaluateTaConst::$OVERLAP_EXPLANATION]) 
+                                && !empty($this->data[EvaluateTaConst::$OVERLAP_EXPLANATION]['text'])) :?>
+                    <?php $overlapExplanationCounter = 1;?>
+                    <table class="tableAnswers">
+                    <?php foreach($this->data[EvaluateTaConst::$OVERLAP_EXPLANATION]['text'] as $text): ?>
+                        <?php if(strlen(trim($text)) > 0) :?>
+                        <?php $overlapExplanationNoneFound = false;?>
+                        <tr>
+                            <td><span class="answersList"><?php echo $overlapExplanationCounter;?></span></td>
+                            <td><?php echo nl2br(trim($text));?></td>
+                        </tr>
+                        <?php endif;?>
+                        <?php $overlapExplanationCounter++;?>
+                    <?php endforeach;?>
+                    </table>
+                <?php endif;?>
+                <?php if($overlapExplanationNoneFound == true):?>
+                    <b class="error">N/A</b><br />
+                <?php endif;?>
+            </div>
+        </div>       
+    <?php $this->placeholder(EvaluateTaConst::$OVERLAP)->captureEnd();?>
+<?php endif;?>
+
+<?php //OVERALL RATING ?>
+<?php if(in_array(EvaluateTaConst::$OVERALL_RATING, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$OVERALL_RATING)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$OVERALL_RATING_QUES, strtolower($this->ta->type));?></span><br />
+        <div style="width:275px;height:300px;">
+            <div id="<?php echo EvaluateTaConst::$OVERALL_RATING;?>"></div>
+        </div>                     
+    <?php $this->placeholder(EvaluateTaConst::$OVERALL_RATING)->captureEnd();?>
+<?php endif;?>
+
+<?php //SUGGESTIONS ?>
+<?php if(in_array(EvaluateTaConst::$SUGGESTIONS, $this->questions)):?>
+    <?php $this->placeholder(EvaluateTaConst::$SUGGESTIONS)->captureStart();?>
+        <span class="questionText"><?php printf(EvaluateTaConst::$SUGGESTIONS_QUES, strtolower($this->ta->type));?></span><br />
+        <?php $suggestionsCounter = 1;?>
+        <?php $suggestionsNoneFound = true;?>
+        <?php if(isset($this->data[EvaluateTaConst::$SUGGESTIONS]) 
+                        && !empty($this->data[EvaluateTaConst::$SUGGESTIONS]['text'])) :?>
+            <table class="tableAnswers">
+            <?php foreach($this->data[EvaluateTaConst::$SUGGESTIONS]['text'] as $text): ?>
+                <?php if(strlen(trim($text)) > 0) :?>
+                <?php $suggestionsNoneFound = false;?>
+                <tr>
+                    <td><span class="answersList"><?php echo $suggestionsCounter;?></span></td>
+                    <td><?php echo nl2br(trim($text));?></td>
+                </tr>
+                <?php endif;?>
+                <?php $suggestionsCounter++;?>
+            <?php endforeach;?>
+            </table>
+        <?php endif;?>
+        <?php if($suggestionsNoneFound == true):?>
+            <b class="error">None Found</b><br />
+        <?php endif;?>
+        
+    <?php $this->placeholder(EvaluateTaConst::$SUGGESTIONS)->captureEnd();?>
+<?php endif; ?>
+
+

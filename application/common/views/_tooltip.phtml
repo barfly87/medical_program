@@ -1,0 +1,28 @@
+<script src="<?php echo $this->baseUrl; ?>/js/jquery/jquery.tooltip.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+<?php if(isset($customToolTip) && !empty($customToolTip)):?>
+   <?php if($customToolTip == 'compass-resource-link') :?>
+       $(document).ready(function() {
+           $(".compass-resource-link-tooltip").tooltip({
+               track: true,
+               delay: 300,
+               showURL: false,
+               opacity: 1,
+               extraClass: "resource-link",
+               left: 0
+           });
+       });
+   <?php endif;?>
+<?php else: ?>
+    $(document).ready(function() {
+        $(".helpimg").tooltip({
+            track: true,
+            delay: 0,
+            showURL: false,
+            opacity: 1,
+            showBody: " - ",
+            left: 0
+        });
+    });
+<?php endif;?>
+</script>

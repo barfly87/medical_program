@@ -1,0 +1,12 @@
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+<div style="float:left; max-width:750px">
+  <h2>Thank you!</h2>
+  <p>A new version of teaching activity has been created. Click <a href="<?php echo $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'view', 'id'=>$this->ta_id)); ?>">
+here</a> to view the details.</p>
+
+  <?php $identity = Zend_Auth::getInstance()->getIdentity(); ?>
+  <?php $role = $identity->role; ?>
+  <?php if (!($role == 'admin' || $role == 'domainadmin' || $role == 'stagecoordinator')) : ?>
+    <p>A request to approve this new version has been send to the relevant course designer.</p>
+  <?php endif; ?>
+</div>

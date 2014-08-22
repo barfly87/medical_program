@@ -1,0 +1,26 @@
+<div id="linkContainer">
+<div class="subHeadings">Resource Metadata</div>
+<?php
+//Set image width to be used by captureResult.phtml  
+$this->result['imageWidth'] = ($this->id == 'new') ? '250' : '500' ;
+?>
+<?php include('captureResult.phtml');?>
+<?php $tableId      = ($this->id == 'new') ? 'viewNewMetadata'  : 'viewMetadata' ;?>
+    	<div class="linkContent" id="linkMetadata">
+    <table id="<?php echo $tableId;?>" class="tableNoSorter">
+        <tr>
+            <th>Repository</th>
+            <td><?php echo $this->placeholder('repositoryId');?></td>
+        </tr>
+        <tr>
+            <th>Collection</th>
+            <td><?php echo $this->placeholder('collectionId');?></td>
+        </tr>
+        <tr>
+            <th>Object</th>
+            <td><?php echo $this->placeholder('objectId');?></td>
+        </tr>
+        <?php echo $this->placeholder('metadata');?>
+    </table>    
+</div>
+</div>

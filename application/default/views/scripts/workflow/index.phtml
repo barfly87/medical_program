@@ -1,0 +1,159 @@
+<script type="text/javascript">
+$(function() {
+	$("table thead tr:nth-child(odd)").css('background-color', '#ffe0af');
+	$("table tbody tr:nth-child(even)").css('background-color', '#ffe0af');
+});
+</script>
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<div>
+<?php if ($this->role == 'admin' || $this->role == 'domainadmin') :?>
+<h2>Compass Workflow Queues:</h2>
+<table>
+  <thead><tr><th width="200px"><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?> Name</th>
+  <th style="padding-left:10px; padding-right:10px">New submission<br/><?php echo Status::$IN_DEVELOPMENT?></th>
+  <th style="padding-left:10px; padding-right:10px">New submission<br/><?php echo Status::$AWAITING_APPROVAL?></th>
+  <th style="padding-left:10px; padding-right:10px">New version<br/><?php echo Status::$AWAITING_APPROVAL?></th>  
+  <th style="padding-left:10px; padding-right:10px">Archive<br/><?php echo Status::$AWAITING_APPROVAL?></th></tr></thead>
+  <tbody>
+    <?php if ($this->null_ta_count > 0) : ?>
+    <tr>
+      <td><span style="color:red;">Unknown Teaching activity</span></td>
+      <td align="center"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 
+    'action'=>'viewunknownta'),null,true);?>"><?php echo $this->null_ta_count?></a></td>
+      <td align="center">0</td><td align="center">0</td><td align="center">0</td>
+    </tr>
+    <?php endif; ?>
+    <?php foreach ($this->blocks as $k => $v): ?>
+    <tr>
+      <td><?php echo $v == '' ? '<span style="color:red;">Unknown Block</span>' : $this->escape($v); ?></td>
+      <td align="center">
+        <?php if ($this->indev_arr[$k] > 0) : ?>
+          <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'viewblock','id' => $k, 
+          'status' => $this->indev),null,true);?>"><?php echo $this->indev_arr[$k] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if ($this->awaiting_arr[$k] > 0) : ?>
+          <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'viewblock','id' => $k, 
+          'status' => $this->awaiting),null,true);?>"><?php echo $this->awaiting_arr[$k] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if ($this->new_version_arr[$k] > 0) : ?>
+          <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'viewblock','id' => $k, 
+          'status' => $this->new_version),null,true);?>"><?php echo $this->new_version_arr[$k] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if ($this->archive_arr[$k] > 0) : ?>
+          <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'viewblock','id' => $k, 
+          'status' => $this->archived),null,true);?>"><?php echo $this->archive_arr[$k] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+    </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+<?php endif; ?>
+
+<?php if ($this->role == 'stagecoordinator') :?>
+<h2>Submissions need to be approved by you:</h2>
+<table>
+  <thead><tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?> Name</th>
+  <th style="padding-left:10px; padding-right:10px">New submission<br/><?php echo Status::$AWAITING_APPROVAL?></th>
+  <th style="padding-left:10px; padding-right:10px">New version<br/><?php echo Status::$AWAITING_APPROVAL?></th>  
+  <th style="padding-left:10px; padding-right:10px">Archive<br/><?php echo Status::$AWAITING_APPROVAL?></th></tr></thead>
+  <tbody>
+  <?php foreach ($this->coordinatorblocks as $v): ?>
+    <tr><td><?php echo $this->blocks[$v] ?></td>
+      <td align="center">
+        <?php if ($this->awaiting_arr[$v] > 0) : ?>
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'viewblock','id' => $v, 
+      'status' => $this->awaiting),null,true);?>"><?php echo $this->awaiting_arr[$v] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if ($this->new_version_arr[$v] > 0) : ?>
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'viewblock','id' => $v, 
+        'status' => $this->new_version),null,true);?>"><?php echo $this->new_version_arr[$v] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if ($this->archive_arr[$v] > 0) : ?>
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'viewblock','id' => $v, 
+        'status' => $this->archived),null,true);?>"><?php echo $this->archive_arr[$v] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>      
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
+<?php endif; ?>
+
+<h2>Your workflow queues:</h2>
+<?php if (($this->my_indev_total == 0) && ($this->my_awaiting_total == 0) && ($this->my_new_version_total == 0) && ($this->my_archive_total == 0)) :?>
+<p>No submission found.</p>
+<?php else :?>
+<table>
+  <thead><tr><th width="200px"><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?> Name</th>
+  <th style="padding-left:10px; padding-right:10px">New submission<br/><?php echo Status::$IN_DEVELOPMENT?></th>
+  <th style="padding-left:10px; padding-right:10px">New submission<br/><?php echo Status::$AWAITING_APPROVAL?></th>
+  <th style="padding-left:10px; padding-right:10px">New version<br/><?php echo Status::$AWAITING_APPROVAL?></th>  
+  <th style="padding-left:10px; padding-right:10px">Archive<br/><?php echo Status::$AWAITING_APPROVAL?></th></tr></thead>
+  <tbody>
+    <?php if ($this->my_null_ta_count > 0) : ?>
+    <tr>
+      <td><span style="color:red;">Unknown Teaching activity</span></td>
+      <td align="center"><a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 
+    'action'=>'viewownunknownta'),null,true);?>"><?php echo $this->my_null_ta_count?></a></td>
+      <td align="center">0</td><td align="center">0</td><td align="center">0</td>
+    </tr>
+    <?php endif; ?>
+    
+    <?php foreach ($this->blocks as $k => $v): ?>
+    <?php if ($this->my_indev_arr[$k] > 0 || $this->my_awaiting_arr[$k] > 0 || $this->my_new_version_arr[$k] > 0 || $this->my_archive_arr[$k] > 0) :?>
+    <tr>
+      <td><?php echo $v == '' ? '<span style="color:red;">Unknown Block</span>' : $this->escape($v); ?></td>
+      <td align="center">
+        <?php if ($this->my_indev_arr[$k] > 0) : ?>
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow','action'=>'viewownblock','id'=>$k,
+        'status'=>$this->indev),null,true);?>"><?php echo $this->my_indev_arr[$k] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if ($this->my_awaiting_arr[$k] > 0) : ?>
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow','action'=>'viewownblock','id'=>$k,
+        'status'=>$this->awaiting),null,true);?>"><?php echo $this->my_awaiting_arr[$k] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if ($this->my_new_version_arr[$k] > 0) : ?>
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow','action'=>'viewownblock','id'=>$k,
+        'status'=>$this->new_version),null,true);?>"><?php echo $this->my_new_version_arr[$k] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if ($this->my_archive_arr[$k] > 0) : ?>
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow','action'=>'viewownblock','id'=>$k,
+        'status'=>$this->archived),null,true);?>"><?php echo $this->my_archive_arr[$k] ?></a>
+        <?php else :?>0
+        <?php endif; ?>
+      </td>
+    </tr>
+    <?php endif; ?>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+<?php endif; ?>
+
+</div>

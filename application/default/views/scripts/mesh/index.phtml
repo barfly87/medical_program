@@ -1,0 +1,33 @@
+<script language="JavaScript">
+	function expandTree(treenumber, uid){
+		var sUrl = BASE_URL + '/mesh/heading/format/html/find/' + treenumber + '/uid/' + uid;
+		$('#heading' + uid).load(sUrl);
+	}
+	function expandRoot(categoryID, domObjID){
+		var sUrl = BASE_URL + '/mesh/root/format/html/find/' + categoryID;
+		$('#' + domObjID).load(sUrl);
+	}
+	function pick(meshTerm) {
+		window.opener.meshPick(meshTerm);
+		window.close();
+	}
+</script>
+<style type="text/css">
+	a { text-decoration: none; }
+	a:hover { color: red; }
+	div, body { font-family:Verdana,Arial,Helvetica,sans-serif; font-size:12px; }
+</style>
+
+<div style="border: 1px solid black; background: #efefef; padding: 4px">
+<strong>Medical Subject Headings (MeSH) Tree</strong>
+</div>
+<?php
+	foreach (MeshService::$rootCategories as $rootCategoryLetter => $rootCategoryDescription) {
+		echo "<div id=\"rootCategory$rootCategoryLetter\">".
+	     " [<a href=\"javascript:expandRoot('$rootCategoryLetter', 'rootCategory$rootCategoryLetter')\">+</a>]".
+	     " <a href=\"javascript:pick('$rootCategoryDescription')\">$rootCategoryDescription [$rootCategoryLetter]</a> ".
+	     "</div>\n";
+	}
+?>
+<br/><br/>
+<div style="border-top: 1px solid #afafaf; color: #7f7f7f"><?php echo $this->mesh_count ?> terms indexed from the 2009 NLM MeSH database.</div>

@@ -1,0 +1,18 @@
+<?php $href = $this->url(array('module'=>'default','controller'=> 'learningobjective', 'action'=>'view', 'id'=>$this->lo_id)); ?>
+<div>
+<h2>Thank you!</h2>
+<?php if ($this->all_archived == "yes"): ?>
+  <p>Learning objective <a href="<?php echo $href; ?>"><?php echo $this->lo_id ?></a> has been archived.</p>
+<?php else : ?>
+  <?php if (Zend_Auth::getInstance()->getIdentity()->role == 'stagecoordinator') :?>
+    <p>This learning objective is also linked to teaching activity(ies) in other stages,
+    therefore a request has been sent to the relevant course designer(s) for approval.</p>
+    <p>You will receive an email once the request has been approved.</p>
+  <?php else : ?>
+    <p>A request for archiving <a href="<?php echo $href; ?>">learning objective <?php echo $this->lo_id ?></a> has been sent to the course designer(s).</p>
+    <p>You will receive an email once the request has been approved.</p>
+  <?php endif; ?>
+  <?php $workflowurl = $this->url(array('module'=>'default','controller'=> 'workflow', 'action'=>'index')); ?>
+  <p>You may find all your submissions in <a href="<?php echo $workflowurl ?>">workflow queue</a>.</p>
+<?php endif; ?>
+</div>

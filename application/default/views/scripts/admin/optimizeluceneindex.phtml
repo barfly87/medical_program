@@ -1,0 +1,6 @@
+<?php if($this->optimized == true):?>
+    <h2>Successfully optimized lucene index !</h2>
+<?php else:?>
+    <h2 class="error">Error !</h2>
+    <?php echo $this->optimized;?>
+<?php endif;?>

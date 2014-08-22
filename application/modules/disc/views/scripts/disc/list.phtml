@@ -1,0 +1,60 @@
+<?php include_once('_DisciplineJsAndCss.phtml'); ?>
+<?php include_once('../application/common/views/_tableSortJsAndCss.phtml'); ?>
+<link href="<?php echo $this->baseUrl;?>/css/listOfDisciplinesPrint.css" media="print" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/advancedSearchScreen.css" media="screen" rel="stylesheet" type="text/css" />
+
+<h2>List of Disciplines</h2>
+<div id="resultPrintContainer">
+    <div id="resultContainer">
+        <span id='resultCount'><?php echo count($this->rows);?></span> disciplines found.
+    </div>
+    <div id="printContainer">
+        <a href="#" onclick="window.print();">Print</a>
+    </div>
+</div>
+
+<?php if(isset($this->rows) && count($this->rows) > 0) :?>
+    <?php $customNoOfColumns = 6;?>
+    <table class="tableSorter">
+        <?php $paginationBg = 'top';?>
+        <?php include('../application/common/views/_footerPagination.phtml'); ?>
+    </table>
+    <table id="sortTable" class="tableSorter">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Parent</th>
+                <?php if($this->admin === true) :?>
+                    <th class="discipline_print_edit">Edit</th>
+                    <th class="discipline_print_edit">Curriculum Areas</th>
+                <?php endif; ?> 
+            </tr> 
+        </thead>
+        <tbody>
+        <?php foreach ($this->rows as $row) :?>     
+        <tr>
+            <td><?php echo $row['name']; ?> </td>
+            <td><?php echo $row['parent_name']; ?></td>        
+            <?php if($this->admin === true) :?>
+                <?php if($row['allowEdit'] == true) :?>
+                    <td class="discipline_list_center discipline_print_edit">
+                        <a title="Edit <?php echo $row['name']; ?>" href="<?php echo $this->editLink; ?>/id/<?php echo $row['auto_id'];?>" />Edit</a>
+                    </td>
+                    <td class="discipline_list_center discipline_print_edit">
+                        <a title="Look for learning areas attached to discipline '<?php echo $row['name']; ?>'" href="<?php echo $this->url(array('module'=>'disc','controller'=>'curriculumareas', 'action'=>'list','disc_id'=>$row['auto_id']),null,true);?>" />Curriculum Areas</a>
+                    </td>
+                <?php else :?>
+                    <td class="discipline_list_center discipline_gray discipline_print_edit">Edit</td>   
+                    <td class="discipline_list_center discipline_gray discipline_print_edit">Curriculum Areas</td>
+                <?php endif;?>       
+            <?php endif; ?>
+        </tr>
+        <?php endforeach; ?>   
+        </tdbody>
+        <?php $paginationBg = 'bottom';?>
+        <?php include('../application/common/views/_footerPagination.phtml'); ?>
+    </table>
+    <?php include_once('_footer.phtml'); ?>
+<?php else :?>
+    <h2>No records found.</h2>
+<?php endif;?>

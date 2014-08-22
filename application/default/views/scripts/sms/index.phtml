@@ -1,0 +1,46 @@
+<div>
+	<h2>Create message</h2>
+	
+	<?php
+		if (isset($this->errors)) {
+			echo "<ul class=\"error\">";
+			foreach ($this->errors as $v) {
+				echo "<li>$v</li>";
+			}
+			echo "</ul>";
+		}
+	?>
+	<form method="POST" action="<?php echo $this->baseUrl ;?>/sms/index">
+	<table>
+	<tr>
+		<th>M4U Account</th>
+		<td>
+			<select name="smsaccount">
+			<?php
+				foreach ($this->smsaccounts as $k => $v) {
+					echo "<option value=\"$k\">".$v["account"]."</option>\n";
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+	<tr><th valign="top">Group</th>
+		<td>
+			<select multiple name="group[]" size="15">
+			<?php
+				foreach ($this->expanded_sms_groups as $group) {
+					$selected = ' ';
+					if (in_array($group, $this->groups)) {
+						$selected = " selected=\"selected\"";
+					}
+					echo "<option{$selected}>{$group}</option>";
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+	<tr><th valign="top">Message</th><td><textarea name="message" cols="40" rows="5"><?php echo $this->escape($this->message); ?></textarea></td></tr>
+	<tr><th></th><td><input type="submit" value="Send Message"></td></tr>
+	</table>
+	</form>
+</div>

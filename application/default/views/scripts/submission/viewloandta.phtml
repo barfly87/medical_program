@@ -1,0 +1,161 @@
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+<style type="text/css">
+#contentcol { margin-right : 210px }
+#actionscol {float : right; width : 200px }
+#losummarylink, #lodetaillink, #tasummarylink, #tadetaillink {
+  cursor: pointer;
+  background-color: #003366;
+  color: #eeeeee; padding: 2px 10px;
+  font-weight : bolder;
+}
+</style>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<script type="text/javascript">
+$(function() {
+	$('#actionscontent').css('position', 'fixed').width(200).css('top', '150px');
+	$('#lodetail').hide();
+	$('#tadetail').hide();
+	$('table tr:last-child td').css('background-color', '#FFFFFF');
+	$('#losummarylink').click(function() {
+        $('#losummary').hide();
+        $('#lodetail').show();
+	}).hover(over, out);
+	$('#lodetaillink').click(function() {
+        $('#losummary').show();
+        $('#lodetail').hide();
+	}).hover(over, out);
+	$('#tasummarylink').click(function() {
+        $('#tasummary').hide();
+        $('#tadetail').show();
+	}).hover(over, out);
+	$('#tadetaillink').click(function() {
+        $('#tasummary').show();
+        $('#tadetail').hide();
+	}).hover(over, out);
+});
+function over(event) {
+    $(event.target).css('background-color', '#6699CC');
+}
+function out(event) {
+    $(event.target).css('background-color', '#003366');
+}
+</script>
+<br />
+<div id="loViewDetailsContainer">
+  <div id="actionscol"><?php echo $this->action('rightmenu', 'submission', NULL, array('id' => $this->link->auto_id))?></div>
+  <div id="contentcol">
+    <?php if (empty($this->lo)) : ?>
+      <div><p align="center"><span style="font-weight:bold;color:red">Unknown learning objective</span></p></div>
+    <?php else :?>
+    <div id="losummary" style="border: 1px solid #FFE0AF;">
+    <p align="center"><span style="font-weight:bold">Learning Objective Summary (<?php echo $this->lo_status?>)</span></p>
+    <table width="100%" class="tableNoSorter">
+    <tr><th style="width: 200px;" valign="top">Learning Objective</th><td><?php echo $this->lo->lo; ?></td></tr>
+    <tr><th>Main Discipline</th><td><?php echo $this->escape($this->lo->discipline1Name); ?></td></tr>
+    <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme1); ?></td></tr>
+    <tr><th>System</th><td><?php echo $this->escape($this->lo->system); ?></td></tr>
+    <tr><th>Assessment Methods</th><td><?php echo $this->escape($this->lo->assessment_type); ?></td></tr>
+    <tr><td colspan="2" align="right"><span id="losummarylink">View detail</span></td></tr>
+    </table>
+    </div>
+    <div id="lodetail" style="border: 1px solid #FFE0AF;">
+    <p align="center"><span style="font-weight:bold">Learning Objective Detail (<?php echo $this->lo_status?>)</span></p>
+      <table class="tableNoSorter" width="100%">
+        <tr><th style="width: 200px;">Learning Objective</th><td><?php echo $this->lo->lo; ?></td></tr>
+        <tr><th>Keywords</th><td>
+        <?php
+            $keywords_arr = explode('|', $this->lo->keywords);
+            if (count($keywords_arr) > 0) {
+                sort($keywords_arr);
+                $li = '';
+                foreach ($keywords_arr as $word) {
+                    if (trim($word) !== '')
+                        $li .= "<li>".$this->escape($word)."</li>";
+                    }
+                if ($li != '') {
+                    echo '<ul>'.$li.'</ul>';
+                }
+         
+            }
+        ?>
+        </td></tr>
+        <tr><th>Main Discipline</th><td><?php echo $this->escape($this->lo->discipline1Name); ?></td></tr>
+        <tr><th>Curriculum Area 1</th><td><?php echo $this->escape($this->lo->curriculumarea1Name); ?></td></tr>
+        <tr><th>Additional Discipline</th><td><?php echo $this->escape($this->lo->discipline2Name); ?></td></tr>
+        <tr><th>Curriculum Area 2</th><td><?php echo $this->escape($this->lo->curriculumarea2Name); ?></td></tr>
+        <tr><th>Additional Discipline</th><td><?php echo $this->escape($this->lo->discipline3Name); ?></td></tr>
+        <tr><th>Curriculum Area 3</th><td><?php echo $this->escape($this->lo->curriculumarea3Name); ?></td></tr>
+        <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme1); ?></td></tr>
+        <tr><th>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme2); ?></td></tr>
+        <tr><th>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th><td><?php echo $this->escape($this->lo->theme3); ?></td></tr>
+        <tr><th>Skill</th><td><?php echo $this->escape($this->lo->skill); ?></td></tr>
+        <tr><th>System</th><td><?php echo $this->escape($this->lo->system); ?></td></tr>
+        <tr><th>Achievement</th><td><?php echo $this->escape($this->lo->achievement); ?></td></tr>
+        <tr><th>Review</th><td><?php echo $this->escape($this->lo->review); ?></td></tr>
+        <tr><th>Assessment Methods</th><td><?php echo $this->escape($this->lo->assessment_type); ?></td></tr>
+        <tr><th>JMO</th><td><?php echo $this->lo->jmo ?></td></tr>
+        <tr><th>Graduate attribute</th><td><?php echo $this->lo->gradattrib ?></td></tr>
+        <tr><th>Notes</th><td><?php echo $this->escape($this->lo->notes); ?></td></tr>
+        <tr><th>Version</th><td><?php echo $this->lo->version ?></td></tr>
+        <tr><th>Submitted by</th><td><?php echo Compass::userInfoHtml($this->lo->created_by); ?></td></tr>
+        <tr><th>Date Submitted</th><td><?php echo $this->lo->date_created; ?></td></tr>
+        <tr><th>Approved by</th><td><?php echo Compass::userInfoHtml($this->lo->approved_by); ?></td></tr>
+        <tr><th>Date Approved</th><td><?php echo $this->lo->date_approved;; ?></td></tr>
+        <tr><th>Additional notes</th><td><?php echo $this->escape($this->lo->notes) ?></td></tr>
+        <tr><td colspan="2" align="right"><span id="lodetaillink">View summary</span></td></tr>
+      </table>
+      </div>
+      <?php endif; ?>
+    <div>
+      <table width="100%">
+        <tr>
+          <td rowspan="3" style="width:300px"><img src="<?php echo $this->baseUrl;?>/img/linkage.png" style="padding-left:200px;height:80px"></td>
+          <td width="150px">Strength</td><td><?php echo $this->link->strength ?></td></tr>
+          <td>Submitted by</td><td><?php echo Compass::userInfoHtml($this->link->created_by);?></td>
+        </tr>
+        <tr>
+          <td>Date created</td>
+          <td><?php echo $this->displayDate($this->link->date_created)?></td>
+        </tr>
+      </table>
+    </div>
+    <?php if (empty($this->ta)) : ?>
+      <div><p align="center"><span style="font-weight:bold;color:red">Unknown Teaching Activity</span></p></div>
+    <?php else :?>
+    <div id="tasummary" style="border: 1px solid #FFE0AF;">
+      <p align="center"><span style="font-weight:bold">Teaching Activity Summary (<?php echo $this->ta_status?>)</span></p>
+      <table width="100%" class="tableNoSorter">
+        <tr><th style="width:200px">Title</th><td><?php echo $this->escape($this->ta->name); ?></td></tr>
+        <tr><th>Type</th><td><?php echo $this->escape($this->ta->type); ?></td></tr>
+        <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?></th><td><?php echo $this->ta->stage; ?></td></tr>
+        <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></th><td><?php echo $this->escape($this->ta->block); ?></td></tr>
+        <tr><td colspan="2" align="right"><span id="tasummarylink">View detail</span></td></tr>
+      </table>
+    </div>
+    <div id="tadetail" style="border: 1px solid #FFE0AF;">
+      <p align="center"><span style="font-weight:bold">Teaching Activity Detail (<?php echo $this->ta_status?>)</span></p>
+      <table class="tableNoSorter" width="100%">
+        <tr><th style="width:200px">Id</th><td><?php echo $this->ta->auto_id; ?></td></tr>
+        <tr><th>Title</th><td><?php echo $this->escape($this->ta->name); ?></td></tr>
+        <tr><th>Type</th><td><?php echo $this->escape($this->ta->type); ?></td></tr>
+        <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?></th><td><?php echo $this->ta->stage; ?></td></tr>
+        <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></th><td><?php echo $this->escape($this->ta->block); ?></td></tr>
+        <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Week') ?></th><td><?php echo $this->ta->block_week; ?></td></tr>
+        <tr><th>PBL/CRS</th><td><?php echo $this->escape($this->ta->pbl); ?></td></tr>
+        <tr><th>Sequence No.</th><td><?php echo $this->ta->sequence_num; ?></td></tr>
+        <tr><th>Student group</th><td><?php echo $this->escape($this->ta->student_grp); ?></td></tr>
+        <tr><th>Principal Teacher</th><td><?php echo Compass::userInfoHtml($this->ta->principal_teacher); ?></td></tr>
+        <tr><th>Current Teacher</th><td><?php echo Compass::userInfoHtml($this->ta->current_teacher); ?></td></tr>
+        <tr><th>Author</th><td><?php echo Compass::userInfoHtml($this->ta->created_by); ?></td></tr>
+        <tr><th>Date created</th><td><?php echo $this->ta->date_created; ?></td></tr>
+        <tr><th>Approved by</th><td><?php echo Compass::userInfoHtml($this->ta->approved_by); ?></td></tr>
+        <tr><th>Date Approved</th><td><?php echo $this->ta->date_approved; ?></td></tr>
+        <tr><th>Version</th><td><?php echo $this->ta->version ?></td></tr>  
+        <tr><th>Additional notes</th><td><?php echo $this->escape($this->ta->notes) ?></td></tr>
+        <tr><td colspan="2" align="right"><span id="tadetaillink">View summary</span></td></tr>
+       </table>
+    </div>
+    <?php endif; ?>
+    </div>
+  </div>
+</div>

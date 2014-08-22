@@ -1,0 +1,31 @@
+<link type="text/css" rel="stylesheet" media="screen" href="<?php echo $this->baseUrl;?>/css/tableNoSort.css">
+<?php //If form is processed successfully?>
+<?php if($this->resourceAddedMid !== false) :?>
+    <?php include_once('loose/success.phtml');?>
+    
+<?php //If form is NOT submitted yet or form is submitted but has some errors?>
+<?php else :?>
+
+    <?php //Deal with form submission errors?>
+    <?php include('uploadedit/error.phtml');?>
+    
+    <?php //Display form?>
+    <?php include_once('loose/form.phtml'); ?>
+    
+<?php endif;?>
+<br />
+<p style="display:inline;">
+<?php if(!empty($this->viewData->referer)) :?>
+<b><a href="<?php echo $this->viewData->referer;?>">Return</a></b>
+<?php endif;?>
+
+<?php if($this->resourceAddedMid !== false) :?>
+&nbsp;&nbsp;&nbsp;
+<form method="post" id="add-another-resource" action="<?php echo $this->url();?>" style="display:inline">
+    <?php $refererUrl = $this->url(array( 'module'=>'default', 'controller'=>'resource', 'action'=>'loose'), 'default', true);?>
+    <?php echo $this->formHidden(MediabankResourceConstants::$FORM_looseResourceReferer, $this->viewData->referer); ?>
+    <?php echo $this->formHidden(MediabankResourceConstants::$FORM_looseResourceAddedOnce, MediabankResourceConstants::$FORM_looseResourceAddedOnceVal); ?>
+    <b><a href="javascript:void(0);" onclick="$('#add-another-resource').submit();">Add another loose resource</a></b>
+</form>
+<?php endif;?>
+</p>

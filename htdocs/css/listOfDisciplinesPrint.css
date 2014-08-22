@@ -1,0 +1,17 @@
+#sortTable thead tr th{
+    border: 1px solid #8F8F8F;
+    font-size: 90%;
+}
+#sortTable tbody tr td{
+    border: 1px solid #8F8F8F;
+    font-size: 90%;    
+}
+.discipline_list_center {
+    text-align: center;
+}
+.pagerOne, #resultPrintContainer, h3 {
+    display: none;
+}
+.discipline_print_edit {
+	display: none;
+}

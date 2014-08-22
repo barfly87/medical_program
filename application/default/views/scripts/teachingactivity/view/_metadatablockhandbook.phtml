@@ -1,0 +1,71 @@
+<?php
+$pblLink = $this->url(array('controller'=>'pbl', 'action'=>'index', 'ref'=> $this->ta->block_no.'.'.$this->ta->block_week_zero_padded),null,true);
+?>
+
+<div id="metadata" class="rhsbox">
+	<h3 class="rhsheading">Metadata</h3>
+	<div class="mcontent">
+		<table width="100%">
+			<tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?>:</th>
+				<td><?php echo $this->ta->stage; ?></td>
+			</tr>
+			<?php 
+			$blockHtml = $this->escape($this->ta->block);
+			if($this->ta->block_no <= 10 && $this->ta->block_no > 0) {
+			    $blockHtml = $this->ta->block_no.': '.$blockHtml;
+			} else if($this->ta->stage == 3) {
+			    $href = $this->url(array('module'=>'default', 'controller'=>'block', 'action'=>'index','ref'=>$this->ta->block_id), null, true);
+			    $blockHtml = <<<BLOCKHTML
+                <a href="{$href}">{$blockHtml}</a>                        
+BLOCKHTML;
+			}
+			
+			?>
+			<tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?>:</th>				<td><?php echo $blockHtml; ?></td></tr>
+			<tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Week') ?>:</th>				<td><?php echo $this->ta->block_week; ?></td></tr>
+			<tr><th>PBL/CRS:</th>			<td><?php if ($this->ta->block_no <= 10) : ?>
+													<a href="<?php echo $pblLink;?>"><?php echo $this->escape($this->ta->pbl); ?></a>
+												<?php else : ?>
+													<?php echo $this->escape($this->ta->pbl); ?>
+												<?php endif; ?>
+											</td>
+			</tr>
+			<tr><th>Sequence No.:</th>		<td><?php echo $this->ta->sequence_num; ?></td></tr>
+			<?php if (!empty($this->ta->term)): ?>
+			<tr><th>Term:</th>				<td><?php echo $this->ta->term; ?></td></tr>
+			<?php endif; ?>
+			<?php if (!empty($this->ta->student_grp)): ?>
+			<tr><th>Student Group:</th>		<td><?php echo $this->escape($this->ta->student_grp); ?></td></tr>
+			<?php endif; ?>
+			<?php if (count($this->ta->current_teacher_uid_arr) > 0): ?>
+			<tr><th>Current Teacher</th>		
+				<td>
+				<?php
+					echo "<table>";
+					foreach($this->ta->current_teacher_uid_arr as $row) {
+						echo "<tr><td>".$this->escape(UserService::getUidFullName($row))."</td></tr>";
+					}
+					echo "</table>";
+				?>
+				</td>
+			</tr>
+			<?php endif; ?>
+		<?php if (!UserAcl::isStudent()) : ?>
+			<tr><th>Submitted by:</th>		<td><?php echo $this->escape(UserService::getUidFullName($this->ta->created_by));?></td></tr>
+			<tr><th>Date Submitted:</th>	<td><?php echo $this->ta->date_created; ?></td></tr>
+			
+			<?php if (!empty($this->ta->approved_by)): ?>
+			<tr><th>Approved by:</th>		<td><?php echo $this->escape(UserService::getUidFullName($this->ta->approved_by));?></td></tr>
+			<?php endif; ?>
+			<?php if ($this->ta->date_approved != 'N/A'): ?>
+			<tr><th>Date Approved:</th>		<td><?php echo $this->ta->date_approved; ?></td></tr>
+			<?php endif; ?>
+		<?php endif; ?>
+		
+			<tr><th>Reviewed by:</th>		<td><span id="reviewedby_user"><?php echo $this->escape(UserService::getUidFullName($this->ta->reviewed_by));?></span></td>
+			</tr>
+			<tr><th>Date Reviewed:</th>		<td><span id="reviewedby_time"><?php echo $this->ta->date_reviewed; ?><span></span></td></tr>
+			<tr><th>Status:</th>			<td><?php echo $this->ta->getCurrentStatus(); ?></td></tr>
+		</table>
+	</div>
+</div>

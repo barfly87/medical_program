@@ -1,0 +1,12 @@
+<?php if(UserAcl::isStaffOrAbove()) :?>
+<?php 
+$manageResourcesUrl = $this->url(array('module'=>'default', 'controller'=>'resource', 'action'=>'manage'),null, true);
+$manageResourcesUrl .= '/page/ta/ref/'.$this->ta->auto_id;
+?>
+<div id="manageresources" class="rhsbox">
+    <h3 class="rhsheading">Manage Resources</h3>
+    <div class="mcontent">
+        <div><a href="<?php echo $manageResourcesUrl;?>">Manage resources for this activity</a></div>
+    </div>
+</div>
+<?php endif;?>

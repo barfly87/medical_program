@@ -1,0 +1,112 @@
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<style type="text/css">
+  a.ltheading:hover {text-decoration: inherit; color: inherit; background: inherit} 
+  .ltheading {font-weight:bold; text-decoration: none; color: black}
+  th {background-color: #fdf5db; padding: 5px}
+  td {padding: 3px}
+</style>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').css('border', '1px solid #ffe0af').css('border-collapse', 'collapse');
+    });
+</script>
+
+<?php if (count($this->procedural_skills) > 0) : ?>
+  <h2 align="center">PROCEDURAL SKILLS - 
+  <?php if (isset($this->stage)) :?>
+  	<?php echo strtoupper(Zend_Registry::get('Zend_Translate')->_('Stage'))?> <?php echo $this->stage ?>
+  <?php else : ?>
+    <?php echo strtoupper(Zend_Registry::get('Zend_Translate')->_('Block'))?> <?php echo $this->block ?> - <?php echo $this->blockname ?>
+  <?php endif; ?>
+  </h2>
+  <table border="1">
+    <tr>
+      <th>No.</th>
+    <?php if (isset($this->stage)): ?>
+      <?php if ($this->stage >= 3) : ?>
+        <th>Term</th>
+      <?php else : ?>
+        <th>Block</th>
+      <?php endif; ?>
+    <?php endif; ?>
+      <th style="min-width:600px;">Activity Title</th>
+    </tr>
+    <?php 
+    $i = 1;
+    foreach ($this->procedural_skills as $procedural_skill) {
+    	echo "<tr><td align='center'>$i</td>";
+    	if (isset($this->stage)) {
+    		if ($this->stage >= 3) {
+    			echo "<td align='center'>$procedural_skill->term</td>";
+    		} else {
+    			echo "<td align='center'>$procedural_skill->block_no</td>";
+    		}
+    	}
+    	echo "<td><a href=\"#section-$i\">{$procedural_skill->name}</a></td></tr>";
+    	$i++;
+    }
+    ?>
+  </table>
+  
+  <?php
+    $resourceFinder = new MediabankResource();
+    $i = 1;
+    foreach ($this->procedural_skills as $procedural_skill) {
+        echo "<p style=\"page-break-before: always;\">Procedural Skills - ";
+        $pd_url = $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'view', 'id'=>$procedural_skill->auto_id), null, true);
+        echo "<a name=\"section-$i\" class=\"ltheading\">{$procedural_skill->name}</a> <span class=\"hidefromprint\">(<a href=\"{$pd_url}\">View Teaching Activity</a>)</span></p>\n";
+        echo "<hr />\n";
+        echo '<div style="padding: 5px">';
+		$released_los = $procedural_skill->getLinkedLearningObjectiveWithStatus(Status::$RELEASED);
+		echo "<h3>Learning Objectives:</h3>";
+		foreach ($released_los as $lo) {
+			echo "<div>{$lo['lo']}</div>";
+		}
+        
+		echo "<h3>Content:</h3>";
+        $contents = $procedural_skill->getResourcesContentByType(8);
+        if(!empty($contents)) {
+            foreach($contents as $content) {
+                echo $this->partial('resource/_resourceTaPartial.phtml', array('row' => $content));
+            }
+        }
+        $pd_resource = new ProceduralSkillsResource($procedural_skill->auto_id);
+        $general_resources = $pd_resource->getResources();
+        if (count($general_resources) > 0) {
+        	echo "<h3>Resources:</h3>";
+        	echo "<ol>";
+        	foreach ($general_resources as $resource)  {
+        		if (isset($resource['customViewUrl'])) {
+        			if ($resource['customViewUrl'] == '#') { //rich media
+        				echo "<li><a href=\"{$resource['customViewUrl']}\" onClick=\"{$resource['customOnclick']}\">{$resource['title']}</a></li>";
+        			} else { //CMS document
+        				echo "<li><a href=\"{$resource['customViewUrl']}\">{$resource['title']}</a></li>";
+        			}
+        		} else {
+        			echo "<li><a href=\"{$this->baseUrl}/resource/view/type/ta/resourceid/{$resource['auto_id']}/id/{$procedural_skill->auto_id}/resourcetypeid/{$resource['resource_type_id']}?mid={$resource['mid']}\">{$resource['title']}</a></li>";
+        		}
+        	}
+        	echo "</ol>";
+        }
+        $references = $procedural_skill->getResourcesContentByType(9);
+        if(!empty($references)) {
+        	echo "<h3>References:</h3>";
+            foreach($references as $reference) {
+                echo $this->partial('resource/_resourceTaPartial.phtml', array('row' => $reference));
+            }
+        }
+        echo '</div>';
+        $p_teachers = $procedural_skill->principal_teacher_uid_arr;
+        if (count($p_teachers) > 0) {
+            foreach ($p_teachers as $teacher) {
+                echo "<p><b>Author:</b> ".UserService::getUidFullNameAndOrg($teacher)."</p>";
+            }
+        }
+        echo "<hr />\n";
+        $i++;
+    }
+  ?>
+<?php else : ?>
+    <h2 style="padding-top:10px">Procedural skills handbook not found.</h2>
+<?php endif; ?>

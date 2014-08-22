@@ -1,0 +1,179 @@
+<div id="loViewEditApproveTA">
+  <?php
+    //Get current user info
+    $identity = Zend_Auth::getInstance()->getIdentity();
+    $user_id = $identity->user_id;
+    $role = $identity->role;
+    
+    $statusFinder = new Status();
+    $status = $statusFinder->getAllNames();
+    $status_ids = array_flip($status);
+    
+    $p_teacher_array = explode(',', $this->ta->principal_teacher);
+    $block = $this->ta->blockID;
+    $stage = $this->ta->stageID;
+    
+    //check if ta is in any approval request
+    $db = Zend_Registry::get("db");
+    $select = $db->select()
+        ->from(array('t' => 'teachingactivity'), array('taid' => 'auto_id', 'block' => 'block', 'stage' => 'stage'))
+        ->join(array('lk' => 'link_lo_ta'), 't.auto_id = lk.ta_id', 
+    	    array('lkid' => 'auto_id', 'created_by' => 'created_by', 'date_created' => 'date_created', 'modified_by' => 'modified_by',
+            'date_modified' => 'date_modified', 'status' => 'status', 'new_status' => 'new_status', 'type' => 'type'))
+    	->join(array('l' => 'learningobjective'), 'l.auto_id = lk.lo_id', array('loid' => 'auto_id'))
+        ->where("lk.ta_id={$this->ta->auto_id}");
+    $stmt = $db->query($select);
+    $results = $stmt->fetchAll();
+    
+    $new_ta_version_array = array();
+    $new_ta_array = array();
+    $new_lo_array = array();
+    $new_ta_lo_array = array();
+    $new_link_array = array();
+    $archive_ta_array = array();
+    $archive_link_array = array();
+    $no_archived_linkages = 0;
+    $no_new_requests = 0;
+    
+    foreach ($results as $row) {
+    	if ($row['status'] == $status_ids[Status::$NEW_VERSION] && $row['type'] == 'TA') {
+    		$new_ta_version_array[] = array('loid' => $row['loid'], 'taid' => $row['taid'], 'stage' => $row['stage'], 
+    			'created_by' => $row['created_by'], 'date_created' => $row['date_created']);
+    	}
+        if ($row['status'] == $status_ids[Status::$AWAITING_APPROVAL] && $row['type'] == 'TA') {
+    		$new_ta_array[] = array('loid' => $row['loid'], 'lkid' => $row['lkid'], 'stage' => $row['stage'],
+    			'created_by' => $row['created_by'], 'date_created' => $row['date_created']);
+    	}
+        if ($row['status'] == $status_ids[Status::$AWAITING_APPROVAL] && $row['type'] == 'LO') {
+    		$new_lo_array[] = array('loid' => $row['loid'], 'lkid' => $row['lkid'], 'stage' => $row['stage'],
+    			'created_by' => $row['created_by'], 'date_created' => $row['date_created']);
+    	}
+        if ($row['status'] == $status_ids[Status::$AWAITING_APPROVAL] && $row['type'] == 'TL') {
+    		$new_ta_lo_array[] = array('loid' => $row['loid'], 'lkid' => $row['lkid'], 'stage' => $row['stage'],
+    			'created_by' => $row['created_by'], 'date_created' => $row['date_created']);
+    	}
+        if ($row['status'] == $status_ids[Status::$AWAITING_APPROVAL] && $row['type'] == 'LK') {
+    		$new_link_array[] = array('loid' => $row['loid'], 'lkid' => $row['lkid'], 'stage' => $row['stage'],
+    			'created_by' => $row['created_by'], 'date_created' => $row['date_created']);
+    	}
+    	if ($row['new_status'] == $status_ids[Status::$ARCHIVED] && $row['type'] == 'TA') {
+    		$archive_ta_array[] = array('loid' => $row['loid'], 'stage' => $row['stage'], 
+    			'modified_by' => $row['modified_by'], 'date_modified' => $row['date_modified']);
+    	}
+    	if ($row['new_status'] == $status_ids[Status::$ARCHIVED] && $row['type'] == 'LK') {
+    		$archive_link_array[] = array('loid' => $row['loid'], 'stage' => $row['stage'], 
+    			'modified_by' => $row['modified_by'], 'date_modified' => $row['date_modified']);
+    	}
+    	if ($row['status'] == $status_ids[Status::$ARCHIVED]) {
+    		$no_archived_linkages++;
+    	}
+    	if (!(($row['status'] == $status_ids[Status::$RELEASED] && $row['new_status'] == $status_ids[Status::$UNKNOWN]) ||
+    		$row['status'] == $status_ids[Status::$ARCHIVED])) {
+    		$no_new_requests++;
+    	}
+    }
+    if (count($new_ta_version_array) > 0) {
+      	echo "<div class=\"notice\">New version of teaching activity to replace the old version that links to the following learning objective(s).
+      	Submitted by \"{$new_ta_version_array[0]['created_by']}\" on {$this->displayDate($new_ta_version_array[0]['date_created'])}.";
+        foreach ($new_ta_version_array as $entry) {
+        	$lourl = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=>$entry['loid']));
+        	echo "<br/><span style=\"padding-left:10px\"> - Learning objective</span> <a href=\"{$lourl}\">{$entry['loid']}</a>";
+        	if (($role == 'stagecoordinator' && in_array($stage, $identity->stages)) || $role == 'admin') {
+        		$approveurl = $this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'approve','id'=>$entry['taid'], 'loid'=>$entry['loid']));
+        		echo " <span style=\"padding-left:30px\"><a class=\"resourceButtonHref\" href=\"{$approveurl}\">Approve</a></span>";
+        	}
+        }
+        echo "</div>";    	
+    }
+    if (count($new_ta_array) > 0) {
+    	$lourl = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=>$new_ta_array[0]['loid']));
+      	echo "<div class=\"notice\">New teaching activity to link to learning objective <a href=\"{$lourl}\">{$new_ta_array[0]['loid']}</a>.
+      		Submitted by \"{$new_ta_array[0]['created_by']}\" on {$this->displayDate($new_ta_array[0]['date_created'])}.";
+      	if (($role == 'stagecoordinator' && in_array($stage, $identity->stages)) || $role == 'admin') {
+      		$approveurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'approveloandta',
+      			'id'=>$new_ta_array[0]['lkid']), null, true);
+      		echo "<div style=\"text-align:right\"><a class=\"resourceButtonHref\" href=\"{$approveurl}\">Approve</a></div></div>";
+      	}
+    }
+    if (count($new_lo_array) > 0) {
+    	$lourl = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=>$new_lo_array[0]['loid']));
+      	echo "<div class=\"notice\">Adding linkage to new learning objective <a href=\"{$lourl}\">{$new_lo_array[0]['loid']}</a>.
+      		Submitted by \"{$new_lo_array[0]['created_by']}\" on {$this->displayDate($new_lo_array[0]['date_created'])}.";
+      	if (($role == 'stagecoordinator' && in_array($stage, $identity->stages)) || $role == 'admin') {
+      		$approveurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'approveloandta',
+    			'id'=>$new_lo_array[0]['lkid']), null, true);
+        	echo "<div style=\"text-align:right\"><a class=\"resourceButtonHref\" href=\"{$approveurl}\">Approve</a></div></div>";
+      	}
+    }
+    if (count($new_ta_lo_array) > 0) {
+    	$lourl = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=>$new_ta_lo_array[0]['loid']));
+      	echo "<div class=\"notice\">New teaching activity to link to new learning objective <a href=\"{$lourl}\">{$new_ta_lo_array[0]['loid']}</a>.
+      		Submitted by \"{$new_ta_lo_array[0]['created_by']}\" on {$this->displayDate($new_ta_lo_array[0]['date_created'])}.";
+      	if (($role == 'stagecoordinator' && in_array($stage, $identity->stages)) || $role == 'admin') {
+      		$approveurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'approveloandta',
+      			'id'=>$new_ta_lo_array[0]['lkid']), null, true);
+      		echo "<div style=\"text-align:right\"><a class=\"resourceButtonHref\" href=\"{$approveurl}\">Approve</a></div></div>";
+      	}	
+    }
+    if (count($new_link_array) > 0) {
+    	$lourl = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=>$new_link_array[0]['loid']));
+      	echo "<div class=\"notice\">Adding linkage to learning objective <a href=\"{$lourl}\">{$new_link_array[0]['loid']}</a>.
+      		Submitted by \"{$new_link_array[0]['created_by']}\" on {$this->displayDate($new_link_array[0]['date_created'])}.";
+      	if (($role == 'stagecoordinator' && in_array($stage, $identity->stages)) || $role == 'admin') {
+      		$approveurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'approveloandta',
+      			'id'=>$new_link_array[0]['lkid']), null, true);
+			echo "<div style=\"text-align:right\"><a class=\"resourceButtonHref\" href=\"{$approveurl}\">Approve</a></div></div>";
+      	} 	
+    }
+    if (count($archive_ta_array) > 0) {
+    	echo "<div class=\"notice\">Archiving teaching activity. Submitted by \"{$archive_ta_array[0]['modified_by']}\" 
+    		on {$this->displayDate($archive_ta_array[0]['date_modified'])}.
+        	As a result, linkage to the following learning objective(s) will be archived:";
+        foreach ($archive_ta_array as $entry) {
+        	$lourl = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=>$entry['loid']));
+        	echo "<br/><span style=\"padding-left:10px\"> - Learning objective</span> <a href=\"{$lourl}\">{$entry['loid']}</a>";
+        	if (($role == 'stagecoordinator' && in_array($stage, $identity->stages)) || $role == 'admin') {
+        		$approveurl = $this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'archivetalink','loid'=>$entry['loid']));
+        		echo " <span style=\"padding-left:30px\"><a class=\"resourceButtonHref\" href=\"{$approveurl}\">Approve</a></span>";
+        	}
+        }
+        echo "</div>";
+    }
+    if (count($archive_link_array) > 0) {
+    	$lourl = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=>$archive_link_array[0]['loid']));
+    	echo "<div class=\"notice\">Archiving linkage to learning objective <a href=\"{$lourl}\">{$archive_link_array[0]['loid']}</a>.
+    		Submitted by \"{$archive_link_array[0]['modified_by']}\" on {$this->displayDate($archive_link_array[0]['date_modified'])}.";
+        if (($role == 'stagecoordinator' && in_array($stage, $identity->stages)) || $role == 'admin') {
+        	$approveurl = $this->url(array('module'=>'default','controller'=>'lotalinkage','action'=>'approvedelete',
+        		'taid'=>$this->ta->auto_id,'loid'=>$archive_link_array[0]['loid'],'type'=>'ta'), null, true);
+        	echo "<div style=\"text-align:right\"><a class=\"resourceButtonHref\" href=\"{$approveurl}\">Approve</a></div></div>";
+        }
+    }
+    if (count($results) == $no_archived_linkages) {
+    	echo '<div class="notice">This teaching activity is not currently being used.</div>';
+    }
+    if ($no_new_requests == 0  && count($results) != $no_archived_linkages) {
+    	$found_as_teacher = false;
+    	if ($role == 'stagecoordinator' || $role == 'blockchair' || $role == 'staff') {
+    		foreach ($p_teacher_array as $teacher) {
+    			if (trim($teacher) === $user_id) {
+    				$found_as_teacher = true;
+    				break;
+    			}
+    		}
+    	}
+    	if (($role == 'staff' && $found_as_teacher) || 
+    		($role == 'blockchair' && ($found_as_teacher || in_array($block, $identity->blocks))) ||
+    		($role == 'stagecoordinator' && ($found_as_teacher || in_array($stage, $identity->stages))) || 
+    		($role == 'admin')) {
+    		$edit_url = $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'edit'));
+    		echo "<h3><b><a href=\"{$edit_url}\">Edit</a></b>";
+    		if ($role != 'staff') {
+    			$archive_url = $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'archive'));
+    			echo "&nbsp;&nbsp;&nbsp;&nbsp;<b><a href=\"{$archive_url}\">Archive</a></b>";
+    		}
+    		echo "</h3>";
+    	}
+    }
+  ?>
+</div>

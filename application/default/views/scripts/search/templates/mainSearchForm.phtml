@@ -1,0 +1,58 @@
+  <?php 
+  $classForFieldName = 'fancyFieldName';
+  $classTopText = 'topText';
+  ?>
+  <tr>
+    <td width="90" class="<?php echo $classForFieldName?>">Search in</td>
+    <td colspan="4">
+        <?php echo $this->placeholder('searchIn') ?>
+    </td>
+  </tr>
+  <tr>
+    <td class="<?php echo $classForFieldName?>">Search Text</td>
+    <td colspan="4">
+        <?php echo $this->placeholder('qstr') ?>
+        <?php echo $this->placeholder('qoption') ?>
+        <img src="<?php echo $this->baseUrl;?>/img/icon_question.gif" class="helpimg" alt="Help" id="luceneHelp"/>
+    </td>
+  </tr>
+  <?php if (UserAcl::isStaffOrAbove()): ?>
+  <tr <?php if ($this->process == 'simple'):?>style="display:none" <?php endif;?>>
+    <td class="<?php echo $classForFieldName?>">Domain</td>
+    <td colspan="4">
+        <?php echo $this->placeholder('domain') ?>
+    </td>
+  </tr>
+  <?php endif; ?>
+  <tr <?php if ($this->process == 'simple'):?>style="display:none" <?php endif;?>>
+    <td class="<?php echo $classForFieldName.' '.$classTopText;?>" style="padding-top:6px;">Discipline</td>
+    <td><?php echo $this->placeholder('disciplines') ?></td>
+    <td class="<?php echo $classForFieldName.' '.$classTopText;?>" style="padding-top:6px;">Activity Type</td>
+    <td colspan="2">
+        <?php echo $this->placeholder('acttype') ?>
+    </td>
+  </tr>
+   <tr <?php if ($this->process == 'simple'):?>style="display:none" <?php endif;?>>
+    <td class="<?php echo $classForFieldName?>"><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?></td>
+    <td colspan="4">
+     <?php echo $this->placeholder('stage') ?>&nbsp;&nbsp;
+     <span class="<?php echo $classForFieldName;?>"><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></span>&nbsp;<?php echo $this->placeholder('block') ?>&nbsp;&nbsp;
+     <span class="<?php echo $classForFieldName;?>"><?php echo Zend_Registry::get('Zend_Translate')->_('Week') ?></span>&nbsp;<?php echo $this->placeholder('blockweek') ?>
+    </td>    
+  </tr>
+  <tr <?php if ($this->process == 'simple'):?>style="display:none" <?php endif;?>>
+    <td class="<?php echo $classForFieldName?>">PBL</td>
+    <td id="pbl_td" colspan="4">
+        <?php echo $this->placeholder('pbl') ?>&nbsp;&nbsp;
+        <span class="<?php echo $classForFieldName;?>"><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></span>
+        &nbsp;<?php echo $this->placeholder('theme') ?>
+        &nbsp;<span class="<?php echo $classForFieldName;?>">Skills</span>&nbsp;<?php echo $this->placeholder('skill') ?>
+    </td>     
+  </tr>
+  <tr>
+    <td></td>
+    <td colspan='4'>
+        <u><span id='searchType'><?php if ($this->process == 'simple'):?>Advanced Search<?php else :?>Simple Search<?php endif;?></span></u>
+    </td>
+ </tr>
+

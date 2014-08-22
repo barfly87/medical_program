@@ -1,0 +1,49 @@
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+
+<?php if($this->result['error'] === true) :?>
+    <span class="error" >Error ! <?php echo $this->result['error_string']?></span>
+<?php else:?>
+    <div>
+        <div>
+            <h3 onclick="javascript: $('#notfound').toggle();" style="text-decoration:underline;cursor:pointer;">NotFound</h3>
+            <table id="notfound" class="tableNoSorter" style="display:none">
+                <tr><th>Mid</th><th>Metadata did not find any teaching activity attached to it</th></tr>
+            <?php foreach($this->result['notfound'] as $row) :?>
+                <tr>
+                    <td valign="top"><?php echo $row['mid']; ?></td>
+                    <td>
+                        <table class="tableNoSorter">
+                            <?php foreach($row['metadata'] as $metadataName => $metadata):?>
+                                <tr>
+                                    <td valign="top" style="border:1px solid FFF;"><?php echo $metadataName;?></td>
+                                    <td valign="top" style="border:1px solid FFF;"><?php echo $metadata;?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+            </table>
+            
+            <h3 onclick="javascript:$('#singleta').toggle();" style="text-decoration:underline;cursor:pointer;">List of midsMid attached to single teaching activity.</h3>
+            <table id="singleta" class="tableNoSorter" style="display:none">
+                <tr><th>Mid Attached to</th><th>Single Ta</th></tr>
+            <?php foreach($this->result['single'] as $row) :?>
+                <tr><td valign="top"><?php echo $row['mid']; ?></td><td><?php echo $row['ta'];?></td></tr>
+            <?php endforeach;?>
+                <tr><td colspan="2">Total found <?php echo count($this->result['single']) ;?></td></tr>
+            </table>
+            
+            <h3 onclick="javascript: $('#multita').toggle();" style="text-decoration:underline;cursor:pointer;">List of mids attached to multiple teaching activities.</h3>
+            <table id="multita" class="tableNoSorter" style="display:none">
+                <tr><th>Mid Attached to</th><th>Multi Ta</th></tr>
+            <?php $count = 0;?>
+            <?php foreach($this->result['multi'] as $row) :?>
+                <?php $count += count($row['tas']) ;?>
+                <tr><td valign="top"><?php echo $row['mid']; ?></td><td><?php echo implode("|",$row['tas']);?></td></tr>
+            <?php endforeach;?>
+                <tr><td colspan="2">Total found <?php echo $count;?></td></tr>
+            </table>
+        </div>
+    </div>
+<?php endif?>

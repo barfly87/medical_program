@@ -1,0 +1,20 @@
+<?php if (!isset($this->error)) :?>
+    <?php 
+    $hideRepository                 = true;
+    $hideCollection                 = true;
+    $hideObject                     = true;
+    $hideResourceImage              = true;
+    $hideData                       = true;
+    $hideDownloadLink               = true;
+    $displaySimpleDownloadLink      = true;
+    $displayTextSeparately          = true;
+    
+    ?>
+    <table id="mainTable">
+        <tr>
+            <td><?php include_once('view/details.phtml');?></td>
+        </tr>
+    </table>    
+<?php else:?>
+    <h3 class="error">Error !</h3>
+<?php endif;?>

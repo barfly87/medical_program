@@ -1,0 +1,108 @@
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/smartcolumn.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/lotaview.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.7.js"></script>
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" media="screen" rel="stylesheet" type="text/css" />
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	smartColumns(180);	
+
+	$(window).resize(function () {
+		smartColumns(180);
+	});
+
+	$('.column .block').hover(
+		function() {
+			$(this).css('border-color', '#ffe0af');
+			$('.deletersc', this).show();
+		},
+		function() {
+			$(this).css('border-color', '#fff9ef');
+			$('.deletersc', this).hide();
+		}
+	);
+});
+</script>
+<?php
+$generalResources = (UserAcl::isStaffOrAbove()) ? $this->resources['general_staff'] : $this->resources['general_student'];
+?>
+
+<?php if (count($generalResources) == 0): ?>
+
+<?php else: ?>
+<div id="taresource">
+	<h2>Resources
+	<?php if ($this->display_edit_links): ?>
+	<?php $add_rsc_url = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'upload', 'id'=> $this->ta->auto_id, 'type'=>'ta', 'resourcetypeid'=>ResourceTypeConstants::$RESOURCES_ID),null,true); ?>
+	<?php $link_rsc_url = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'link', 'id'=> $this->ta->auto_id, 'type'=>'ta', 'resourcetypeid'=>ResourceTypeConstants::$RESOURCES_ID),null,true); ?>
+	<span class="mainedit black">
+		[<a class="editlink" href="<?php echo $add_rsc_url?>">Add</a>]
+		[<a class="editlink" href="<?php echo $link_rsc_url?>">Link</a>]
+	</span>
+	<?php endif; ?>
+	</h2><hr/>
+		<ul class="column">
+		<?php 
+		$imageUrlFormat  = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'image'),null,true).'?size=128&mid=%s';
+        $viewUrlFormat  = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'view','type'=>'ta','resourceid'=>'%d','id'=>'%d','resourcetypeid'=>ResourceTypeConstants::$RESOURCES_ID),null,true,false).'?mid=%s';
+        $viewOrDownloadUrlFormat = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'viewordownload','type'=>'ta','resourceid'=>'%d','id'=>'%d','resourcetypeid'=>ResourceTypeConstants::$RESOURCES_ID),null,true,false).'?mid=%s';
+		?> 
+  
+		<?php foreach ($generalResources as $resource): ?>
+	
+            <?php
+                if(!isset($resource['customViewUrl'])) {
+                    $viewUrl = $this->escape(sprintf($viewUrlFormat, $resource['auto_id'], $this->ta->auto_id, $resource['mid']));
+                    $viewOrDownloadUrl = $this->escape(sprintf($viewOrDownloadUrlFormat, $resource['auto_id'], $this->ta->auto_id, $resource['mid']));
+                } else {
+                    $viewUrl = $resource['customViewUrl'];
+                    $viewOrDownloadUrl = $resource['customViewUrl'];
+                }
+                if(!isset($resource['customImageUrl'])) {
+                    $imageUrl = $this->escape(sprintf($imageUrlFormat, $resource['mid']));
+                } else {
+                    $imageUrl = $resource['customImageUrl'];
+                }
+                if(!isset($resource['customOnclick'])) {
+                    $onclick = '';
+                } else {
+                    $onclick = ' onclick ="'.$resource['customOnclick'].'"';
+                }
+                $staffOnlyTextImageHtml = ''; 
+                if(isset($resource['staffOnly']) && $resource['staffOnly'] === true) {
+                    $staffOnlyTextImageHtml = MediabankResourceConstants::staffOnlyTextImage('staffonly-resource').'<br/>';
+                }
+                $author = '';
+                if(isset($resource['metadata']['data']['author']) && strlen(trim($resource['metadata']['data']['author'])) > 0) {
+                    $author = trim($resource['metadata']['data']['author']);
+                }
+            ?>
+		
+			<li id="resourceElem_<?php echo $resource['auto_id'];?>">
+				<div class="block">
+				    <?php if(!empty($author)) :?>
+				        <a class="resource-author tooltip-class" href="javascript:void(0);" title="Written/Prepared By - <b><?php echo $author;?></b>">Author</a>
+				    <?php endif;?>
+				    <div class="resource-info-container">
+        				<?php echo $staffOnlyTextImageHtml;?>
+    				</div>
+    				<div>
+					   <a href="<?php echo $viewOrDownloadUrl?>"><img src="<?php echo $imageUrl ?>" <?php echo $onclick?>/></a>
+					   <p><a href="<?php echo $viewOrDownloadUrl?>" class="rlink" <?php echo $onclick?>><?php echo $resource['title'];?></a></p>
+					</div>
+					<?php if ($this->resourceAcl['remove']['allow'] === true) :?>
+					<?php echo MediabankResourceConstants::createInfoUrl($viewUrl, array('width'=>18,'class'=>'resource-info-with-delete'));?>
+					<a class="deletersc" href="javascript:removeResource('ta','<?php echo (int)$this->ta->auto_id;?>','<?php echo $resource['mid']; ?>','<?php echo $resource['auto_id'];?>')">
+						<img class="resource-delete" src="<?php echo $this->baseUrl;?>/img/delete_select.gif">
+					</a>
+					<?php else:?>
+					   <?php echo MediabankResourceConstants::createInfoUrl($viewUrl, array('width'=>20,'padding-right'=>0));?>
+					<?php endif;?>
+				</div>
+			</li>
+		<?php endforeach; ?>
+		</ul>
+</div>
+<?php endif; ?>

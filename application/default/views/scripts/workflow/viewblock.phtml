@@ -1,0 +1,61 @@
+<script type="text/javascript">
+$(function() {
+	$("table thead tr:nth-child(odd)").css('background-color', '#ffe0af');
+	$("table tbody tr:nth-child(even)").css('background-color', '#ffe0af');
+	$("table tr td a").css("text-decoration", "none");
+});
+</script>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<div>
+<h2><?php echo $this->status_name ?> queue for block "<?php echo $this->block_name?>"</h2>
+<table width="100%">
+  <thead>
+    <tr>
+      <th><?php echo $this->inDevQueue ? 'Created&nbsp;by' : 'Submitted&nbsp;by'?></th>
+      <th>Date</th>
+      <th>Type</th>
+      <th width="40%">Learning Objective Description</th>
+      <th width="40%">Teaching Activity Description</th></tr>
+  </thead>
+  <tbody>
+  <?php foreach ($this->result as $v) : ?>
+    <?php
+      if ($v['doctype'] == 'TA') {
+          if ($this->status_name == Status::$IN_DEVELOPMENT || $this->status_name == Status::$AWAITING_APPROVAL) {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  } else {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'view','id'=> $v['id']),null,true);
+      	  }
+          $type = "TA";
+      } else if ($v['doctype'] == 'LO') {
+      	  if ($this->status_name == Status::$IN_DEVELOPMENT || $this->status_name == Status::$AWAITING_APPROVAL) {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  } else {
+              $url = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=> $v['id']),null,true);
+      	  }
+          $type = "LO";
+      } else if ($v['doctype'] == 'TL') {
+      	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+          $type = "TA&nbsp;+&nbsp;LO";
+      } else if ($v['doctype'] == 'LK') {
+      	  if ($this->status_name == Status::$IN_DEVELOPMENT || $this->status_name == Status::$AWAITING_APPROVAL) {
+      		  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  } else {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'view','id'=> $v['taid']),null,true);
+      	  }
+          
+      	  $type = "Linkage";
+      } else {
+      	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  $type = "Unknown";
+      }
+    ?>
+    <tr><td align="center"><?php echo Compass::userInfoHtml($v['submitted_by']);?></td>
+    <td align="center"><a href="<?php echo $url ?>"><?php echo $this->displayDate($v['date_submitted'])?></a></td>
+    <td align="center"><?php echo $type?></td>
+    <td><?php echo $v['lo_text']?></td>
+    <td><?php echo $v['ta_title']?></td></tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
+</div>

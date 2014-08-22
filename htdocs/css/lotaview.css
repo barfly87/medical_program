@@ -1,0 +1,230 @@
+h3 {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+div.subHeadings {
+    font-size: 13px;
+    font-weight: bold;
+    color:#2F1D03; 
+    background-color: #FFE0AF;
+    padding:2px 4px;
+}
+
+.subHeadingsResources {
+	margin-top: 10px;
+}
+
+td.loViewContainerLeft {
+    padding:0px 0px 0px 5px;
+    width: 600px;
+    vertical-align: top;
+}
+/* style="padding-top:10px; " valign="top"*/
+
+
+td.loViewContainerRight {
+	width: 350px;
+    padding:10px 5px 10px 10px;
+    margin-top: 10px;
+    vertical-align: top;
+}
+
+/**********************************************
+** START :: Linked Activities/Objectives CSS **
+***********************************************/
+
+#linkContainer {
+    margin-top:10px;
+}
+
+#linkContent, .linkContent {
+	margin-left: 10px;
+    padding: 0px;
+}
+
+.linkElement {   
+    padding: 5px;
+    border: 1px solid #FFE0AF;
+    background-color: #FFECCF;
+}
+.linkElementEven {
+}
+
+.linkElement a:link, .linkElement a:visited, .linkElement a:active {
+    color: #2F1D03;
+    font-size: 110%;
+} 
+
+.linkElement a:hover {
+    color: #7F6B4F;
+    font-size: 110%;  
+    text-decoration: none;  
+} 
+
+.linkSubElementHeading {
+    font-weight: bold;
+    color: #2F1D03
+}
+
+.linkSubElement {
+    width:100%;
+    text-align:right;
+    line-height: 1.6em;
+}
+
+.linkNone {
+	padding: 5px;
+	margin: 0px;
+	background-color: #FFF9EF;
+	border: 1px solid #FFE0AF;
+}
+/**********************************************
+** END :: Linked Activities/Objectives CSS   **
+***********************************************/
+
+/****************************
+** START :: Resources CSS  **
+*****************************/
+#resourceContainer {
+	margin-left: 10px;
+    padding: 0px;
+}
+.resourceElem {
+    background-color: #FFECCF;
+    border: 1px solid #FFE0AF;
+    padding: 5px;
+}
+
+.resourceImgContainer {
+	width:128px;
+	float:left;
+}
+
+.resourceTitleContainer {
+    vertical-align:top;
+    width:135px;
+    float:right;
+}
+
+.resourceActionContainer {
+	text-align: right; 
+    vertical-align:top;
+    clear:both;
+}
+.resourceButtonContainer, .resourceSortButtonContainer {
+    display: inline;
+}
+
+.resourceImgContainer img {
+    border: 0px solid #FFFFFF;
+    padding-right: 5px;
+}
+
+.resourceTitleContainer a:visited, .resourceTitleContainer a:link, .resourceTitleContainer a:active, .resourceTitleContainer a:hover {
+    color:#2F1D03;
+} 
+.resourceTitleContainer a:hover {
+    text-decoration :none;
+}
+a:visited.resourceButtonHref, a:link.resourceButtonHref,a:active.resourceButtonHref,a:hover.resourceButtonHref 
+a:visited.resourceRemoveButtonHref, a:link.resourceRemoveButtonHref,a:active.resourceRemoveButtonHref,a:hover.resourceRemoveButtonHref {
+    border:1px solid #2F1D03;
+    color:#2F1D03;
+    background-color:#FFD79F;
+    cursor:pointer;
+    font-weight:bold;
+    margin-right:6px;
+    padding:2px 4px;
+    font-size: 11px;
+    font-family: sans,verdana, arial;
+    text-decoration: none;
+}
+
+/***************************
+** END :: Resources CSS   **
+****************************/
+/****************************
+** START :: Student Resources CSS  **
+*****************************/
+.studentresourcemetadata {
+	font-size: smaller;
+	color: #666666;
+}
+.studentresourcemetadatacell {
+	vertical-align: top;
+}
+.studentresourceinlinedisplay {
+	border: 1px solid #eeeeee;
+	padding: 5px;
+}
+.ratingbox, .commentbox {
+	font-size:smaller;
+}
+/***************************
+** END :: Student Resources CSS   **
+****************************/
+
+/****************************
+** START :: Feedback CSS  **
+*****************************/
+#feedbackContainer {
+    margin-left: 10px;
+    padding: 0px;
+}
+#feedbackContainer .responses {
+    padding-left: 10px;
+    text-decoration: underline;
+}
+/***************************
+** END :: Feedback CSS   **
+****************************/
+
+/****************************
+** START :: Details CSS  **
+*****************************/
+
+#loViewDetailsContainer {
+    min-width:500px;
+    max-width:600px;
+}
+
+.viewEmptyDiv {
+    border-top: 2px dotted #FFD38F;
+}
+.userdetails img {
+	padding:5px;
+	padding-top: 10px;
+}
+.userdetails img.uidimages {
+    padding:4px 2px 0px 0px;
+}
+.userdetails img.noimage {
+    padding:0px;
+}
+/****************************
+** END :: Details CSS  **
+*****************************/
+
+/****************************
+** START :: date and exam CSS  **
+*****************************/
+#dateContainer, #examContainer {
+	margin-left: 10px;
+    padding: 0px;
+}
+.dateElem, .examElem {
+	background-color: rgb(255, 249, 239);
+    border: 1px solid #FFE0AF;
+    padding: 5px;
+}
+/****************************
+** END :: date and exam CSS  **
+*****************************/
+a:visited.sectionLink, a:link.sectionLink,a:active.sectionLink,a:hover.sectionLink {
+	padding: 2px 5px;
+	background-color: #A0522D      ; /* rgb(0, 51, 102);*/
+	color: #FFECCF;
+	font-weight: bolder;
+	text-decoration: none;
+}

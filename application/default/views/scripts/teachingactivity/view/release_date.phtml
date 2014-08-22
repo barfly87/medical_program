@@ -1,0 +1,37 @@
+<div>
+	<div class="subHeadings subHeadingsResources">Release Date</div>
+	<div id="examContainer">
+		<div class="dateElem">
+		<?php $release_date = $this->ta->release_date; ?>
+		<?php if (count($release_date) > 0): ?>
+		    <a href="#" id="showhidelink">Show dates</a><br/>
+		    <div id="relasedates">
+			<?php
+				foreach ($release_date as $k => $v) {
+					echo "Group <b>$k</b> - $v<br/>"; 
+				}
+				if ($this->debugdate == 'true') {
+					$index = Compass_Search_Lucene::open(SearchIndexer::getIndexDirectory());
+					$results = $index->find("+ta_auto_id:{$this->ta->auto_id}");
+					$fields = $index->getFieldNames();
+					if(isset($results[0])) {
+						$doc = $results[0]->getDocument();
+						foreach($fields as $field) {
+							if (preg_match('/[0-9]{4}/', $field)) {
+								try {
+									$value = $doc->getFieldValue($field);
+									echo $field, ' - ', date('Y-m-d H:i:s', $value), "<br/>";
+								} catch (Exception $e) {	
+								}
+							}
+						}
+					}
+				}
+			?>
+			</div>
+		<?php else: ?>
+	    	No release date information available.
+		<?php endif; ?>
+		</div>
+	</div>
+</div>

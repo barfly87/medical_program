@@ -1,0 +1,36 @@
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/managephotos.js"></script>
+<div class="rhsbox">
+    <h3 class="rhsheading">Manage Photos</h3>
+    <div class="mcontent">
+        <div>
+        	<?php 
+        		$photos = $this->photoURLs;
+        		foreach($photos as $ind => $photo): ?>
+        	        	<div style="float:left;height: 160px; width: 130px;">
+        	        		<div style="height:128px"><img src="<?php echo($photo); ?>"/></div>
+        	        		<?php if (!$this->hideDefault) : ?>
+        	        			<div style="font-size:smaller; float:bottom"><input type="radio" name="defaultphoto" value="<?php echo($this->mids[$ind]);?>" <?php if($this->mids[$ind] == $this->defaultPhoto): ?>checked<?php endif;?> onClick="setDefaultPhoto('<?php echo(base64_encode($this->mids[$ind]));?>')"></input> Default<br>
+        	        		<?php else :?>
+        	        			<div style="font-size:smaller; float:bottom"><input type="radio" name="officialphoto" value="<?php echo($this->mids[$ind]);?>" <?php if($this->mids[$ind] == $this->officialPhoto): ?>checked<?php endif;?> onClick="setOfficialPhoto('<?php echo(base64_encode($this->mids[$ind]));?>', '<?php echo $this->uid?>')"></input> Official<br>
+        	        		<?php endif; ?> 
+        	        		<?php if(in_array($this->mids[$ind], $this->editableMids)):?>
+        	        		<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'deletephoto', "mid"=>base64_encode($this->mids[$ind]), 'uid'=>$this->uid),'default',true); ?>">Delete Photo</a>
+        	        		<?php endif;?></div>
+        	        	</div>
+        	<?php endforeach; ?>
+        	<div id="messagebox" style="clear:both;">&nbsp;</div>
+        	
+			<div style="clear:both;padding-top: 20px;">
+			<form method="post" enctype="multipart/form-data" action="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'photoupload'),'default',true); ?>">
+				Upload photo for "<?php echo $this->escape($this->uid) ?>": <input type="file" name="photo">
+				<input type="hidden" name="uid" value="<?php echo $this->escape($this->uid) ?>">
+				<input type="submit" value="Upload">
+			</form>
+			</div>
+			<div style="clear:both;padding-top: 25px;">
+				<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$this->uid),'default',true); ?>">Return to profile</a></div>
+			</div>
+			
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+#savenewlo, #cancelnewlo, #saveexistinglo, #cancelexistinglo, #savenewta, #cancelnewta, #saveexistingta, #cancelexistingta, #savelink, #cancellink {
+	width: auto;
+	padding: 6px 12px;
+	background: #617798;
+	border: 0;
+	font-size: 14px;
+	color: #FFFFFF;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	cursor: pointer;
+}
+.buttonscontainer {
+	text-align: center
+}
+.disabled {
+	background-color: #eeeeee;
+}
+.enabled {
+	background-color: #cfeace;
+}
+.incomplete {
+	background-color: #ffe0af;
+}
+.complete {
+	background-color: #00ff00;
+}
+.new {
+	background-color: #ffffff;
+}
+.hidden {
+	display: none;
+}
+.helpimg {
+	vertical-align: middle;
+	margin-left: 4px;
+	border:0;
+}
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+	opacity: 0.85;
+	background-color: #feeca4;
+	width: 250px;
+	padding: 5px;
+}
+#tooltip h3, #tooltip div {
+	margin: 0;
+}
+th {
+	font-weight: normal;
+	text-align: left;
+	padding-right: 10px;
+	padding-left: 5px;
+}
+.sectionheader {
+	font-size: 160%;
+	padding-bottom: 0.5em;
+	border-bottom: 1px dotted #ccc;
+}
+.buttonscontainer {
+	text-align: left;
+	margin-top: 1.0em;
+	padding-top: 1.0em;
+	border-top: 1px dotted #ccc;
+}
+table table {
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+table table div {
+	width: 300px; height: 100px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+#strengthlink {
+	width: 200px; height: 60px;
+	margin-bottom: 50px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}

@@ -1,0 +1,12 @@
+<div style="float:left; max-width:750px">
+  <h2>Thank you!</h2>
+  <?php $lourl = $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view', 'id'=>$this->lo_id));?>
+  <?php $workflowurl = $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'index'));?>
+  <p>A new version of learning objective has been created. Click <a href="<?php echo $lourl ?>">here</a> to view the details.</p>
+
+  <?php $role = Zend_Auth::getInstance()->getIdentity()->role; ?>
+  <?php if ($role != 'admin' && $role != 'domainadmin' && $role != 'stagecoordinator') : ?>
+    <p>A request to approve this new version has been send to the relevant course designer(s).</p>
+    <p>You may find all your submissions in <a href="<?php echo $workflowurl?>">workflow queue</a>.</p>
+  <?php endif; ?>
+</div>

@@ -1,0 +1,21 @@
+<?php 
+$viewPage       = $this->requestParams['viewPage'];
+$taTypeId       = $this->requestParams['taTypeId'];
+$taTypeName     = $this->requestParams['taTypeName'];
+$taId           = $this->requestParams['taId'];
+
+$taUrlFormat   = $this->url(array('module'=>'default', 'controller'=>$this->zendController, 'action'=>'fetch'), null, true);
+$taUrlFormat  .= '/ref/'.$this->pblOrBlockRef.'/tatypeid/'.$taTypeId.'/taid/%d';
+
+switch($viewPage) {
+    case 'list':
+        $page = 'fetch/list';
+    break;
+    case 'ta':
+        $page = 'fetch/ta';
+        $navigate = PblBlockConst::prevNextTa($this->tas, $taId, $taUrlFormat);
+    break;
+}
+include($page.'.phtml');
+?>
+

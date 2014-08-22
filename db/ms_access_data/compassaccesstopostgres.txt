@@ -1,0 +1,208 @@
+begin;
+--Achievement	(NOT NULL)	OK				
+--Status		(NOT NULL)	OK
+--review		ANOTHER TABLE link_lo_review
+--assesstype	ANOTHER TABLE link_lo_assesstype
+
+INSERT INTO learningobjective (old_id, lo, shorttitle, achievement, theme1, skill, review1, review2, review3, system, created_by, date_created, modified_by, date_modified, reviewed_by, date_reviewed, date_next_review, status, notes, jmo, gradattrib, keywords, majorversion, minorversion) SELECT loid, strlearnobj, strshorttitle, lngattainment, lngtheme, lngsubtheme, lngreview1, lngreview2, lngreview3, lngsystem, NULL, dtmdatecreated, NULL, dtmdatemodified, NULL, dtmdatelastreview, dtmdatenextreview, lngstatus, memlearnobjnotes, lngjmo, lnggradattrib, strkeyword, 1, 0 FROM tbllearningobjective;
+
+--Skill: REPLACE NULL with 1 - '' (1992 NULL)
+UPDATE learningobjective SET skill = 1 WHERE skill IS NULL;
+
+--System: REPLACE NULL WITH 11 - '' (1278 NULL)
+UPDATE learningobjective set system = 11 where system is null;
+
+--jmo		ALL NULL	replace with 13 - ''
+UPDATE learningobjective set jmo = 13 where jmo is null;
+
+--gradattrib	ALL NULL	replace with 6 - ''
+UPDATE learningobjective set gradattrib = 6 where gradattrib is null;
+
+UPDATE learningobjective set created_by = (SELECT uid FROM tblpeople, tbllearningobjective where tblpeople.peopleid = tbllearningobjective.lngauthor AND tbllearningobjective.loid = learningobjective.old_id);
+
+UPDATE learningobjective set modified_by = (SELECT uid FROM tblpeople, tbllearningobjective where tblpeople.peopleid = tbllearningobjective.lngmodifiedby AND tbllearningobjective.loid = learningobjective.old_id);
+
+UPDATE learningobjective set reviewed_by = (SELECT uid FROM tblpeople, tbllearningobjective where tblpeople.peopleid = tbllearningobjective.lngreviewer AND tbllearningobjective.loid = learningobjective.old_id);
+
+--UPDATE learningobjective SET discipline1 = 1 WHERE old_id IN (SELECT loid FROM tbllearningobjective WHERE lngdiscipline1 IS NULL and lngsubdiscipline1 IS NULL);
+
+--UPDATE learningobjective SET discipline2 = 1 WHERE old_id IN (SELECT loid FROM tbllearningobjective WHERE lngdiscipline2 IS NULL and lngsubdiscipline2 IS NULL);
+
+--UPDATE learningobjective SET discipline3 = 1 WHERE old_id IN (SELECT loid FROM tbllearningobjective WHERE lngdiscipline3 IS NULL and lngsubdiscipline3 IS NULL);
+
+
+--update discipline 1
+ALTER TABLE learningobjective ADD COLUMN disc1 VARCHAR(255);
+ALTER TABLE learningobjective ADD COLUMN subdisc1 VARCHAR(255);
+
+UPDATE learningobjective set disc1 = (SELECT strdiscipline FROM tbldiscipline, tbllearningobjective where tbldiscipline.disciplineid = tbllearningobjective.lngdiscipline1 AND tbllearningobjective.loid = learningobjective.old_id);
+UPDATE learningobjective set subdisc1 = (SELECT strsubdiscipline FROM tblsubdiscipline, tbllearningobjective where tblsubdiscipline.id = tbllearningobjective.lngsubdiscipline1 AND tbllearningobjective.loid = learningobjective.old_id);
+
+UPDATE learningobjective set discipline1 = (SELECT auto_id FROM lk_discipline where learningobjective.subdisc1 = lk_discipline.name) WHERE subdisc1 IS NOT NULL;
+UPDATE learningobjective set discipline1 = (SELECT auto_id FROM lk_discipline where learningobjective.disc1 = lk_discipline.name) WHERE disc1 IS NOT NULL AND subdisc1 IS NULL;
+UPDATE learningobjective set discipline1 = 1 where discipline1 IS NULL;
+
+ALTER TABLE learningobjective DROP disc1;
+ALTER TABLE learningobjective DROP subdisc1;
+
+--update discipline 2
+ALTER TABLE learningobjective ADD COLUMN disc1 VARCHAR(255);
+ALTER TABLE learningobjective ADD COLUMN subdisc1 VARCHAR(255);
+
+UPDATE learningobjective set disc1 = (SELECT strdiscipline FROM tbldiscipline, tbllearningobjective where tbldiscipline.disciplineid = tbllearningobjective.lngdiscipline2 AND tbllearningobjective.loid = learningobjective.old_id);
+UPDATE learningobjective set subdisc1 = (SELECT strsubdiscipline FROM tblsubdiscipline, tbllearningobjective where tblsubdiscipline.id = tbllearningobjective.lngsubdiscipline2 AND tbllearningobjective.loid = learningobjective.old_id);
+
+UPDATE learningobjective set discipline2 = (SELECT auto_id FROM lk_discipline where learningobjective.subdisc1 = lk_discipline.name) WHERE subdisc1 IS NOT NULL;
+UPDATE learningobjective set discipline2 = (SELECT auto_id FROM lk_discipline where learningobjective.disc1 = lk_discipline.name) WHERE disc1 IS NOT NULL AND subdisc1 IS NULL;
+UPDATE learningobjective set discipline2 = 1 where discipline2 IS NULL;
+
+ALTER TABLE learningobjective DROP disc1;
+ALTER TABLE learningobjective DROP subdisc1;
+
+--update discipline 3
+ALTER TABLE learningobjective ADD COLUMN disc1 VARCHAR(255);
+ALTER TABLE learningobjective ADD COLUMN subdisc1 VARCHAR(255);
+
+UPDATE learningobjective set disc1 = (SELECT strDiscipline FROM tbldiscipline, tbllearningobjective where tbldiscipline.disciplineid = tbllearningobjective.lngdiscipline3 AND tbllearningobjective.loid = learningobjective.old_id);
+UPDATE learningobjective set subdisc1 = (SELECT strsubdiscipline FROM tblsubdiscipline, tbllearningobjective where tblsubdiscipline.id = tbllearningobjective.lngsubdiscipline3 AND tbllearningobjective.loid = learningobjective.old_id);
+
+UPDATE learningobjective set discipline3 = (SELECT auto_id FROM lk_discipline where learningobjective.subdisc1 = lk_discipline.name) WHERE subdisc1 IS NOT NULL;
+UPDATE learningobjective set discipline3 = (SELECT auto_id FROM lk_discipline where learningobjective.disc1 = lk_discipline.name) WHERE disc1 IS NOT NULL AND subdisc1 IS NULL;
+UPDATE learningobjective set discipline3 = 1 where discipline3 IS NULL;
+
+ALTER TABLE learningobjective DROP disc1;
+ALTER TABLE learningobjective DROP subdisc1;
+
+
+--update review
+INSERT INTO link_lo_review (lo_id, review_id) SELECT auto_id, review1 FROM learningobjective WHERE review1 IS NOT NULL;
+
+update learningobjective set review2 = null where review2 in (7,9);
+INSERT INTO link_lo_review (lo_id, review_id) SELECT auto_id, review2 FROM learningobjective WHERE review2 IS NOT NULL;
+
+INSERT INTO link_lo_review (lo_id, review_id) SELECT auto_id, review3 FROM learningobjective WHERE review3 IS NOT NULL;
+
+ALTER TABLE learningobjective DROP COLUMN review1;
+ALTER TABLE learningobjective DROP COLUMN review2;
+ALTER TABLE learningobjective DROP COLUMN review3;
+
+
+--update assesstype
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 1 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype = 1;
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 1 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '1;%';
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 1 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%;1';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 2 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype = 2;
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 2 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '2;%';
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 2 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%;2';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 3 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype = 3;
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 2 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '3;%';
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 2 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%;3';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 4 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype = 4;
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 4 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '4;%';
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 4 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%;4';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 5 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%5%';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 6 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%6%';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 7 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%7%';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 8 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%8%';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 9 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%9%';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 10 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%10%';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 11 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%11%';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 12 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%12%';
+
+INSERT INTO link_lo_assesstype (lo_id, assesstype_id) SELECT auto_id, 13 FROM tbllearningobjective, learningobjective where tbllearningobjective.loid = learningobjective.old_id and lngassesstype like '%13%';
+
+
+
+--StudentGroup	OK		NOT NULL
+--Stage		(NOT NULL)	OK ?? (in lo or ta)
+--series_num	841 NULL
+--series_denom	842 NULL
+
+
+INSERT INTO teachingactivity (old_id, name, type, pbl, cohort, block, block_week, sequence_num, student_grp, date_created, date_modified, date_reviewed, status, notes, majorversion, minorversion) SELECT teachactivityid, strteachactyname, lngteachactytype, lngpbl,lngcohort1, lngblock1, bytblockwk, bytseriesnum, lngstudentgrp, dtmdatecreated, dtmdatemodified, dtmdatelastreview, lngstatus, memteachactynotes, 1, 0 FROM tblteachactivity;
+
+--Status		1 NULL		Update Null to 7
+UPDATE teachingactivity SET status = 7 WHERE status IS NULL;
+
+--Block 		28 NULL		Update NULL to 24;
+UPDATE teachingactivity SET block = 24 WHERE block IS NULL;
+
+--blockweek	123 NULL Update NULL to 13
+UPDATE teachingactivity SET block_week = 13 WHERE block_week IS NULL;
+
+--pbl		67 NULL		Update NULL to 95
+UPDATE teachingactivity SET pbl = 95 WHERE pbl IS NULL;
+
+--activitytype	3 NULL		Update NULL to 27
+UPDATE teachingactivity SET type = 27 WHERE type is NULL;
+
+UPDATE teachingactivity set created_by = (SELECT uid FROM tblpeople, tblteachactivity where tblpeople.peopleid = tblteachactivity.lngauthor AND tblteachactivity.teachactivityid= teachingactivity.old_id);
+
+UPDATE teachingactivity set modified_by = (SELECT uid FROM tblpeople, tblteachactivity where tblpeople.peopleid = tblteachactivity.lngmodifiedby AND tblteachactivity.teachactivityid= teachingactivity.old_id);
+
+UPDATE teachingactivity set reviewed_by = (SELECT uid FROM tblpeople, tblteachactivity where tblpeople.peopleid = tblteachactivity.lngreviewer AND tblteachactivity.teachactivityid= teachingactivity.old_id);
+
+UPDATE teachingactivity set teacher = (SELECT uid FROM tblpeople, tblteachactivity where tblpeople.peopleid = tblteachactivity.lngteacher AND tblteachactivity.teachactivityid= teachingactivity.old_id);
+
+
+--13 NULL
+DELETE FROM tbllink WHERE lngloid IS NULL OR lngteachingactivity IS NULL;
+--930 NULL
+UPDATE tbllink SET lnglinkage = 5 WHERE lnglinkage IS NULL;
+
+INSERT INTO link_lo_ta (lo_id, ta_id, strength, notes) SELECT learningobjective.auto_id, teachingactivity.auto_id, tbllink.lnglinkage, tbllink.memlink FROM tbllink, teachingactivity, learningobjective where tbllink.lngloid = learningobjective.old_id AND tbllink.lngteachingactivity = teachingactivity.old_id;
+
+ALTER TABLE teachingactivity DROP COLUMN old_id;
+ALTER TABLE learningobjective DROP COLUMN old_id;
+
+--delelet duplicate from tbllink
+
+UPDATE teachingactivity SET cohort = 1 WHERE cohort = 2007;
+UPDATE teachingactivity SET cohort = 2 WHERE cohort = 2008;
+UPDATE teachingactivity SET cohort = 3 WHERE cohort = 2009;
+UPDATE teachingactivity SET cohort = 4 WHERE cohort = 2010;
+UPDATE teachingactivity SET cohort = 5 WHERE cohort is NULL;
+UPDATE teachingactivity SET cohort = 7 WHERE cohort = 2006;
+UPDATE teachingactivity SET cohort = 8 WHERE cohort = 2005;
+
+UPDATE teachingactivity SET sequence_num = 14 where sequence_num IS NULL;
+
+UPDATE teachingactivity SET stage = 1 WHERE auto_id IN (SELECT teachingactivity.auto_id FROM teachingactivity, lk_pbl WHERE teachingactivity.pbl = lk_pbl.auto_id AND lk_pbl.pbl_seq SIMILAR TO '(1|2|3|4|5).%');
+UPDATE teachingactivity SET stage = 2 WHERE auto_id IN (SELECT teachingactivity.auto_id FROM teachingactivity, lk_pbl WHERE teachingactivity.pbl = lk_pbl.auto_id AND lk_pbl.pbl_seq SIMILAR TO '(6|7|8|9).%');
+UPDATE teachingactivity SET stage = 3 WHERE auto_id IN (SELECT teachingactivity.auto_id FROM teachingactivity, lk_pbl WHERE teachingactivity.pbl = lk_pbl.auto_id AND lk_pbl.pbl_seq like '8__.00');
+UPDATE teachingactivity SET stage = 4 WHERE auto_id IN (SELECT teachingactivity.auto_id FROM teachingactivity, lk_pbl WHERE teachingactivity.pbl = lk_pbl.auto_id AND lk_pbl.pbl_seq = '0.00');
+UPDATE teachingactivity SET stage = 4 WHERE stage IS NULL;
+
+UPDATE learningobjective SET lo = upper(substr(lo, 1, 1)) || substr(lo, 2);
+UPDATE learningobjective SET lo = trim(trailing '.' from lo);
+UPDATE learningobjective SET lo = lo || '.';
+
+UPDATE learningobjective SET lo = REPLACE(lo, '’', '\'') WHERE lo LIKE '%’%';
+UPDATE learningobjective SET lo = REPLACE(lo, '‘', '\'') WHERE lo LIKE '%‘%';
+
+UPDATE learningobjective SET shorttitle = REPLACE(shorttitle, '’', '\'') WHERE shorttitle LIKE '%’%';
+UPDATE learningobjective SET shorttitle = REPLACE(shorttitle, '‘', '\'') WHERE shorttitle LIKE '%‘%';
+
+UPDATE teachingactivity SET name = REPLACE(name, '’', '\'') WHERE name LIKE '%’%';
+UPDATE teachingactivity SET name = REPLACE(name, '‘', '\'') WHERE name LIKE '%‘%';
+
+UPDATE learningobjective SET theme1 = 3 WHERE theme1 = 8;
+DELETE FROM lk_theme WHERE auto_id = 8;
+
+UPDATE learningobjective SET theme1 = 9 WHERE theme1 = 7;
+DELETE FROM lk_theme WHERE auto_id = 7;
+
+UPDATE learningobjective SET theme2 = 9;
+UPDATE learningobjective SET theme3 = 9;
+commit;

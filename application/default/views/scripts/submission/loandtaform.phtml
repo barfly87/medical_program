@@ -1,0 +1,298 @@
+<?php include('../application/common/views/_ckeditorJsAndCss.phtml');?>
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/lotaform.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="<?php echo $this->baseUrl;?>/js/ajax.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/info.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.dimensions.min.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.tooltip.min.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/taform.js" type="text/javascript"></script>
+<?php
+	$config = Zend_Registry::get('config');
+	$loform_hidden_fields = $config->loform->hiddenfields->toArray();
+	$discipline_fields = array('discipline1','discipline2','discipline3');
+	if (in_array('discipline3', $loform_hidden_fields)) {
+		array_pop($discipline_fields);
+	}
+?>
+<?php include_once('../application/common/views/_listOfDisciplinesJsAndCss.phtml'); ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        listOfDisciplines(new Array(<?php echo "'". implode("','", $discipline_fields)."'" ?>));
+        $(".helpimg").tooltip({
+        	track: true,
+        	delay: 0,
+        	showURL: false,
+        	opacity: 1,
+        	showBody: " - ",
+        	left: 5
+        });
+        $("#usefirstline").click(function() {
+        	if (this.checked) {
+        		$("#activity").removeAttr('disabled');
+        		$("#ability").removeAttr('disabled');
+        	} else {
+        		$("#activity").attr('disabled', 'disabled');
+        		$("#ability").attr('disabled', 'disabled');
+        	}
+    	});
+    	<?php
+        	if (isset($this->checked) && $this->checked == false) {
+        ?>
+        	$("#activity").attr('disabled', 'disabled');
+        	$("#ability").attr('disabled', 'disabled');
+        <?php 
+        	}
+        ?>
+    });
+    function searchDocument(type) {
+        if (type == 'lo') {
+    		window.open(BASE_URL + '/search/index/searchtype/objective', 'myobjectivewindow','resizable=1,scrollbars=1,menubar=1,toolbar=0,locationbar=0,left=0,top=0,width=780,height=658',false);
+        } else if (type == 'ta') {
+        	window.open(BASE_URL + '/search/index/searchtype/activity', 'myactivitywindow','resizable=1,scrollbars=1,menubar=1,toolbar=0,locationbar=0,left=0,top=0,width=780,height=658',false);
+        }
+    }
+    function remove(nodeid) {
+        $('#' + nodeid).remove();
+    }
+
+    function buttonover(event) {
+        $(event.target).css('background-color', '#6699CC');
+    }
+    function buttonout(event) {
+        $(event.target).css('background-color', '#617798');
+    }
+</script>
+<?php include_once('../application/default/views/scripts/learningobjective/_curriculumAreasJS.phtml'); ?>
+<?php $help_text = Utilities::help_text(); ?>
+<div>
+  <div id="newlo" class="hidden">
+  <form id="newloform" name="newloform">
+    <p><label class="required"></label> = Required<p>
+    <p class="sectionheader">New learning objective detail:</p>
+    <table>
+    <tr>
+      <th width="180"><label class="required">Main Discipline<img class="helpimg" src="<?php echo $this->baseUrl;?>/img/icon_question.gif" title="Main Discipline - <?php echo $help_text['main discipline']?>"/></label></th>
+      <td width="600" nowrap="nowrap">
+        <?php echo $this->formSelect('discipline1', $this->discipline1,  array('style '=> ''), $this->disciplines) ?>
+        &nbsp;<label>Curriculum Area</label>&nbsp;&nbsp;<?php echo $this->formSelect('curriculumarea1','', array('style' => ''), array(''=>'Any')); ?>
+      </td>
+    </tr>
+    <tr>
+      <th><label>Additional Discipline<img class="helpimg" src="<?php echo $this->baseUrl;?>/img/icon_question.gif" title="Additional Discipline - <?php echo $help_text['additional discipline']?>"/></label></th>
+      <td nowrap="nowrap">
+        <?php echo $this->formSelect('discipline2', $this->discipline2,  array('style '=> ''), $this->disciplines) ?>
+        &nbsp;<label>Curriculum Area</label>&nbsp;&nbsp;<?php echo $this->formSelect('curriculumarea2', '', array('style' => ''), array(''=>'Any')); ?>        
+      </td>
+    </tr>
+    <?php if (!in_array('discipline3', $loform_hidden_fields)): ?>
+    <tr>
+      <th><label>Additional Discipline</label></th>
+      <td nowrap="nowrap">
+        <?php echo $this->formSelect('discipline3', $this->discipline3,  array('style '=> ''), $this->disciplines) ?>
+        &nbsp;<label>Curriculum Area</label>&nbsp;&nbsp;<?php echo $this->formSelect('curriculumarea3', '', array('style' => ''), array(''=>'Any')); ?>    
+      </td>
+    </tr>
+    <?php endif; ?>
+    <tr>
+      <th><label class="required"><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?><img class="helpimg" src="<?php echo $this->baseUrl;?>/img/icon_question.gif" title="<?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?> - <?php echo $help_text['theme']?>"/></label></th>
+      <td><?php echo $this->formSelect('theme1', $this->theme1, null, $this->themes) ?></td>
+    </tr>
+    <tr>
+      <th><label>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></label></th>
+      <td><?php echo $this->formSelect('theme2', $this->theme2, null, $this->themes) ?></td>
+    </tr>
+    <?php if (!in_array('theme3', $loform_hidden_fields)): ?>
+    <tr>
+      <th><label>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></label></th>
+      <td><?php echo $this->formSelect('theme3', $this->theme3, null, $this->themes) ?></td>
+    </tr>
+    <?php endif; ?>
+    <tr>
+      <th><label>Clinical Skills<img class="helpimg" src="<?php echo $this->baseUrl;?>/img/icon_question.gif" title="Clinical Skills - <?php echo $help_text['clinical skills']?>"/></label></th>
+      <td><?php echo $this->formSelect('skill', $this->skill, null, $this->skills) ?></td>
+    </tr>
+    <tr>
+      <th><label class="required">System</label></th>
+      <td><?php echo $this->formSelect('system', $this->system, null, $this->systems) ?></td>
+    </tr>
+    <tr>
+      <th valign="top"><label class="required">Learning Objective</label></th>
+      <td><input type="checkbox" id="usefirstline" <?php echo (isset($this->checked) && $this->checked == false) ? '' : 'checked="checked"'; ?>/>
+      At the end of <?php echo $this->formSelect('activity', $this->activity, null, $this->activities) ?>, students should be able to
+      <?php echo $this->formSelect('ability', $this->ability, null, $this->abilities) ?><br />
+      <?php echo $this->formTextarea('lo', $this->lo, array('cols'=>60, 'rows'=>6, 'class' => 'ckeditor')) ?></td>
+    </tr>
+    <tr>
+      <th valign="top"><label>Curriculum Review</label></th>
+      <td><?php echo $this->formMultiCheckbox('review', $this->review, null, $this->reviews, ' ') ?></td>
+    </tr>
+    <tr>
+      <th valign="top"><label>Keywords</label></th>
+      <td>
+      Keywords are important as they enable searching for related content in the curriculum.<br />
+Please use the <input id="submit" type="button" value="MeSH Crawler" onclick="javascript:crawlerPopup();"/>
+or <input type="button" id="submit" value="MeSH browser" onclick="javascript:meshPopup();"/>
+to select as many as apply: <br />
+        <ul id="keywordslist">
+        <?php
+          $keywords_arr = explode('|', $this->keywords);
+          if (count($keywords_arr) > 0) {
+            foreach ($keywords_arr as $k => $v) {
+        	  if (trim($v) !== '') {
+        ?>
+          <li id="keyword_<?php echo $k?>"><input type="hidden" name="keywords[]" value="<?php echo $v?>"><?php echo $v?>
+          <a style="padding-left:10px" href="javascript:remove('keyword_<?php echo $k?>')"><img src="<?php echo $this->baseUrl;?>/img/delete.gif" border="0"></a></li>
+        <?php }
+            }
+          }
+        ?>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th valign="top"><label class="required">Assessment Methods</label></th>
+      <td><?php echo $this->formMultiCheckbox('assesstype', $this->assesstype, null, $this->assesstypes, ' ') ?></td>
+    </tr>
+    <tr>
+      <th><label>Level&nbsp;of&nbsp;achievement</label></th>
+      <td><?php echo $this->formSelect('achievement', $this->achievement, null, $this->achievements) ?></td>
+    </tr>
+    <tr>
+      <th><label>JMO</label></th>
+      <td><?php echo $this->formSelect('jmo', $this->jmo, null, $this->jmos) ?></td>
+    </tr>
+    <tr>
+      <th><label>Graduate Attribute</label></th>
+      <td><?php echo $this->formSelect('gradattrib', $this->gradattrib, null, $this->gradAttribs) ?></td>
+    </tr>
+    <tr>
+      <th valign="top"><label>Notes</label></th>
+      <td><?php echo $this->formTextarea('lo_notes', $this->lo_notes, array('cols'=>60, 'rows'=>4)) ?></td>
+    </tr>
+    </table>
+    
+    <div id="loresource"><p class="sectionheader">Learning objective resource(s):</p>
+      <?php $type = 'lo';?>  
+      <?php include('resource.phtml');?>
+    </div>
+    </form>
+    <div class="buttonscontainer" style="padding-left: 200px;"><span id="savenewlo" style="margin-right:40px">Save</span> <span id="cancelnewlo">Cancel</span></div>
+  </div>
+  
+  <div id="existinglo" style="width:800px" class="hidden">
+  <p class="sectionheader">Existing learning objective:</p>
+    <p>Please enter the learning objective id into the text field, or you may search for learning objective using the search button.</p>
+    <?php echo $this->formText('lo_id', $this->lo_id, array('size'=>30,'onkeyup' => "displayInfo('loinfo', this.value)")) ?> 
+    <a href="javascript:searchDocument('lo')"><img border="0" src="<?php echo $this->baseUrl;?>/img/search_down.gif"/></a>
+    <a href="javascript:searchDocument('lo')"> Search</a>
+    <div id="loinfo" style="margin-top: 15px; max-width: 750px;"></div>
+    <div class="buttonscontainer"><span id="saveexistinglo" style="margin-right:20px">Save</span> <span id="cancelexistinglo">Cancel</span></div>
+  </div>
+  
+
+  <div id="newta" style="width:800px" class="hidden">
+  <p><label class="required"></label> = Required<p>
+  <form id="newtaform" name="newtaform">
+  <p class="sectionheader">New teaching activity detail:</p>
+    <table>
+    <tr>
+      <th width="140"><label class="required">Title</label></th>
+      <td><?php echo $this->formText('name', $this->name, array('size'=>60)) ?></td>
+    </tr>
+    <tr>
+      <th><label class="required">Type</label></th>
+      <td><?php echo $this->formSelect('type', $this->type, null, $this->types) ?></td>
+    </tr>
+    <tr>
+      <th><label class="required"><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?></label></th>
+      <td><?php echo $this->formSelect('stage', $this->stage, null, $this->stages) ?></td>
+    </tr>
+    <?php $taform_hidden_fields = $config->taform->hiddenfields->toArray(); ?>
+    <?php if (!in_array('year', $taform_hidden_fields)): ?>
+    <tr>
+      <th><label>Year</label></th>
+      <td><?php echo $this->formSelect('year', $this->year, array('style'=>'width:37px'), $this->years) ?></td>
+    </tr>
+    <?php endif; ?>
+    <tr>
+      <th><label class="required"><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></label></th>
+      <td><?php echo $this->formSelect('block', $this->block, null, $this->blocks) ?></td>
+    </tr>
+    
+    <?php if (!in_array('block_week', $taform_hidden_fields)): ?>
+    <tr>
+      <th><label><?php echo Zend_Registry::get('Zend_Translate')->_('Week') ?></label></th>
+      <td><?php echo $this->formSelect('block_week', $this->block_week, null, $this->block_weeks) ?></td>
+    </tr>
+    <?php endif; ?>
+    <?php if (!in_array('pbl', $taform_hidden_fields)): ?>
+    <tr>
+      <th><label>PBL/CRS</label></th>
+      <td><?php echo $this->formSelect('pbl', $this->pbl, null, $this->pbls) ?></td>
+    </tr>
+    <?php endif; ?>
+    <?php if (!in_array('sequence_num', $taform_hidden_fields)): ?>
+    <tr>
+      <th><label>Sequence No.</label></th>
+      <td><?php echo $this->formSelect('sequence_num', $this->sequence_num, null, $this->sequence_nums) ?></td>
+    </tr>
+    <?php endif; ?>
+    <?php if (!in_array('term', $taform_hidden_fields)): ?>
+    <tr>
+      <th><label>Term</label></th>
+      <td><?php echo $this->formSelect('term', $this->term, null, $this->terms) ?></td>
+    </tr>
+    <?php endif; ?>
+    <tr>
+      <th><label>Student Group</label></th>
+      <td><?php echo $this->formSelect('student_grp', $this->student_grp, null, $this->student_grps) ?></td>
+    </tr>
+    <tr>
+      <th><label>Principal Teacher</label></th>
+      <td><?php echo $this->formText('principal_teacher', $this->principal_teacher, array('size'=>60, 'id'=>'principal_teacher')) ?></td>
+    </tr>
+    <tr>
+      <th><label>Current Teacher</label></th>
+      <td><?php echo $this->formText('current_teacher', $this->current_teacher, array('size'=>60, 'id'=>'current_teacher')) ?></td>
+    </tr>
+    <tr>
+      <th valign="top"><label>Notes</label></th>
+      <td><?php echo $this->formTextarea('ta_notes', $this->ta_notes, array('cols'=>60, 'rows'=>4)) ?></td>
+    </tr>
+    </table>
+    <div id="taresource"><p class="sectionheader">Teaching activity resource(s):</p>
+    <?php $type = 'ta';?>  
+    <?php include('resource.phtml');?>
+    </div>
+  </form>
+    <div class="buttonscontainer" style="padding-left: 160px;"><span id="savenewta" style="margin-right:40px">Save</span> <span id="cancelnewta">Cancel</span> </div>
+  </div>
+  
+  <div id="existingta" style="width:800px" class="hidden">
+    <p class="sectionheader">Existing teaching activity:</p>
+    <p>Please enter the teaching activity id into the text field, or you may search for teaching activity using the search button.</p>
+    <?php echo $this->formText('ta_id', $this->ta_id, array('size'=>30,'onkeyup' => "displayInfo('tainfo', this.value)")) ?>
+    <a href="javascript:searchDocument('ta')"><img border="0" src="<?php echo $this->baseUrl;?>/img/search_down.gif"/></a>
+    <a href="javascript:searchDocument('ta')"> Search</a>
+    <div id="tainfo" style="margin-top: 15px; max-width: 750px;"></div>
+    <div class="buttonscontainer"><span id="saveexistingta" style="margin-right:20px">Save</span> <span id="cancelexistingta">Cancel</span></div>   
+  </div>
+
+  <div id="strength" style="width:800px" class="hidden">
+  <p class="sectionheader">Learning objective and teaching activity linkage information:</p>
+  <form id="strengthform" name="strengthform">
+  <table>
+    <tr>
+      <th width="80"><label>Strength</label></th>
+      <td><?php echo $this->formSelect('strength', $this->strength, null, $this->strengths) ?></td>
+    </tr>
+    <tr>
+      <th valign="top"><label>Notes</label></tg>
+      <td><?php echo $this->formTextarea('link_notes', $this->link_notes, array('cols'=>50, 'rows'=>4)) ?></td>
+    </tr>
+  </table>
+  </form>
+  <div class="buttonscontainer" style="padding-left: 100px;"><span id="savelink" style="margin-right:40px">Save</span> <span id="cancellink">Cancel</span></div>     
+  </div>
+   
+</div> 

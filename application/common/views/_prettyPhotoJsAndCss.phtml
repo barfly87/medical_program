@@ -1,0 +1,16 @@
+<?php if( UserService::isBrowserIE(6) !== true && UserService::isMobileBrowser() !== true) :?>
+<link href="<?php echo $this->baseUrl;?>/js/pretty_photo/prettyPhoto.css"     media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/pretty_photo/jquery.prettyPhoto.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+	try{
+		$("a[rel^='prettyPhoto']").attr('target','_blank');
+        //$("a[rel^='prettyPhoto']").prettyPhoto();
+	} catch(err) {}
+});
+
+function closeprettyphoto() {
+    $.prettyPhoto.close();
+}
+<?php endif; ?>
+</script>

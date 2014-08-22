@@ -1,0 +1,173 @@
+<div>
+<?php $req = Compass::request(); ?>
+<?php $isDomainAdmin = UserAcl::isDomainAdminOrAbove();?>
+<?php $isStaff = UserAcl::isStaffOrAbove();?>
+<?php $isStage3 = UserAcl::displayStage3Menu();?>
+</div>
+<?php $this->baseUrl = Compass::baseUrl(); ?>
+    <p style="display:inline"><a name="top" id="top"></a></p>
+    <div id="scrn-read" title="links to aid navigation for screen readers">
+        [<a href="#content" accesskey="s">Skip to main content</a>]
+    </div>
+    <div id="header">
+    	<img src="<?php echo $this->baseUrl;?>/img/compass_logo_set.jpg" title="" alt="" align="left"/>
+        <img class="right" src="<?php echo $this->baseUrl;?>/img/1_new.jpg" title="" alt=""/>
+        <img class="right" src="<?php echo $this->baseUrl;?>/img/2_new.jpg" title="" alt=""/>
+        <img class="right" src="<?php echo $this->baseUrl;?>/img/3_new.jpg" title="" alt=""/>
+    </div>
+<?php 
+    $mainMenuId         = 'id="main-menu-selected"';
+    $mainMenuHome       = '';
+    $mainMenuQQ         = '';
+    $mainMenuSearch     = '';
+    $mainMenuSubmission = '';
+    $mainMenuWorkFlow   = '';
+    $mainMenuAdmin      = '';
+    $mainMenuPbl        = '';
+    $mainMenuPhaseII    = '';
+    $mainMenuPhaseIII   = '';
+    $mainMenuDisc       = '';
+    $mainMenuBlock      = '';
+    $mainMenuTop        = '';
+    $mainMenuPeople     = '';
+
+    if(isset($req['controller']) && ! empty($req['controller']) ) {
+        switch($req['controller']) {
+            case 'index':
+                $mainMenuHome = $mainMenuId;
+            break;
+            case 'search':
+                if(isset($req['searchType']) && ! empty($req['searchType'])) {
+                    if($req['searchType'] == 'qq') {
+                        $mainMenuQQ = $mainMenuId;
+                    } else if ($req['searchType'] == 'main') {
+                        $mainMenuSearch = $mainMenuId;
+                    }
+                }
+            break;
+            case 'submission':
+                $mainMenuSubmission = $mainMenuId;
+            break;
+            case 'workflow':
+                $mainMenuWorkFlow = $mainMenuId;
+            break;
+            case 'admin':
+                $mainMenuAdmin = $mainMenuId;
+            break;
+            case 'pbl':
+                if($req['action'] == 'top') {
+                	$mainMenuTop = $mainMenuId;
+                } else {
+                	$mainMenuPbl = $mainMenuId;
+                }
+            break;
+            case 'phase':
+            	if(isset($req['name']) && ! empty($req['name'])) {
+            		if($req['name'] == 'II') {
+            			$mainMenuPhaseII = $mainMenuId;
+            		} else {
+            			$mainMenuPhaseIII = $mainMenuId;
+            		}
+            	}
+            break;
+            case 'disc':
+                $mainMenuDisc = $mainMenuId;
+            break;
+            case 'block':
+                $mainMenuBlock = $mainMenuId;
+            break;
+            case 'people':
+                $mainMenuPeople = $mainMenuId;
+            break;            
+        }
+    }
+    
+?>
+<div id="menu">
+    <ul id="main-menu">
+        <li>
+            <a href="/" <?php echo $mainMenuHome;?> accesskey="H">
+            <span class="underlineText">H</span>ome</a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'search', 'action'=>'index','searchtype'=>'qq'),'default',true); ?>" <?php echo $mainMenuQQ;?> accesskey="Q">
+            <span class="underlineText">Q</span>uick Queries</a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'search', 'action'=>'index','searchtype'=>'main'),'default',true); ?>" <?php echo $mainMenuSearch;?> accesskey="S">
+            <span class="underlineText">S</span>earch</a>
+        </li>
+        
+        <?php if($isStaff) :?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'submission', 'action'=>'index'),'default',true); ?>" <?php echo $mainMenuSubmission;?> accesskey="u">
+            S<span class="underlineText">u</span>bmit</a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'workflow', 'action'=>'index'),'default',true); ?>" <?php echo $mainMenuWorkFlow;?> accesskey="W">
+            <span class="underlineText">W</span>orkflow</a>
+        </li>
+        <?php endif;?>
+        
+        <?php if($isDomainAdmin) :?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'admin', 'action'=>'index'),'default',true); ?>" <?php echo $mainMenuAdmin;?> accesskey="m">
+            Ad<span class="underlineText">m</span>in</a>
+        </li>
+        <?php endif;?>
+        <?php
+        	$config = Zend_Registry::get('config');
+			$topnav_hidden_links = $config->topnav->hiddenlink->toArray();
+		?>
+		
+        <?php if (!in_array('pbl', $topnav_hidden_links)): ?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'pbl', 'action'=>'index'),'default',true); ?>" <?php echo $mainMenuPbl;?> accesskey="P">
+            <?php $linkName = Zend_Registry::get('Zend_Translate')->_('PBL') ?>
+            <span class="underlineText"><?php echo substr($linkName, 0, 1);?></span><?php echo substr($linkName, 1);?></a>
+        </li>
+        <?php endif;?>
+        
+        <?php if (!in_array('stage1_2', $topnav_hidden_links)): ?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'pbl', 'action'=>'top'),'default',true); ?>" <?php echo $mainMenuTop;?> accesskey="1">
+            <?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?> <span class="underlineText">1</span> &amp; 2</a>
+        </li>
+        <?php endif;?>
+        
+        <?php if (!in_array('stage3', $topnav_hidden_links)): ?>
+        	<?php if($isStaff || $isStage3) :?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'block', 'action'=>'list'),'default',true); ?>" <?php echo $mainMenuBlock;?> accesskey="3">
+            <?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?> <span class="underlineText">3</span></a>
+        </li>
+        	<?php endif;?>
+        <?php endif;?>
+        
+        <?php if (!in_array('phase2', $topnav_hidden_links)): ?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'phase', 'action'=>'index', 'name'=>'II'),'default',true); ?>" <?php echo $mainMenuPhaseII;?> accesskey="2">
+            Phase <span class="underlineText">2</span></a>
+        </li>
+        <?php endif;?>
+        
+        <?php if (!in_array('phase3', $topnav_hidden_links)): ?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'phase', 'action'=>'index', 'name'=>'III'),'default',true); ?>" <?php echo $mainMenuPhaseIII;?> accesskey="3">
+            Phase <span class="underlineText">3</span></a>
+        </li>
+        <?php endif;?>
+        
+        <?php if($isStaff) :?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'disc','controller'=>'disc', 'action'=>'index'),'default',true); ?>" <?php echo $mainMenuDisc;?> accesskey="D">
+            <span class="underlineText">D</span>iscipline</a>
+        </li>
+        <?php endif;?>
+        <li>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'index'),'default',true); ?>" <?php echo $mainMenuPeople;?> accesskey="E">
+            	P<span class="underlineText">e</span>ople</a>
+        </li>
+    </ul>
+    <ul id="login-menu"><li id="loggedIn"><?php echo $this->loggedInUser(); ?></li></ul>
+</div>

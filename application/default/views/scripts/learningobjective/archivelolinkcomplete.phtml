@@ -1,0 +1,6 @@
+<div>
+<h2>Thank you!</h2>
+  <?php $lourl = $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view', 'id'=>$this->lo_id)) ?>
+  <p>The linkage from teaching activity <?php echo $this->ta_id?> to learning objective 
+  <a href="<?php echo $this->escape($lourl) ?>"><?php echo $this->lo_id ?></a> has been archived.</p>
+</div>

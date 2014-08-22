@@ -1,0 +1,47 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<div style="float:left; max-width:750px">
+  <h2>People</h2>
+  <table width="700px">
+  	<tr>
+  		<td style="vertical-align:top; width:50%">  
+  			<?php foreach($this->externallinks as $linkage): 
+  				$parts = explode('|',$linkage);?>
+			  	<a href="<?php echo $parts[1]; ?>">
+					<?php echo $parts[0];?>
+				</a>
+				<br/>
+				<br/>
+			<?php endforeach;?>	
+  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'blockchairs'),'default',true); ?>">
+				Block Chairs
+			</a>
+			<br/>
+			<br/>
+			<?php foreach($this->staffpages as $key => $name):?>
+			  	<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'stafflist', 'page'=>$name),'default',true); ?>">
+					<?php echo $name;?>
+				</a>
+				<br/>
+				<br/>
+			<?php endforeach;?>	
+			<!--<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'teachingstaff'),'default',true); ?>">
+				Principal Teachers
+			</a>
+			<br/>
+			<br/>-->
+					
+		</td>
+  		<td style="vertical-align:top; width:50%">            
+  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'students'),'default',true); ?>">
+				Students
+			</a>
+			<br/>
+			<br/>
+  			<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'pblgroups'),'default',true); ?>">
+				PBL Groups
+			</a>
+		</td>
+  	</tr>
+  </table>
+</div>

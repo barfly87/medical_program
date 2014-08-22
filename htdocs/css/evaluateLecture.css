@@ -1,0 +1,60 @@
+.lectureEvaluateBody {
+    color: #330000;
+}
+ul.errors {
+    margin: 0px;
+    margin-left: 5px;
+}
+ul.errors li {
+    margin-top: 0px;
+    margin-bottom: 2px;
+}
+#table-evaluate-lecture {
+    border-collapse: collapse;
+}
+#table-evaluate-lecture td {
+    border-bottom : 1px dotted #B5C6FC;
+    vertical-align: top;
+    padding: 4px;
+    padding-top:8px;
+}
+
+#table-evaluate-lecture td table.tableAnswers td{
+    border-bottom : 1px dotted #C4C2C2; 
+}
+
+.form-elements label{
+    display:block;
+}
+
+.hideElem {
+    display:none;
+}
+
+.questionNo, .answersList {
+    background-color: #988872;
+    color: #FCECE5;
+    font-weight: bold;
+    padding: 2px 5px;
+    white-space: nowrap;
+}
+.answersList {
+    background-color: #F9F7F7;
+    border: 1px solid #EFE8E8; 
+    color: #6D6A6A;
+
+}
+#table-evaluate-lecture td.noBorder {
+    border: 0px;
+}
+.questionText {
+    font-weight: bold;
+    font-size: 95%;
+}
+.radioHover {
+    background-color:#F7F4F4;
+}
+a.returnUrl {
+    font-size: 90%;
+    font-weight: bold;
+}

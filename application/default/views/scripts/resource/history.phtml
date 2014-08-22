@@ -1,0 +1,64 @@
+<link href="<?php echo $this->baseUrl;?>/css/form.css" rel="stylesheet" type="text/css" media="all" />
+<?php $customSortOrder = '[0,1]';?>
+<?php include_once('../application/common/views/_tableSortJsAndCss.phtml'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<?php 
+$href = $this->returnUrl;
+?>
+
+<div id='history'>
+    <?php if(count($this->result['rows']) > 0) :?>
+        <h2>History of Resources for : <a href="<?php echo $href;?>"/><b><?php echo $this->title; ?></b></a></h2>
+        <?php $customNoOfColumns = 6;?>
+        <table class="tableSorter">
+            <?php $paginationBg = 'top';?>
+            <?php include('../application/common/views/_footerPagination.phtml'); ?>
+        </table>
+        <table id="sortTable" class="tableSorter">
+            <thead>
+                <tr>
+                    <th>Res Id</th>
+                    <th>Resource Title</th>
+                    <th>Action</th>
+                    <th>User</th>
+                    <th>Date/Time</th>
+                    <th>Mediabank Id</th>
+                </tr> 
+            </thead>
+            <tbody>
+            <?php foreach ($this->result['rows'] as $row) :?>
+            <?php
+                $color = 'color:black;';
+                switch($row['action']) {
+                    case 'delete':
+                        $color = 'color:red;';
+                        break;
+                    case 'edit':
+                        $color = 'color:#FF9B08;';
+                        break;
+                    case 'add':
+                        $color = 'color:green;';
+                    break;
+                } 
+                $dateTime = explode(' ', $row['timestamp']);
+                $timeStamp = '&nbsp;'.$dateTime[0].'&nbsp;<i>'.$dateTime[1].'</i>&nbsp;';
+            ?>
+            <tr>
+                <td><?php echo $row['lk_resource_id']; ?></td>
+                <td><?php echo $row['resource_title']; ?></td>
+                <td style="<?php echo $color;?>"><?php echo $row['action']; ?></td>                
+                <td><?php echo Compass::userInfoHtml($row['uid']); ?></td>
+                <td class="noWrap"><?php echo $timeStamp; ?></td>
+                <td class="noWrap">&nbsp;<?php echo $row['resource_id']; ?>&nbsp;</td>
+            </tr>
+            <?php endforeach; ?>   
+            </tdbody>
+            <?php $paginationBg = 'bottom';?>
+            <?php include('../application/common/views/_footerPagination.phtml'); ?>
+        </table>
+        <p><b><a href="<?php echo $href;?>">Return</a></b></p>
+    <?php else :?>
+        <h3 style="color:red;">No history found for : <a style="color:red;" href="<?php echo $href;?>"/><b><?php echo $this->title; ?></b></a></h3>
+        <p><b><a href="<?php echo $href;?>">Return</a></b></p>
+    <?php endif;?>        
+</div>

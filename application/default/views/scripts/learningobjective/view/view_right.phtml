@@ -1,0 +1,13 @@
+<?php include_once('edit_approve.phtml');?>
+<?php include_once('details.phtml');?>
+<?php include_once('linked_activities.phtml');?>
+
+<?php include_once('resources.phtml');?>
+
+<?php if (UserAcl::isDomainAdminOrAbove()) : ?>
+    <?php include_once('audience.phtml');?>
+<?php endif; ?>
+<?php if(UserAcl::isStaffOrAbove()) :?>
+    <?php include_once('exambank_questions.phtml');?>
+<?php endif;?>
+    <?php include_once('history.phtml');?>

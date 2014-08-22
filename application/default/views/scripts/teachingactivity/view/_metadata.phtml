@@ -1,0 +1,149 @@
+<style type="text/css">
+	#reviewedbyform { display:none };
+</style>
+<link href="<?php echo $this->baseUrl;?>/css/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.autocomplete.min.js"></script>
+<script>
+$().ready(function() {
+	$("#editimg").css('cursor', 'pointer');
+	$("#editimg").click( 
+		function() {
+			$("#reviewedbyform").slideToggle();
+		}
+	);
+	$("#reviewedby_uid").focus(
+		function() {
+			$('input[name=reviewedby_select]:eq(1)').attr('checked', 'checked');
+		}
+	);
+	$("#reviewedby_cencel").click(
+		function(event) {
+			event.preventDefault();
+			$("#reviewedbyform").slideUp();
+		}
+	)
+	$("#reviewedby_submit").click(
+		function(event) {
+			event.preventDefault();
+			$.post(BASE_URL + "/teachingactivity/editreviewedby", $("#reviewedbyform").serialize(), function(data){
+				if ('error' == data) {
+					alert("User id must not be empty.");
+				} else {
+					$("#reviewedbyform").slideUp();
+					var arr = data.split("|");
+					$('#reviewedby_user').html(arr[1]);
+					$('#reviewedby_time').html(arr[0]);
+				}
+			});
+		}
+	)
+	$("#reviewedby_uid").autocomplete(BASE_URL + "/service/allusers", {
+		width: 200,
+		delay: 200,
+		multiple: false,
+		matchContains: true,
+		mustMatch: true,
+		selectFirst: true,
+		formatItem: function(data, i, n, value) {
+			var tmp = value.split(" ");
+			var uid = tmp.splice(tmp.length-1,1);
+			return tmp.join(" ") + " [" + uid +"]";
+		},
+		formatResult: function(data, value) {
+			var result = (data + "").split(" ");
+			return result[result.length-1];
+		}
+	});  
+});	
+</script>
+<?php
+$pblLink = $this->url(array('controller'=>'pbl', 'action'=>'index', 'ref'=> $this->ta->block_no.'.'.$this->ta->block_week_zero_padded),null,true);
+$editLink = $this->url(array('controller'=>'teachingactivity', 'action'=>'edit', 'id'=>$this->ta->auto_id), null, true);
+$archiveLink = $this->url(array('controller'=>'teachingactivity', 'action'=>'archive', 'id'=>$this->ta->auto_id), null, true);
+?>
+
+<div id="metadata" class="rhsbox">
+	<?php $displayEditLink = (($this->ta->isEditable === true) && UserAcl::isStaffOrAbove() && UserAcl::checkTaPermission($this->ta, UserAcl::$EDIT) === true)?>
+	<?php $displayArchiveLink = (($this->ta->isEditable === true) && UserAcl::isBlockchairOrAbove() && UserAcl::checkTaPermission($this->ta, UserAcl::$ARCHIVE) === true)?>
+	<h3 class="rhsheading">Metadata 
+		<span class="editlink">
+			<?php echo $displayEditLink ? '<a href="'.$editLink.'">Edit</a>' : '' ?>&nbsp;&nbsp;
+			<?php echo $displayArchiveLink ? '<a href="'.$archiveLink.'">Archive</a>' : '' ?>
+		</span>
+	</h3>
+	<div class="mcontent">
+		<table width="100%">
+			<tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?>:</th>
+				<td><?php echo $this->ta->stage; ?></td>
+			</tr>
+			<?php 
+			$blockHtml = $this->escape($this->ta->block);
+			if($this->ta->block_no <= 10 && $this->ta->block_no > 0) {
+			    $blockHtml = $this->ta->block_no.': '.$blockHtml;
+			} else if($this->ta->stage == 3) {
+			    $href = $this->url(array('module'=>'default', 'controller'=>'block', 'action'=>'index','ref'=>$this->ta->block_id), null, true);
+			    $blockHtml = <<<BLOCKHTML
+                <a href="{$href}">{$blockHtml}</a>                        
+BLOCKHTML;
+			}
+			
+			?>
+			<tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?>:</th>				<td><?php echo $blockHtml; ?></td></tr>
+			<tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Week') ?>:</th>				<td><?php echo $this->ta->block_week; ?></td></tr>
+			<tr><th>PBL/CRS:</th>			<td><?php if ($this->ta->block_no <= 10) : ?>
+													<a href="<?php echo $pblLink;?>"><?php echo $this->escape($this->ta->pbl); ?></a>
+												<?php else : ?>
+													<?php echo $this->escape($this->ta->pbl); ?>
+												<?php endif; ?>
+											</td>
+			</tr>
+			<tr><th>Sequence No.:</th>		<td><?php echo $this->ta->sequence_num; ?></td></tr>
+			<?php if (!empty($this->ta->term)): ?>
+			<tr><th>Term:</th>				<td><?php echo $this->ta->term; ?></td></tr>
+			<?php endif; ?>
+			<?php if (!empty($this->ta->student_grp)): ?>
+			<tr><th>Student Group:</th>		<td><?php echo $this->escape($this->ta->student_grp); ?></td></tr>
+			<?php endif; ?>
+			<?php if (count($this->ta->current_teacher_uid_arr) > 0): ?>
+			<tr><th>Current Teacher</th>		
+				<td>
+				<?php
+					echo "<table>";
+					foreach($this->ta->current_teacher_uid_arr as $row) {
+						echo "<tr><td>".$this->escape(UserService::getUidFullName($row))."</td></tr>";
+					}
+					echo "</table>";
+				?>
+				</td>
+			</tr>
+			<?php endif; ?>
+		<?php if (!UserAcl::isStudent()) : ?>
+			<tr><th>Submitted by:</th>		<td><?php echo $this->escape(UserService::getUidFullName($this->ta->created_by));?></td></tr>
+			<tr><th>Date Submitted:</th>	<td><?php echo $this->ta->date_created; ?></td></tr>
+			
+			<?php if (!empty($this->ta->approved_by)): ?>
+			<tr><th>Approved by:</th>		<td><?php echo $this->escape(UserService::getUidFullName($this->ta->approved_by));?></td></tr>
+			<?php endif; ?>
+			<?php if ($this->ta->date_approved != 'N/A'): ?>
+			<tr><th>Date Approved:</th>		<td><?php echo $this->ta->date_approved; ?></td></tr>
+			<?php endif; ?>
+		<?php endif; ?>
+		
+			<tr><th>Reviewed by:</th>		<td><span id="reviewedby_user"><?php echo $this->escape(UserService::getUidFullName($this->ta->reviewed_by));?></span>
+				<?php if ($displayEditLink) : ?>
+				<?php $new_window_url = $this->baseUrl . '/teachingactivity/review/id/' . $this->ta->auto_id ?>
+					<img id="editimg" src="<?php echo $this->baseUrl;?>/img/edit.gif" width="12px" />
+					<form id="reviewedbyform">
+						<input type="hidden" name="taid" value="<?php echo $this->ta->auto_id?>" />
+						<input type="radio" name="reviewedby_select" value="own" checked="checked" /> Me <br />
+						<input type="radio" name="reviewedby_select" valude="other" /> Other <input type="text" id="reviewedby_uid" name="reviewedby_uid" size="15" /> <br />
+						<p></span><input id="reviewedby_submit" type="submit" value="OK" /> <input id="reviewedby_cencel" type="submit" value="Cancel" /></p>
+					</form>
+				<?php endif; ?>
+											</td>
+			</tr>
+			<tr><th>Date Reviewed:</th>		<td><span id="reviewedby_time"><?php echo $this->ta->date_reviewed; ?><span></span></td></tr>
+			<tr><th>Status:</th>			<td><?php echo $this->ta->getCurrentStatus(); ?></td></tr>
+		</table>
+	</div>
+</div>

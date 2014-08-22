@@ -1,0 +1,30 @@
+@CHARSET "UTF-8";
+#luceneHelp {
+    margin-right: 4px;
+    color: #2F1D03;
+}
+#luceneHelp .heading {
+    display: block;
+    width: 100%;
+    background-color:#FFD79F;
+    font-weight: bold;
+    padding: 4px;
+    color: #2F1D03;
+}
+#luceneHelp .text {
+    display: block;
+    width: 100%;
+    padding: 4px;
+    margin-bottom:10px;
+}
+#luceneHelp .italics {
+    font-style: italic;
+    font-weight: bold;
+}
+
+#luceneHelp .bold {
+    font-weight: bold;
+}
+#luceneHelp .signs {
+    font-size: 140%;
+}

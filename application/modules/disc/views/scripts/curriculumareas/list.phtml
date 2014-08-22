@@ -1,0 +1,93 @@
+<?php 
+include_once('header.phtml');
+include('../application/common/views/_impromptu27JsCss.phtml');
+?>
+<script type="text/javascript">
+function confirmDelete(curriculumArea, loAttached, url) {
+    var promptText = "<div style=\"font-weight:normal;font-size:13px;\">Are you sure you want to <span class=\"red\">DELETE</span> Curriculum Area :<span  class=\"red\">'" +curriculumArea + "'</span>";
+    if(loAttached == 1){
+        promptText += "<br /><span class=\"red\">There are Learning Objectives attached to this Curriculum Area.</span>";
+    }
+    promptText +='</div>';
+    $.prompt(
+        promptText,
+        {
+        buttons: {Ok:true, Cancel:false},
+        callback:   function(v,m,f) {
+                        if(v == true) {
+                            $('#loader').show();
+                            window.location.href = url;
+                        }
+                    }
+        }
+    );
+}
+</script>
+<?php 
+$listEditUrlFmt = "javascript:curriculumAreaEdit('curriculumAreaEdit_%d');";
+$listArchiveUrlFmt = $this->url(array('module'=>'disc','controller'=>'curriculumareas','action'=>'archive'),null,true).'/disc_id/%d/ca_id/%d';
+$listSearchUrlFmt = $this->url(array('module'=>'default','controller'=>'search', 'action'=>'index','searchtype'=>'main'),null,true).'?context=lo&curriculumarea=%s&process=advanced&submit=Search';
+$formEditUrlFmt = $this->url(array('module'=>'disc','controller'=>'curriculumareas','action'=>'save')).'/la_id/%d';
+?>
+
+<?php if(isset($this->listOfCurriculumAreas) && is_array($this->listOfCurriculumAreas) && count($this->listOfCurriculumAreas) > 0):?>
+    <script type="text/javascript">var discId = '<?php echo $this->discId; ?>' </script>
+    <script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.tablednd_0_5.js" type="text/javascript"></script>
+    <script src="<?php echo $this->baseUrl;?>/js/curriculumareas.js" type="text/javascript"></script>
+
+    <p id="sortMsg">To order curriculum areas drag the row up or down.</p>    
+    <div id="curriculumAreaList">
+        <?php #id="curriculumAreaIds" name is used for table sorting. So please do not change !!?>
+        <table class="tableNoSorter" id="curriculumAreaIds">
+        <tr class="nodrop nodrag" id="">
+            <th>Order</th><th>Name of Curriculum Area</th><th>Learning Objectives Attached</th><th>Edit</th><th>Delete</th><th>Search Exambank</th>
+        </tr>
+        <?php 
+        $exambankQuestLoFormat = Compass::getConfig('exambank_question_search_curriculum_areas');
+        ?>
+        <?php foreach($this->listOfCurriculumAreas as $row):?>
+            <tr id="<?php echo $row['auto_id']; ?>">
+                <?php //Order?>
+                <td class="curriculumAreasCenter"><?php echo $row['no']; ?></td>
+                
+                <?php //Curriculum Area?>
+                <td><?php echo $row['curriculumarea']; ?></td>
+                
+                <?php //Learning objectives Attached?>
+                <?php if($row['lo_attached'] === false):?>
+                    <td class="curriculumAreasCenter">--</td>
+                <?php else:?>
+                    <td class="curriculumAreasCenter"><a title="Search for learning objectives attached to curriculum area '<?php echo $row['curriculumarea']; ?>'" href="<?php printf($listSearchUrlFmt, $row['curriculumarea']); ?>">Learning Objectives Attached</a></td>
+                <?php endif;?>
+                
+                <?php //Edit?>
+                <td class="curriculumAreasCenter"><a title="Edit '<?php echo $row['curriculumarea']; ?>'" href="<?php printf($listEditUrlFmt, $row['auto_id']);?>">Edit</a></td>
+                
+                <?php
+                //Delete
+                $deleteUrl = sprintf($listArchiveUrlFmt, $row['discipline_id'], $row['auto_id']);
+                ?>
+                <?php if($row['lo_attached'] === false):?>
+                    <td class="curriculumAreasCenter"><a onclick="javascript:confirmDelete('<?php echo $row['curriculumarea'];?>',0,'<?php echo $deleteUrl; ?>');" title="Delete '<?php echo $row['curriculumarea'];?>'" href="javascript:void(0);">Delete</a></td>
+                <?php else:?>
+                    <td class="curriculumAreasCenter"><a onclick="javascript:confirmDelete('<?php echo $row['curriculumarea'];?>',1,'<?php echo $deleteUrl; ?>');" style="color:red;" title="Delete '<?php echo $row['curriculumarea'];?>'" href="javascript:void(0);">Delete</a></td>                <?php endif;?>
+                
+                <?php //Search Exambank?>
+                <td class="curriculumAreasCenter"><a target="_blank" href="<?php echo sprintf($exambankQuestLoFormat, $row['auto_id']);?>">Search</a></td>
+            </tr>
+        <?php endforeach;?>
+        </table>
+    </div>
+    
+    <div id="curriculumAreaHiddenEdit">
+    <?php foreach($this->listOfCurriculumAreas as $row):?>
+        <div id="curriculumAreaEdit_<?php echo $row['auto_id']?>" style="display:none;">
+            <form action="<?php printf($formEditUrlFmt,$row['auto_id']); ?>" method="post">
+                <input type="text" value="<?php echo $row['curriculumarea']?>" name="curriculumarea" style="width:700px;font-weight:bold;"/><br /><br /> 
+                <input type="submit" id="submit" value="Edit" />
+            </form>
+        </div>
+    <?php endforeach;?>
+    </div>
+    
+<?php endif;?>

@@ -1,0 +1,30 @@
+<?php echo $this->render('teachingactivity/view/_jsCss.phtml')?>
+
+<div id="tacontainer">
+  <div id="tatop">
+    <?php echo $this->render('teachingactivity/view/_taHeading.phtml')?>
+  </div>
+  
+  <div id="tametadata">
+    <?php echo $this->render('teachingactivity/view/_evaluation.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_metadata.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_manageResources.phtml')?>
+    <?php if (UserAcl::isDomainAdminOrAbove()) echo $this->render('teachingactivity/view/_owneraudience.phtml')?>
+    <?php if (UserAcl::isStagecoordinatorOrAbove() && UserAcl::checkTaPermission($this->ta, UserAcl::$APPROVE) === TRUE) echo $this->render('teachingactivity/view/_requests.phtml')?>
+    <?php if (UserAcl::isStaffOrAbove()) echo $this->render('teachingactivity/view/_notes.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_releasedate.phtml')?>
+    <?php if (UserAcl::isStaffOrAbove()) echo $this->render('teachingactivity/view/_edithistory.phtml')?>
+  </div>
+  
+  <div id="tacontent">
+    <?php echo $this->render('teachingactivity/view/_principalteacher.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_prologue.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_learningobjectives.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_content.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_lecturerecordings.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_resources.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_references.phtml')?>
+  </div>
+  <div id="tapadding"></div>
+</div>
+

@@ -1,0 +1,57 @@
+<style type="text/css">
+.resourceContainer{
+    border: 1px solid #FCD394;
+    border-radius: 15px 15px 15px 15px;
+    padding: 5px 5px 5px 10px;
+    display:none;
+    margin-top:5px;
+    padding:10px;
+}
+</style>
+<?php if (!isset($this->error)) :?>
+    <?php include('view/captureResult.phtml');?>
+    <?php 
+    $singleResource = ($this->resourcesCount == 1);
+    $multipleResource = ($this->resourcesCount > 1);
+    $htmlId = preg_replace('/[^A-Za-z0-9]/','',$this->result['midEncoded']);
+    ?>
+    <div id="container-<?php echo $htmlId;?>">
+    
+        <?php // ####### SINGLE RESOURCE ####### ?>
+        <?php if($singleResource):?>
+            <div style="float:left;">
+                <?php //Resource Content?>
+                <?php echo $this->placeholder('displayResource');?>
+                <br />
+                <?php if(isset($this->result['image']['allowDownload'])):?>
+                    <a href="<?php echo $this->placeholder('pblBlockImageDownloadLink');?>">Click to download the resource</a>    
+                <?php endif;?>
+            </div>
+        <?php // ####### MULTIPLE RESOURCES ####### ?>
+        <?php elseif($multipleResource) :?>
+            <?php //Title ?>
+            <div id="title-<?php echo $htmlId;?>">
+                <a href="javascript:void(0);">
+                    <?php //onclick function showPblBlockResource is defined in /application/default/views/scripts/pbl/fragments/get.phtml; ?>
+                    <span class="printResourceTitle" onclick="javascript: showPblBlockResource('<?php echo $htmlId;?>');" style="font-weight:bold;">
+                        <?php echo $this->placeholder('title');?>
+                    </span>
+                </a>
+            </div>
+            <div  class="resourceContainer" id="content-<?php echo $htmlId;?>">
+                <?php //Resource Content?>
+                <div><?php echo $this->placeholder('displayResource');?></div>
+                <br />
+                <?php if(isset($this->result['image']['allowDownload'])):?>
+                    <a href="<?php echo $this->placeholder('pblBlockImageDownloadLink');?>">Click to download the resource</a>
+                <?php elseif(isset($this->result['video']['allowDownload'])) :?>
+                      <?php echo $this->placeholder('videoDownloadLink');?>
+                <?php endif;?>
+            </div>
+        <?php endif;?>
+        
+    </div>
+    
+<?php else:?>
+    <h3 class="error">Error !</h3>
+<?php endif;?>

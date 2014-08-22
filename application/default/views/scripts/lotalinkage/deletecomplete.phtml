@@ -1,0 +1,16 @@
+<?php $lourl = $this->url(array('module'=>'default','controller'=> 'learningobjective', 'action'=>'view', 'id'=>$this->lo_id)); ?>
+<?php $taurl = $this->url(array('module'=>'default','controller'=> 'teachingactivity', 'action'=>'view', 'id'=>$this->ta_id)); ?>
+<div>
+<h2>Thank you!</h2>
+<?php $role = Zend_Auth::getInstance()->getIdentity()->role ?>
+<?php if ($role == 'stagecoordinator' || $role == 'admin'): ?>
+  <p>Linkage between teaching activity <a href="<?php echo $taurl; ?>"><?php echo $this->ta_id ?></a>
+    and learning objective <a href="<?php echo $lourl; ?>"><?php echo $this->lo_id ?></a> has been deleted.</p>
+<?php else : ?>
+  <p>Your request to delete linkage between teaching activity <a href="<?php echo $taurl; ?>"><?php echo $this->ta_id ?></a>
+  and learning objective <a href="<?php echo $lourl; ?>"><?php echo $this->lo_id ?></a> has been sent to the course designer for approval.</p>
+  <p>You will receive an email once the request is approved.</p>
+  <?php $workflowurl = $this->url(array('module'=>'default','controller'=> 'workflow', 'action'=>'index')); ?>
+  <p>You may find all your submissions in <a href="<?php echo $workflowurl ?>">workflow queue</a>.</p>
+<?php endif; ?>
+</div>

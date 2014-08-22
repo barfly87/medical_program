@@ -1,0 +1,42 @@
+<div id="linkContainer">
+	<div class="subHeadings">Learning Objectives linked to this resource</div>
+    <?php if(isset($this->loTaAttached) && isset($this->loTaAttached['lo'])) :?>
+		<div class="linkContent" id="linkContentLo">
+    	    <?php foreach($this->loTaAttached['lo'] as $lo):?>
+            <div class="linkElement">
+                <span class="linkSubElementHeading">Learning Objective Id</span>: <a href="<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=> $lo['auto_id']),null,true);?>"><?php echo $lo['auto_id'];?></a><br />
+                <?php if(strlen($lo['lo']) > 0) :?>
+                    <span class="linkSubElementHeading">Name</span>: <?php echo $lo['lo'];?>&nbsp; 
+                <?php endif;?>
+            </div>
+    	    <?php endforeach;?>
+   		</div> 
+    <?php else: ?>
+        <p class="linkNone">None Attached</p>
+    <?php endif; ?>
+	</div>
+	<br />
+    <div class="subHeadings">Teaching Activities linked to this resource</div>
+        <?php if(isset($this->loTaAttached) && isset($this->loTaAttached['ta'])) :?>
+    	<div class="linkContent" id="linkContentTa">
+    	    <?php foreach($this->loTaAttached['ta'] as $ta):?>
+                <div class="linkElement">
+                    <span class="linkSubElementHeading">Teaching Activity Id</span>: <a href="<?php echo $this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'view','id'=> $ta['auto_id']),null,true);?>"><?php echo $ta['auto_id'];?></a><br />
+                    <?php if(strlen($ta['block']) > 0) :?>
+                        <span class="linkSubElementHeading">Block</span>: <?php echo $ta['block'];?>&nbsp; 
+                    <?php endif;?>
+                    <?php if(strlen($ta['pbl']) > 0):?>
+                        <span class="linkSubElementHeading">Problem</span>: <?php echo $ta['pbl'];?>
+                    <?php endif;?>
+                    <br />
+                    <?php if(strlen($ta['name']) > 0) :?>
+                        <span class="linkSubElementHeading">Name</span>: <?php echo $ta['name'];?></span>&nbsp; 
+                    <?php endif;?>
+                </div>
+    	    <?php endforeach;?>
+    	</div>
+        <?php else: ?>
+            <p class="linkNone">None Attached</p>
+        <?php endif; ?>
+    </div>
+</div>

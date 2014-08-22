@@ -1,0 +1,12 @@
+<?php $url=$this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'view','id'=>$this->auto_id));?>
+<tr>
+    <td><a href="<?php echo $url?>"><?php echo $this->escape($this->name); ?></a></td>
+</tr>
+<tr>
+    <td>Submitted by: <?php echo Compass::userInfoHtml($this->escape($this->created_by)); ?> <br />
+        Date submitted: <?php echo $this->displayDate($this->date_created); ?>
+    </td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+</tr>

@@ -1,0 +1,33 @@
+<?php $uploadResourceUrl = $this->url( array('module'=>'default','controller'=>'resource', 'action'=>'upload','type' =>$type,'id' => 'new')); ?>
+<?php $linkResourceUrl   = $this->url( array('module'=>'default','controller'=>'resource', 'action'=>'link',  'type' =>$type,'id' => 'new'));?>
+
+<?php if($type == 'lo') :?>
+	<link href="<?php echo $this->baseUrl;?>/css/lotaview.css"        media="screen" rel="stylesheet" type="text/css" />
+<?php endif;?>
+
+<div class="<?php echo $type?>_resourceUploaded">
+
+</div>
+<div id="resourceAdd">
+    <h3><b><a class ="resource_submission iframe" href="<?php echo $uploadResourceUrl; ?>">Upload Resources</a></b></h3>
+</div>
+<div id="resourceLink">
+    <?php
+    $resourceTypes = array();
+    if($type == 'lo') {
+        $resourceTypes = $this->loResourceTypes;
+    } else if($type =='ta') {
+        $resourceTypes = $this->taResourceTypes;
+    }
+    ?>
+    <h3><b><a onclick ="$('.<?php echo $type;?>linkResourceType').toggle();return false;" href="#">Link Existing Resources</a></b></h3>
+    <div class="<?php echo $type;?>linkResourceType" style="display:none;">
+    <?php if(!empty($resourceTypes)):?>
+        <ol>
+        <?php foreach($resourceTypes as $resourceTypeId => $resourceType):?>
+            <li><b><a class ="resource_submission iframe" href="<?php echo $linkResourceUrl.'/resourcetypeid/'.$resourceTypeId; ?>"><?php echo $resourceType;?></a></b></li>
+        <?php endforeach;?>
+        </ol>
+    <?php endif;?>
+    </div>
+</div>

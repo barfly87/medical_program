@@ -1,0 +1,183 @@
+<?php 
+
+function ratingJS($that) {
+	?>
+	function setrating(id,resourceid,rating) {
+		$.ajax({
+		  url: '<?php echo $that->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'setrating'),'default',true); ?>/id/'+resourceid+'/rating/'+rating,
+		  success: function(response, status, obj) {
+		  		if(rating==1) {
+			  		$('#ratingplusimg'+id).attr('src','<?php echo $that->baseUrl;?>/img/thumb_up_on.png');
+			  		$('#ratingminusimg'+id).attr('src','<?php echo $that->baseUrl;?>/img/thumb_down_off.png');
+			  	} else {
+			  		$('#ratingplusimg'+id).attr('src','<?php echo $that->baseUrl;?>/img/thumb_up_off.png');
+			  		$('#ratingminusimg'+id).attr('src','<?php echo $that->baseUrl;?>/img/thumb_down_on.png');
+			  		
+			  	}
+		  }
+	});
+	
+	}
+	
+	function updaterating(id,resourceid,includecomment) {
+	var myscore=0;
+	var hasrating=false;
+	$('.resource'+id+'_rating:checked').each(function(index) {
+	    myscore = myscore + parseInt($(this).attr('value'));
+	    hasrating=true;
+	});
+	if(hasrating)
+		if(myscore >= 0)
+			myscore=1;
+		else
+			myscore=-1;
+	var mycontents = '';
+	var hascontent=false;
+	$('.resource'+id+'_rating:checked').each(function(index) {
+		hascontent=true;
+	    if(index>0)
+		    mycontents = mycontents+', ';
+	    mycontents = mycontents + $(this).attr('rcname');
+	  	});
+	var mycomment='';
+	if(includecomment) {
+		mycomment = $('#resource'+resourceid+'_comment').val();
+		mycomment = $.base64.encode(mycomment).replace('/','_'); //clean it up so it can get past Zend - base64 sometimes includes a '/'
+		mycomment='/comment/'+mycomment;
+	}
+	$.ajax({
+		  url: '<?php echo $that->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'updaterating'),'default',true); ?>/id/'+resourceid+'/ratings/'+mycontents+mycomment,
+		  success: function(response, status, obj) {
+			  $('#studentrating'+id).html(response);
+			  	if($('#commentupdateresponse'+id).is(':animated')) {
+					$('#commentupdateresponse'+id).stop();
+				}
+				if(includecomment)
+					$('#commentupdateresponse'+id).html(defaultPrepend+'Comment updated');
+				else
+					$('#commentupdateresponse'+id).html(defaultPrepend+'Rating updated');
+				$('#commentupdateresponse'+id).animate({opacity: 100}, 200);
+				$('#commentupdateresponse'+id).animate({opacity: 0}, 2000);
+			  
+		  }
+	});
+	
+}
+	<?php 
+}
+function showsummary($that) { ?>
+		<div id="summarycontent<?php echo $that->studentsummary['auto_id']; ?>" ></div>
+		<script>
+		showresource('summarycontent<?php echo $that->studentsummary['auto_id']; ?>','<?php echo base64_encode($that->studentsummary['mid']);?>','<?php echo $that->studentsummary['mimetype'];?>');
+		$('#summarycontent<?php echo $that->studentsummary['auto_id']; ?>').show();
+		</script>
+		<div>
+			<div style="float:left; width:35;padding-right: 5px;"><?php ratingthumbs('99999999999', $that->studentsummary,$that);?></div>
+			<div style="float:left;"><span class="studentresourcecontrols">
+				<?php if($that->studentsummary['editable']):?>
+				<span class="studentresourcemetadata"><a id="editresourcecontent99999999999" href="<?php echo $that->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'editresource', 'resourceid'=>$that->studentsummary['auto_id']),'default',true); ?>">Edit summary</a></span>
+				<?php endif;?><br>
+				<?php ratingline('99999999999', $that->studentsummary,$that);?>
+			</div>
+			<?php ratingbox('99999999999', $that->studentsummary,$that);?>
+			<?php commentbox('99999999999', $that->studentsummary,$that);?></span>
+		</div>
+
+<?php }
+function ratingthumbs($studentresourceinlinecount, $resource,$that) { ?>
+		<?php if($that->studyconsent): ?>
+
+<span id="ratingplus<?php echo $studentresourceinlinecount;?>" class="studentresourcecontrols"
+			name="togglerating<?php echo $studentresourceinlinecount;?>" 
+			style="color: rgb(48, 111, 223); text-decoration:underline; cursor:pointer;"
+			onclick="javascript:$('#rating<?php echo $studentresourceinlinecount;?>').show();setrating(<?php echo $studentresourceinlinecount;?>,<?php echo $resource['auto_id'];?>,1); $('#resource<?php echo $resource['auto_id'];?>_comment').focus();"
+			><img id="ratingplusimg<?php echo $studentresourceinlinecount;?>" src="<?php echo $that->baseUrl;?>/img/thumb_up_<?php if($resource['myscore']==1) echo "on";else echo "off"; ?>.png" height="30" width="16"></span>
+
+<span id="ratingminus<?php echo $studentresourceinlinecount;?>" class="studentresourcecontrols"
+			name="togglerating<?php echo $studentresourceinlinecount;?>" 
+			style="color: rgb(48, 111, 223); text-decoration:underline; cursor:pointer;<?php if($resource['myscore']==-1) echo "font-weight:bold;"; ?>"
+			onclick="javascript:$('#rating<?php echo $studentresourceinlinecount;?>').show();setrating(<?php echo $studentresourceinlinecount;?>,<?php echo $resource['auto_id'];?>,-1); $('#resource<?php echo $resource['auto_id'];?>_comment').focus();"
+			><img id="ratingminusimg<?php echo $studentresourceinlinecount;?>" src="<?php echo $that->baseUrl;?>/img/thumb_down_<?php if($resource['myscore']==-1) echo "on";else echo "off"; ?>.png" height="30" width="16"></span>
+<?php endif;?>
+
+<?php }
+function ratingline($studentresourceinlinecount, $resource,$that) { ?>
+<span class="studentresourcemetadata">
+
+<span id="studentrating<?php echo $studentresourceinlinecount; ?>">Rating: <?php if(isset($resource['count'])):?>
+		 	<?php echo $resource['score']; ?> 
+		 	<small>(<?php echo $resource['count']; ?> <?php echo $resource['count']==1?'person':'people';?>: <?php if(isset($resource['ratingdescription']))echo implode(', ',$resource['ratingdescription']); ?>)</small>
+		 	<?php else:?> not yet rated.<?php endif;?></span>
+		</span>
+<?php }
+function commentbox($studentresourceinlinecount, $resource,$that) { ?>
+		<div id="comments<?php echo $studentresourceinlinecount;?>" class="ratingbox" style="clear:both;">
+		<?php 
+		$brarray = array("\n" => "<br>\n");
+		//print_r($resource['comments']);
+		if(isset($resource['comments'])):
+			foreach($resource['comments'] as $comm):
+				if(strlen($comm['comment'])>0):?>
+				<?php echo strtr(trim($comm['comment']), $brarray);?> - <a href="<?php echo $that->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$comm['uid']),'default',true); ?>">by</a><br>
+			<?php endif; 
+			endforeach;
+		endif;?>
+		</div>
+<?php }
+function ratingbox($studentresourceinlinecount, $resource, $that) {
+		$widthhint=40;
+		if(isset($that->widthhint))
+			$widthhint=$that->widthhint;
+	?>
+			<div id="rating<?php echo $studentresourceinlinecount;?>" class="ratingbox" style="display:none;clear:both;">
+			<table>
+			<tr><td colspan="2">
+			</td></tr>
+			<form autocomplete="off">
+			<tr><td>
+				<?php foreach($that->ratingcategories as $rc):
+					if($rc['rating']>0): ?>
+						<input 
+							onclick="updaterating(<?php echo $studentresourceinlinecount;?>,<?php echo $resource['auto_id'];?>,false)" 
+							type="checkbox" 
+							class="resource<?php echo $studentresourceinlinecount;?>_rating"
+							id="resource<?php echo $resource['auto_id'];?>_rating<?php echo $rc['auto_id'];?>" 
+							name="resource<?php echo $resource['auto_id'];?>_rating<?php echo $rc['auto_id'];?>"
+							value="<?php echo $rc['rating'];?>"
+							rcname="<?php echo $rc['name']?>"
+							<?php if(isset($resource['myrating']) && in_array($rc['auto_id'],$resource['myrating'])): ?>checked<?php endif;?>
+							> <label class="ratinglabel" for="resource<?php echo $resource['auto_id'];?>_rating<?php echo $rc['auto_id'];?>"><?php echo $rc['name']?><span><?php echo $rc['description'];?></span></label>
+						<br>
+					<?php endif;
+					endforeach;
+				?>
+			</td><td>
+				<?php foreach($that->ratingcategories as $rc):
+					if($rc['rating']<0): ?>
+						<input 
+							onclick="updaterating(<?php echo $studentresourceinlinecount;?>,<?php echo $resource['auto_id'];?>,false)" 
+							type="checkbox" 
+							class="resource<?php echo $studentresourceinlinecount;?>_rating" 
+							id="resource<?php echo $resource['auto_id'];?>_rating<?php echo $rc['auto_id'];?>" 
+							name="resource<?php echo $resource['auto_id'];?>_rating<?php echo $rc['auto_id'];?>"
+							value="<?php echo $rc['rating'];?>"
+							rcname="<?php echo $rc['name']?>"
+							<?php if(isset($resource['myrating']) && in_array($rc['auto_id'],$resource['myrating'])): ?>checked<?php endif;?>
+							> <label class="ratinglabel" for="resource<?php echo $resource['auto_id'];?>_rating<?php echo $rc['auto_id'];?>"><?php echo $rc['name']?><span><?php echo $rc['description'];?></span></label>
+						<br>
+					<?php endif;
+					endforeach;
+				?>
+			</td></tr>	
+			<tr><td colspan="2">
+				<textarea id="resource<?php echo $resource['auto_id'];?>_comment" name="resource<?php echo $resource['auto_id'];?>_comment" rows="3" cols="<?php echo $widthhint; ?>"><?php if(isset($resource['mycomment'])) echo $resource['mycomment']; ?></textarea>
+			</td></tr>
+			<tr><td colspan="2">
+			<a class="resourceButtonHref" onclick="updaterating(<?php echo $studentresourceinlinecount;?>,<?php echo $resource['auto_id'];?>,true);" href="javascript:void(0);">Add comment</a>
+			<span id="commentupdateresponse<?php echo $studentresourceinlinecount;?>"></span>
+			</td></tr>
+			</table>
+			</form>
+		</div>
+<?php }
+?>

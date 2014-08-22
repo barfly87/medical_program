@@ -1,0 +1,60 @@
+<?php 
+$silentUr = $this->url(array('module'=>'default', 'controller'=>'index', 'action'=>'monitor', 'quiet'=>'true', 'allOk'=>'false'), null, true);
+$minimalUrl = $this->url(array('module'=>'default', 'controller'=>'index', 'action'=>'monitor', 'quiet'=>'true', 'allOk'=>'true'), null, true);
+$fullUrl = $this->url(array('module'=>'default', 'controller'=>'index', 'action'=>'monitor', 'quiet'=>'false', 'allOk'=>'true'), null, true);
+?>
+<h2>Machine Friendly Monitoring Page</h2>
+Publicly accessible pages<br />
+<ul style="list-style-image:url('<?php echo $this->baseUrl?>/img/list.png');">
+    <li><a href="<?php echo $silentUrl;?>">Silent</a>&nbsp;-&nbsp;No text displayed if all the components are working fine</li>
+    <li><a href="<?php echo $minimalUrl;?>">Minimal</a>&nbsp;-&nbsp;'ALL OK' text displayed if all the components are working fine</li>
+    <li><a href="<?php echo $fullUrl;?>">Full</a>&nbsp;-&nbsp;Display full information for every component checked</li>
+</ul>
+
+<?php $customSortOrder = '[1,0]'; ?>
+<?php //$highlightSearchTable = true; ?>
+<?php include_once('../application/common/views/_tableSortJsAndCss.phtml'); ?>
+<h2>Compass Health Check</h2>
+<table id="sortTable" class="tableSorter">
+    <thead>
+        <tr>
+            <th style="width:20px;">No</th>
+            <th style="width:20px;">Result</th>
+            <th>Test</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($this->tests as $key => $test) :?>
+        <tr>
+            <td class="centerText">
+                <?php echo ++$key;?>
+            </td>
+            <td class="centerText">
+                <?php if($test['outcome'] == true) :?>
+                    <img src="<?php echo $this->baseUrl;?>/img/tick.png" height="24px;"/>
+                <?php else:?>
+                    <img src="<?php echo $this->baseUrl;?>/img/cross.png" height="28px;"/>
+                <?php endif;?>
+            </td>
+            <td><?php echo $test['title'];?></td>
+            <td><?php echo $test['desc'];?></td>
+        </tr>
+        <?php endforeach;?>
+    </tbody>
+    <?php $paginationBg = 'bottom';?> 
+    <?php include('../application/common/views/_footerPagination.phtml'); ?>
+</table>
+
+
+
+
+<style type="text/css">
+.innerTable table th {
+    vertical-align: top;
+    text-align: right !important;
+    font-family:Verdana, Arial, Helvetica, sans-serif !important;
+    padding: 4px;
+}
+</style>
+

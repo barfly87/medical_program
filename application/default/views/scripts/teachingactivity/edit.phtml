@@ -1,0 +1,32 @@
+<?php
+if ($this->fp->hasError()) {
+    echo '<ul>';
+    $errors = $this->fp->getErrors();
+    foreach ($errors as $k => $v) {
+        echo "<li class=\"error\">$v</li>";
+    }
+    echo '</ul>';
+}
+
+$params = array();
+$params['ta_auto_id']        = $this->fp->ta_auto_id;
+$params['name']              = $this->fp->name;
+$params['type']              = $this->fp->type;
+$params['stage']             = $this->fp->stage;
+$params['year']              = $this->fp->year;
+$params['block']             = $this->fp->block;
+$params['block_week']        = $this->fp->block_week;
+$params['pbl']               = $this->fp->pbl;
+$params['sequence_num']      = $this->fp->sequence_num;
+$params['term']              = $this->fp->term;
+$params['student_grp']       = $this->fp->student_grp;
+$params['principal_teacher'] = $this->fp->principal_teacher;
+$params['current_teacher']   = $this->fp->current_teacher;
+$params['status']            = $this->fp->status;
+$params['notes']             = $this->fp->notes;
+$params['linked_los_old']    = count($this->fp->linked_los_arr_old) == 0 ? '' : join(', ', $this->fp->linked_los_arr_old);
+$params['linked_los_new']    = count($this->fp->linked_los_arr_new) == 0 ? '' : join(', ', $this->fp->linked_los_arr_new);
+$params['archive_option']    = $this->fp->archive_option;;
+
+echo $this->action('taform', 'teachingactivity', null, $params);
+?>

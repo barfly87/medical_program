@@ -1,0 +1,49 @@
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/json2.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-ui-1.6.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/swfobject.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/evaluateLecture.css" media="all"  />
+<link href="<?php echo $this->baseUrl;?>/css/form.css" rel="stylesheet" type="text/css" />
+
+<div class="lectureEvaluateBody">
+<h2>Teaching Evaluation</h2>
+<b>Lecture title</b> : 
+    <a href="<?php echo $pblLink;?>">
+        <?php echo $this->escape($this->ta->name)?>
+    </a> <br />
+</p>
+
+<?php if(!empty($this->data)) :?>
+<?php
+$pblLink = $this->url(array('controller'=>'pbl', 'action'=>'display', 'type'=>'ta', 'activitytypeid'=>'2', 'typeid'=> $this->ta->auto_id, 'ref'=> $this->ta->block_no.'.'.$this->ta->block_week_zero_padded),null,true);
+$chartUrl = $this->url( array( 'module'=>'default', 'controller'=>'evaluate', 'action'=>'taresponseschart'), null, true);
+?>
+<script type="text/javascript">
+$(document).ready(function() {
+<?php foreach($this->data as $question => $evaluations):?>
+    <?php if(isset($evaluations['url'])):?>
+        <?php $url = urlencode($chartUrl.'?'.$evaluations['url']);?>
+        swfobject.embedSWF("<?php echo $this->baseUrl;?>/open-flash-chart.swf", "<?php echo $question?>", "100%", "100%", "9.0.0", "",{"data-file":"<?php echo $url;?>"});
+    <?php endif;?>
+<?php endforeach; ?>
+});
+</script>
+<p>
+<table id="table-evaluate-lecture">
+    <tbody>
+        <?php $count = 1;?><br />
+        <?php echo $this->render('evaluate/taresponsesplaceholders.phtml')?>
+        <?php foreach($this->questions as $question):?>
+        <tr>
+            <td><span class="questionNo"><?php echo $count;?></span></td>
+            <?php //All the placeholders are defined in evaluate/taresponsesplaceholders.phtml?>
+            <td><?php echo $this->placeholder($question);?></td>
+        </tr>
+        <?php $count++;?>
+        <?php endforeach;?>
+    </tbody>
+</table>
+</form>
+<?php else:?>
+<h2 class="error">None Found</h2>
+<?php endif;?>
+</div>

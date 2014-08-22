@@ -1,0 +1,165 @@
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<style type="text/css">
+tr.header td {font-style: italic;}
+tr.special td {border-top: 1px solid #ff0000; }
+span.bname {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 4px 6px 5px 0px;
+}
+span.biglabel {
+  display: block;
+  font-size: 20px;
+  float: left;
+  margin-right: 6px;
+}
+td.pname, td.pname_empty{
+  border-left: 1px solid #ff0000;
+  padding: 0px 5px;
+  font-size: 95%;
+}
+td.pnum, td.pnum_empty {
+  border-left: 1px solid #ff0000;
+  padding: 0px 5px;
+}
+td.blockrsc {
+  border-left: 1px solid #ff0000;
+  padding: 0px 5px;
+}
+td.user-info {
+    border-top:1px solid #ff0000;
+    padding: 2px 6px;
+}
+td a {text-decoration: none ;}
+span.bname a img{
+    text-decoration: none ;
+    border: 1px solid #FFFFFF;
+}
+.ltlink {
+	font-size:90%;
+}
+/*
+Contacts CSS
+*/
+table#contacts-table {
+    border:1px solid #DBDED7;
+    padding-left:10px;
+    padding-right:10px;
+    width: 100%;
+}
+table#contacts-table .block-td {
+    border-right:1px solid #DBDED7;
+    vertical-align:top;
+    padding-right:10px;
+    width:50%;
+}
+table#contacts-table span.heading {
+    font-weight:bold;
+    text-decoration:underline;
+}
+table#contacts-table .casecoordinator-td {
+    padding-left:10px;
+    vertical-align:top;
+    width:50%;
+}
+table#contacts-table .casecoordinator-td table {
+    border-collapse:collapse;
+    width:100%;
+}
+table#contacts-table .casecoordinator-td table td {
+    vertical-align:top;
+}
+table#contacts-table .casecoordinator-td table .pbl-ref {
+    font-weight:bold;
+    padding-right:10px;
+}
+table#contacts-table .uid-container {
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+/* stage css */
+.stagecontent {
+	background: #FDF5DB;
+	padding: 10px;
+}
+.stagersc {
+	padding-left: 5px;
+}
+.stagetitle {
+	font-size: 200%;
+}
+</style>
+<script type="text/javascript">
+  $(function() {
+	  $('td.pnum, td.pname').hover(function() {
+		      $('td.pnum, td.pname', $(this).parent()).css('background-color', '#ffeccf');
+		  }, function() {
+			  $('td.pnum, td.pname', $(this).parent()).css('background-color', '#FFFFFF');
+		  })
+  });
+</script>
+&nbsp;
+<table cellspacing="0" cellpadding="0" border="0">
+ <tbody>
+  <tr class="header">
+    <td><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></td>
+    <td style="padding-left: 2px;">Resources</td>    
+  </tr>
+ <?php
+    $num_blocks = count($this->allModules);
+
+    $resourceViewOrDownloadUrl = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'viewordownload','type'=>'block'), null, true).'/id/%d/mid/%s/fn/%s';
+    foreach($this->allModules as $block => $value) {
+    	$pblsCount = 0;
+    	
+    	//3 are default (Essential Readings Handbook + Procedural Skills Handbook + Manage Resources)
+    	$resources = array();
+    	if ($value['seq_no'] != 0) {
+	    	$resources[] = "<a href=\"{$this->baseUrl}/guide/handbook/block/{$value['seq_no']}\">Essential Readings Handbook</a><br />";
+	    	$resources[] = "<a href=\"{$this->baseUrl}/guide/proceduralskills/block/{$value['seq_no']}\">Procedural Skills Handbook</a><br />";
+    	}
+        foreach($value['resources'] as $resource) {
+            if( $resource['allowUser'] === true) {
+                if(isset($resource['customViewUrl']) &&  !empty($resource['customViewUrl'])) {
+                    $resources[] = "<a rel=\"prettyPhoto\" href=\"{$resource['customViewUrl']}\">{$resource['title']}</a><br />";
+                } else {
+                    $filename = base64_encode('Block - '.$value['seq_no'].' - '.$resource['title']);
+                    $resources[] = "<a href=\"".sprintf($resourceViewOrDownloadUrl, $value['blockId'], $resource['mid'], $filename)."\">{$resource['title']}</a><br />";
+                }
+            }
+        }
+        //Only Blockchairs and above are allowed to access the link for managestage1or2resources link.
+        if(UserAcl::isBlockchairOrAbove()) {
+    	   $resources[] = "<a href=\"{$this->baseUrl}/block/managestage1or2resources/ref/{$value['blockId']}\"><b>Manage Resources</b></a>";
+        }
+    	$resourcesCount = count($resources);
+    	$rowspan = ($pblsCount > $resourcesCount) ? $pblsCount : $resourcesCount;
+    	
+    	//$pblCoordinators = array($value['pbls'][0][0] => $value['pbls'][0]['pblUids']);
+    	//$first_pbl_row = array_shift($value['pbls']);
+    	$first_resource_row = array_shift($resources);
+    	$max_rows = $rowspan -1;
+    	
+        echo "<tr class=\"special\">\n  <td width=\"300\" valign=\"top\" rowspan=\"{$rowspan}\">";
+        echo "<span class=\"biglabel\">{$value['seq_no']}</span>";
+        echo "<span class=\"bname\"><a href=\"{$this->baseUrl}/block/index/ref/{$value['blockId']}\">$block</a></td>";
+    	echo "<td class=\"blockrsc\" valign=\"top\">{$first_resource_row}</td>\n";
+    	echo "</tr>\n";
+    	
+        for($x=0; $x<$max_rows; $x++) {
+            echo "<tr>\n  ";
+            if(isset($resources[$x])) {
+                echo "<td class=\"blockrsc\" valign=\"top\">{$resources[$x]}</td>\n";
+            } else {
+                echo "<td class=\"blockrsc\" valign=\"top\">&nbsp;</td>\n";
+            }
+            echo "</tr>\n";
+        }
+        $num_blocks--;
+    }
+ ?>
+  </tbody>
+</table>

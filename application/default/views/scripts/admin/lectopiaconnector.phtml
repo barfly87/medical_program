@@ -1,0 +1,6 @@
+<?php if($this->result['error'] === true) :?>
+    <span class="error" >Error !</span>
+    <div><?php echo $this->result['error_string']?></div>
+<?php else:?>
+    <span>Successfully added new mids.</span>
+<?php endif;?>

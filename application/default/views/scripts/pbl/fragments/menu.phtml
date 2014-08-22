@@ -1,0 +1,19 @@
+<?php #Create Stage1 and Stage2 links for user group staff and above ?>
+<?php include('menu/stages.phtml');?>
+<br />
+<?php #Display problem details?>
+<div id="pblHeading"><?php echo Zend_Registry::get('Zend_Translate')->_('Problem') ?> <?php echo $this->pblRef; ?><br />
+<?php 
+    echo $this->pblName; 
+?>
+<?php if (isset($this->content['pblIconUrl'])) :?>
+	<img src="<?php echo $this->content['pblIconUrl']?>" />
+<?php endif; ?>
+</div>
+<br />
+
+<?php #Display left menu?>
+<?php include('menu/links.phtml');?>
+
+<?php #Create links so user can go to previous and next pbl?>
+<?php include('menu/prevnext.phtml');?> 

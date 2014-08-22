@@ -1,0 +1,39 @@
+<script type="text/javascript">
+function reindexMediabankCollection() {
+	$('#reindex-collection-results-container p').html('<img style="padding-left: 10px;" src="<?php echo $this->baseUrl;?>/img/loading.gif" />');
+    var collection = jQuery.trim($('#reindex-collection').val());
+    if(collection != '') {
+    	$('#reindex-collection-results-container').show();
+        reindexUrl = BASE_URL + '/admin/incrementalreindexmediabankcollection/collection/' + collection;
+        $.ajax({
+            url: reindexUrl,
+            async: false,
+            type: "GET",
+            success: function(data) {
+                $('#reindex-collection-results-container p').html(data);
+            }
+        });     
+    } else {
+        alert('Please select mediabank collection to be reindexed.');
+    }
+
+}
+</script>
+
+<div id="reindex-collection-container">
+    <div>
+    <h3>Incrementally reindex mediabank collection</h3>
+    <select name="collection" id="reindex-collection" style="">
+        <option value=""></option>
+        <?php foreach(MediabankResourceConstants::$REINDEX_collections as $collection) :?>
+        <option value="<?php echo $collection?>"><?php echo ucwords($collection);?></option>
+        <?php endforeach;?>
+    </select>
+    <input type="button" class="submitButton" value="Reindex" onclick="reindexMediabankCollection();" />
+    </div>
+    <div id="reindex-collection-results-container" style="display:none;" style="padding:5px;">
+        <p>
+            <img style="padding-left: 10px;" src="<?php echo $this->baseUrl;?>/img/loading.gif" />
+        </p>        
+    </div>
+</div>

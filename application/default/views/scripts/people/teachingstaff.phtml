@@ -1,0 +1,32 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<link
+	href="<?php echo Compass::baseUrl();?>/css/table.css" media="screen"
+	rel="stylesheet" type="text/css" />
+
+<div style="float: left; max-width: 750px">
+<h2>Teaching Staff</h2>
+<p>This is by no means a comprehensive list of all teachers in the
+Medical Program. It is, rather a list of staff listed as the Principal
+Teacher of a teaching activity in the program.</p>
+<table id="teachingstafftable" class="tableSorter">
+	<thead>
+		<tr>
+			<th>Teacher</th>
+			<th>Activities</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php
+	$rowcount=0;
+	foreach($this->teachers as $teacher=>$count):
+		$rowcount++;  ?>
+		<tr class="<?php echo($rowcount%2?'even':'odd');?>">
+			<td><?php echo Compass::userInfoHtmlOnly($teacher); ?></td>
+			<td><a href="<?php echo Compass::baseUrl();?>/search/index/searchtype/main?context=ta&qstr=ta_principal_teacher%3A<?php echo $teacher; ?>&qoption=any&process=simple&submit=Search"><?php echo($count);?></a></td>
+		</tr>
+
+		<?php endforeach;?>
+	</tbody>
+</table>
+</div>

@@ -1,0 +1,1 @@
+INSERT INTO lk_domain VALUES (DEFAULT, 'Medicine');

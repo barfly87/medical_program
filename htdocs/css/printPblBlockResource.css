@@ -1,0 +1,20 @@
+.pblBlockPrint, .pblContainerRight {
+    display:inline;
+}
+
+.pblBar, #pblContainerLeft, #header, #menu {
+    display:none;
+}
+
+.printResourceTitle {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.pblElemHeading, .noPrint {
+    display:none;
+}
+
+.print {
+    display: inline;
+}

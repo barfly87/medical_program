@@ -1,0 +1,22 @@
+<div>
+    <div class="subHeadings subHeadingsResources">Feedback</div>
+    <div id="feedbackContainer" class="linkNone">
+        <?php 
+        echo $this->action('index','evaluate','default',array('type'=>'ta', 'type_id'=> $this->ta->auto_id));
+        ?>
+        <?php if(UserAcl::isAdmin()) :?>
+            <br />
+            <span class="responses">Responses</span>
+            <?php if(isset($this->taEvaluations) && !empty($this->taEvaluations)): ?>
+                <ul class="listSquare">
+                <?php foreach($this->taEvaluations as $evaluation): ?>
+                    <li><span class="italicText"><?php print date('d/m/Y', $evaluation['epoch']); ?></span>&nbsp;--&nbsp;<?php print $evaluation['comment']; ?>
+                    </li>
+                <?php endforeach;?>
+                </ul>
+            <?php else:?>
+                <br />&nbsp;&nbsp;&nbsp;None            
+            <?php endif;?>
+        <?php endif;?>  
+    </div>
+</div>

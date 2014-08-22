@@ -1,0 +1,19 @@
+<style type="text/css">
+body {min-width:600px; width:625px}
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+	if ($('#tacontent div').size() == 0) {
+		$('#tacontent').html("<p>No resources found.</p>");
+	}
+});
+</script>
+<?php echo $this->render('teachingactivity/view/_jsCss.phtml')?>
+<div id="tacontainer" style="width:625px; min-height:380px">
+  <?php // Added class 'eventsResources' to remove 360px right margin ?>
+  <div id="tacontent" class="eventsResources">
+    <?php echo $this->render('teachingactivity/view/_lecturerecordings.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_resources.phtml')?>
+  </div>
+  <div id="tapadding"></div>
+</div>

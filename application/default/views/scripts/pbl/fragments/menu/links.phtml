@@ -1,0 +1,118 @@
+<?php 
+$staffOnlyPeopleImage = MediabankResourceConstants::staffOnlyPeopleImage();
+$currentPblUrl = Compass::getRelativeUrl();
+?>
+<span id="pblMenu">
+    <ul>
+        <?php if(isset($this->content['pblMenu'])):?>
+            <?php foreach($this->content['pblMenu'] as $link):?>
+                <?php if(isset($link['foundrecords']) && $link['foundrecords'] == true):?>
+                    <?php 
+                    $urlData = '';
+                    $urlData .= (isset($link['type'])) ? '/type/'.$link['type'] : '';
+                    $urlData .= (isset($link['activitytypeid'])) ? '/activitytypeid/'.$link['activitytypeid'] : '';
+                    $pblBaseUrl = $this->url(array('module'=>'default', 'controller'=>'pbl', 'action'=>'display'),null,true).$urlData;
+                    $pblRef = '/ref/'.$this->pblRef;
+                    $pblUrlFormat = $pblBaseUrl.'%s'.$pblRef;
+                    $clicked = ''; //Need to reset for each link
+                    ?>
+                    <?php if(isset($link['sequences']) && !empty($link['sequences'])):?>
+                        <?php $displaySequenceNo = (count($link['sequences']) > 1) ? true : false; ?>
+                        <?php foreach($link['sequences'] as $sequenceNo => $sequenceRows):?>
+                            <?php foreach($sequenceRows as $sequenceRow):?>
+                                <li>
+                                    <?php 
+                                    $urlPart = sprintf('/typeid/%s', $sequenceRow['typeId']);
+                                    $url = sprintf($pblUrlFormat, $urlPart);
+                                    $clicked = (stristr($currentPblUrl, $pblBaseUrl.'/') !== false) ? ' clicked' : '';
+                                    ?>
+                                    <a href="<?php echo $url;?>" class="menulink<?php echo $clicked;?>">
+                                        <?php echo $link['title']['plural'];?> 
+                                        <?php if($displaySequenceNo == true):?>
+                                            <?php echo $sequenceNo;?> 
+                                        <?php endif;?>
+                                    </a>
+                                    <?php if(isset($sequenceRow['resources']) && !empty($sequenceRow['resources'])):?>
+                                        <div id="pblSubMenu">
+                                        <?php foreach($sequenceRow['resources'] as $resource):?>
+                                            <?php 
+                                            $staffOnlyImage = ($resource['staffOnly'] === true) ? $staffOnlyPeopleImage : '' ;
+                                            $resourceTitleHref = (isset($resource['titleHref'])) ? $resource['titleHref'] : '';
+                                            $target = '';
+                                            $onclick = '';
+                                            $style = '';
+                                            if(isset($resource['customUrl'])) {
+                                                $url = $resource['customUrl'];
+                                                $target = ' target="_blank"';
+                                                if(isset($resource['customOnclick'])){
+                                                    $onclick = sprintf(' onclick ="%s"',$resource['customOnclick']);
+                                                }
+                                            } else {
+                                                $urlPart = sprintf('/typeid/%s/resourceid/%s', $resource['typeId'], $resource['resourceAutoId']);
+                                                $url = sprintf($pblUrlFormat, $urlPart);
+                                            }
+                                            $style = ($currentPblUrl == $url) ? ' border-bottom:1px dotted #99DEFD;' : '';
+                                            ?>    
+                                            <a href="<?php echo $url; ?>" <?php echo $onclick;?> <?php echo $target;?> style="<?php echo $style;?>" title="<?php echo $resourceTitleHref;?>">
+                                                <?php echo $resource['title']?>
+                                            </a>
+                                            <?php echo $staffOnlyImage;?><br />
+                                        <?php endforeach;?>
+                                        </div>
+                                    <?php endif;?>
+                                </li>
+                            <?php endforeach;?>
+                        <?php endforeach;?>
+                    <?php elseif(isset($link['pblResources']) && !empty($link['pblResources'])):?>
+                        <?php foreach($link['pblResources'] as $resource):?>
+                            <?php 
+                            $urlPart = sprintf('/category/pblresources/typeid/%s/resourcetypeid/%s', $this->pblId, $resource['resourceTypeId']);
+                            $url = sprintf($pblUrlFormat, $urlPart);
+                            $staffOnlyImage = ($resource['staffOnly'] === true) ? $staffOnlyPeopleImage : '' ;
+                            $clicked = ($currentPblUrl == $url) ? ' clicked' : '';
+                            ?>
+                            <li>
+                                <a href="<?php echo $url;?>" class="menulink<?php echo $clicked;?>">
+                                    <?php echo $resource['resourceTitle'];?>
+                                </a>
+                                <?php echo $staffOnlyImage;?>    
+                            </li>
+                        <?php endforeach;?>
+                    <?php elseif(isset($link['managePblResources']) && $link['managePblResources'] == true):?>
+                        <?php 
+                        $urlPart = '/category/managepblresources';
+                        $url = sprintf($pblUrlFormat, $urlPart);
+                        $clicked = ($currentPblUrl == $url) ? ' clicked' : '';
+                        ?>
+                        <li>
+                            <a href="<?php echo $url;?>" class="menulink<?php echo $clicked;?>">
+                                <?php echo $link['title']['plural'];?>
+                            </a>
+                            <?php echo $staffOnlyPeopleImage;?>
+                        </li>
+                    <?php elseif(isset($link['studentResources']) && $link['studentResources'] == true):?>
+                        <?php 
+                        $clicked = ($currentPblUrl == $url) ? ' clicked' : '';
+                        ?>
+                        <li>
+                            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'compile', 'problem'=>$this->pblRef),'default',true);?>" class="menulink<?php echo $clicked;?>">
+                                <?php echo $link['title']['plural'];?>
+                            </a>
+                        </li>
+                    <?php else:?>
+                        <?php 
+                        $urlPart = '';
+                        $url = sprintf($pblUrlFormat, $urlPart);
+                        $clicked = (stristr($currentPblUrl, $pblBaseUrl.'/') !== false) ? ' clicked' : '';
+                        ?>
+                        <li>
+                            <a href="<?php echo $url;?>" class="menulink<?php echo $clicked;?>">
+                                <?php echo $link['title']['plural'];?>
+                            </a>
+                        </li>
+                    <?php endif;?>
+                <?php endif;?>
+            <?php endforeach;?>
+        <?php endif;?>
+    </ul>
+</span>

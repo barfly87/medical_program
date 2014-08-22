@@ -1,0 +1,21 @@
+<link href="/compass/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<?php $href = $this->url(array('module'=>'default','controller'=> 'teachingactivity', 'action'=>'view')); ?>
+<div>
+  <h2>Archiving teaching activity <?php echo $this->ta->auto_id; ?></h2>
+  <p>Are you sure you want to archive this teaching activity?<p>
+  <p style="margin-left:20px; font-style:italic;"> - <?php echo $this->escape($this->ta->name)?></p>
+  <?php if (count($this->linkedlos) > 0) :?>
+  <p>If you do, the linkage from this teaching activity to the following learning objective(s) will also be archived.<p>
+  <ul>
+  <?php foreach ($this->linkedlos as $lo) :?>
+    <li>Learning objective <?php echo $lo['auto_id'] ?> - <?php echo $lo['lo']?></li>
+  <?php endforeach; ?>
+  </ul>
+  <?php endif; ?>
+  <br/>
+  <form method="post">
+    <p><input type="radio" name="sure" value="yes" /> Yes
+    <input type="radio" name="sure" value="no" checked="checked" /> No&nbsp;&nbsp;&nbsp;
+    <input type="submit" value="Submit" id="submit"/></p>
+  </form>
+</div>

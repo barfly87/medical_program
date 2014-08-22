@@ -1,0 +1,16 @@
+<script type="text/javascript">
+    jQuery.ajaxSetup({
+        beforeSend: function() {
+            $('#loader').show();
+        },
+        complete: function(){
+            $('#loader').hide();
+        },
+        success: function() {
+            $('#loader').hide();
+        }
+    });
+</script>
+<div id="loader" style="display:none;">
+    <img src="<?php echo Compass::baseUrl(); ?>/img/ajax-loader-big-round-dark.gif" /> 
+</div>

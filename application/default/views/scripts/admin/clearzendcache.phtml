@@ -1,0 +1,8 @@
+<?php if($this->result === true) :?>
+   <h3>Zend cache is successfully removed.</h3> 
+<?php else: ?>
+<div>
+    <span class="error">Could not remove zend cache.</span>
+    <span class="hide"><?php echo $this->result; ?></span>
+</div>    
+<?php endif;?>

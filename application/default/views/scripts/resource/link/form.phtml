@@ -1,0 +1,110 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	$('form#linkResources').submit(function() {
+		var value = jQuery.trim($('form#linkResources input[name="query"]').val());
+		if(value == '') {
+		    $('span#linkResourcesError').html('Please type in \'Search Text\' for your search and submit again.');
+		    return false;	
+	    }
+	    return true;
+	});
+	$('input[name="collectionIds[]"]').change(function() {
+	   if($(this).attr('checked') == true) {
+	       $(this).next('span').addClass('boldText');
+	   } else {
+	       $(this).next('span').removeClass('boldText');
+	   }
+	   if($(this).val() == "any") {
+	       $('input[name="collectionIds[]"]').each(function() {
+	           if($(this).val() != 'any') {
+	               $(this).attr('checked', false);
+	               $(this).next('span').removeClass('boldText');
+	           }
+	       });
+	   } else {
+           $('input[name="collectionIds[]"]').each(function() {
+               if($(this).val() == 'any') {
+                   $(this).attr('checked', false);
+                   $(this).next('span').removeClass('boldText');
+               }
+           });
+	   }
+	});
+});
+function resetLinkResourcesForm() {
+    $('form#linkResources').resetForm();
+    $('input[name="collectionIds[]"]').each(function() {
+       if($(this).val() == 'any') {
+           $(this).attr('checked', true);
+           $(this).next('span').addClass('boldText');
+       } else {
+           $(this).attr('checked', false);
+           $(this).next('span').removeClass('boldText');
+       }
+    });
+}
+</script>
+
+<form method="get" name="linkResources" id="linkResources" action="">
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+	<tbody>
+	    <tr>
+	       <td colspan="2">
+	           <span id="linkResourcesError" class="error"></span>
+	       </td>
+	    </tr>
+		<tr>
+			<td valign="top">Search Text: <span class="error">*</span></td>
+			<td>
+                <?php echo $this->formText('query',$this->query, array('size' => 50))?>
+                <?php
+                $qOptions = array('any' => 'Contains Any','all' => 'Contains All', 'exact' => 'Exact Phrase','lucene' => 'Lucene Syntax');
+                $qOption  = (!is_null($this->fp)) ? $this->fp->qoption : 'any';
+                echo $this->formSelect('qoption', $qOption ,array('style' => ''), $qOptions);
+                ?>
+                <img src="<?php echo $this->baseUrl;?>/img/icon_question.gif" class="helpimg" alt="Help" id="luceneHelp" onclick="window.open(BASE_URL + '/help/search', 'myobjectivewindow','resizable=1,scrollbars=1,menubar=1,toolbar=0,locationbar=0,left=0,top=0,width=780,height=658',false);"/>
+            </td>
+		</tr>
+		<?php if(!empty($this->data->mediabankCollections)) :?>
+        <tr>
+            <td valign="top">Collections:</td>
+            <td>
+                <p id="selectCheckBox" style="height:80px;">
+                    <?php foreach($this->data->mediabankCollections as $k => $mediabankCollection) :?>
+                        <?php
+                            $bold = '';
+                            $checked = ''; 
+                            if(!is_null($this->fp)) {
+                                if(in_array($mediabankCollection, $this->fp->collectionIds)) {
+                                    $checked = 'checked';
+                                    $bold = 'boldText';
+                                }
+                            } else if($mediabankCollection == 'any'){
+                                $checked = 'checked';
+                                $bold = 'boldText';
+                            }
+                        ?>
+                        <label>
+                        <input type="checkbox" name="collectionIds[]" id="collection_id_<?php echo $k; ?>" <?php echo $checked;?> value="<?php echo $mediabankCollection; ?>"/>
+                        <span class="<?php echo $bold;?>"><?php echo '&nbsp;&nbsp;' . $mediabankCollection; ?></span>
+                        </label>
+                        <br/>
+                    <?php endforeach;?>
+                </p>        
+            </td>
+        </tr>
+        <?php endif;?>
+		<tr>
+			<td colspan="2" valign="top">
+                <?php echo $this->formSubmit('submit','Search')?>
+                <input type="button" onclick="javascript:resetLinkResourcesForm();" value="Reset" id="reset" />
+                <?php if(!isset($this->tempResource)):?>
+                <input id="submit" type="button" value="Done adding resources" onclick="javascript:window.location ='<?php echo $this->data->typeReturnUrl;?>';"/>
+                <?php endif;?>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+</form>
+<br />

@@ -1,0 +1,53 @@
+<?php //FIND URL FUNCTIONALITY 
+$findLooseResourceUrl = $this->url(array('module'=>'default', 'controller'=>'resource', 'action'=>'findlooseresourceurl'), null, true);
+?>
+
+<script type="text/javascript">
+try {
+    var findLooseResourceUrl = '<?php echo $findLooseResourceUrl;?>';
+    $(document).ready(function() {
+        $('form#findUrl').submit(function() {
+            var urlContainerObj = $('#findUrlContainer #urlContainer');
+            urlContainerObj.hide();
+            
+            var midObj = $('form#findUrl #mid');
+            var mid = $.trim(midObj.val());
+          
+            if(mid.length > 0) {
+                var params = {'mid' : mid};
+                var url = findLooseResourceUrl;
+                $.post(url, params, function(data) {
+                    if(data == 'fail') {
+                        var findUrlError = '<span style = "font-size:110%;">Could not find URL for the given Mediabank ID.<br />Please check your Mediabank ID and try again.</span>';
+                        $.prompt(findUrlError,{buttons:{Ok:true}});
+                    } else {
+                        urlContainerObj.show();
+                        urlContainerObj.find('#urlTextArea').html(data);
+                    }
+                });
+            } else {
+                midObj.val(mid);
+                var midEmptyError = '<span style = "font-size:110%;">Please type in Mediabank ID and try again.</span>';
+                $.prompt(midEmptyError,{buttons:{Ok:true}});
+            }
+            return false;
+        });
+    });
+} catch(err) {
+    alert(err);
+}
+</script>
+<div class="subSectionContainer subSectionLooseResource hide" id="findUrlContainer">
+    <h3>Find URL for Loose Resource</h3>
+    <div class="error"></div>
+    <form id="findUrl" method="post" action="">
+        Please type in Mediabank ID<br />
+        e.g http://smp.sydney.edu.au/mediabank/|compassresources|3263</i><br />
+        <?php echo $this->formText('mid', '', array('size'=>60)); ?><br /><br />
+        <?php echo $this->formSubmit('find', 'FIND', array('id' => 'submit')); ?>
+    </form>
+    <div id="urlContainer" class="hide">
+        <h3>URL</h3>
+        <textarea id="urlTextArea" rows="3" cols="80"></textarea>
+    </div>
+</div>

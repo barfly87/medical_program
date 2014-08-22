@@ -1,0 +1,10 @@
+<div class="rhsbox">
+    <h3 class="rhsheading">Groups</h3>
+    <div class="mcontent">
+        <div>
+        	<?php foreach($this->groups as $groupname=>$url): ?>
+        		<a href="<?php echo $url; ?>"><?php echo $groupname; ?></a><br>
+        	<?php endforeach; ?>
+        </div>
+    </div>
+</div>

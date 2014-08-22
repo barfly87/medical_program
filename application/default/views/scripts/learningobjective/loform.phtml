@@ -1,0 +1,160 @@
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="<?php echo $this->baseUrl;?>/js/ajax.js" type="text/javascript"></script>
+<?php include('../application/common/views/_ckeditorJsAndCss.phtml');?>
+<?php include_once('../application/common/views/_listOfDisciplinesJsAndCss.phtml'); ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        listOfDisciplines(new Array('discipline1','discipline2','discipline3'));
+        $("#usefirstline").click(function() {
+        	if (this.checked) {
+        		$("#activity").removeAttr('disabled');
+        		$("#ability").removeAttr('disabled');
+        	} else {
+        		$("#activity").attr('disabled', 'disabled');
+        		$("#ability").attr('disabled', 'disabled');
+        	}
+    	});
+    	<?php
+        	if (isset($this->checked) && $this->checked == false) {
+        ?>
+        	$("#activity").attr('disabled', 'disabled');
+        	$("#ability").attr('disabled', 'disabled');
+        <?php 
+        	}
+        ?>
+    });
+    function remove(nodeid) {
+        $('#' + nodeid).remove();
+    }
+</script>
+<?php include_once('_curriculumAreasJS.phtml'); ?>
+
+<div style="float:left;">
+<p><label class="required"></label> = Required<p>
+<h2>
+<?php if ($this->useraction == 'edit'):?>Edit<?php else: ?>Enter<?php endif;?> learning objective detail:
+<?php if(isset($this->lo_auto_id)):?>
+    <b><a href="<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view')); ?>">
+    <?php echo $this->lo_auto_id;?>
+    </a></b>
+<?php endif;?>
+</h2>
+<form name="loform" method="post" action="">
+<table>
+  <tr>
+    <td width="180"><label class="required">Main Discipline</label></td>
+    <td width="700" nowrap="nowrap">
+        <?php echo $this->formSelect('discipline1', $this->discipline1,  array('style '=> ''), $this->disciplines) ?>
+        &nbsp;Curriculum Area&nbsp;&nbsp;<?php echo $this->formSelect('curriculumarea1','', array('style' => ''), array(''=>'Any')); ?>
+    </td>
+  </tr>
+  <tr>
+    <td>Additional Discipline</td>
+    <td nowrap="nowrap">
+        <?php echo $this->formSelect('discipline2', $this->discipline2,  array('style '=> ''), $this->disciplines) ?>
+        &nbsp;Curriculum Area&nbsp;&nbsp;<?php echo $this->formSelect('curriculumarea2', '', array('style' => ''), array(''=>'Any')); ?>        
+    </td>
+  </tr>
+  <tr>
+    <td>Additional Discipline</td>
+    <td nowrap="nowrap">
+        <?php echo $this->formSelect('discipline3', $this->discipline3,  array('style '=> ''), $this->disciplines) ?>
+        &nbsp;Curriculum Area&nbsp;&nbsp;<?php echo $this->formSelect('curriculumarea3', '', array('style' => ''), array(''=>'Any')); ?>    
+    </td>
+  </tr>
+  <tr>
+    <td><label class="required"><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></label></td>
+    <td><?php echo $this->formSelect('theme1', $this->theme1, null, $this->themes) ?></td>
+  </tr>
+  <tr>
+    <td>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></td>
+    <td><?php echo $this->formSelect('theme2', $this->theme2, null, $this->themes) ?></td>
+  </tr>
+      <tr>
+    <td>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></td>
+    <td><?php echo $this->formSelect('theme3', $this->theme3, null, $this->themes) ?></td>
+  </tr>
+  <tr>
+    <td>Clinical Skills</td>
+    <td><?php echo $this->formSelect('skill', $this->skill, null, $this->skills) ?></td>
+  </tr>
+  <tr>
+    <td><label class="required">System</label></td>
+    <td><?php echo $this->formSelect('system', $this->system, null, $this->systems) ?></td>
+  </tr>
+  <tr>
+    <td valign="top"><label class="required">Learning Objective</label></td>
+    <td><input type="checkbox" id="usefirstline" <?php echo (isset($this->checked) && $this->checked == false) ? '' : 'checked="checked"'; ?>/>
+    At the end of <?php echo $this->formSelect('activity', $this->activity, null, $this->activities) ?>, students should be able to
+    <?php echo $this->formSelect('ability', $this->ability, null, $this->abilities) ?><br />
+    <?php echo $this->formTextarea('lo', $this->lo, array('cols'=>70, 'rows'=>6, 'class' => 'ckeditor')) ?></td>
+  </tr>
+  <tr>
+    <td valign="top">Curriculum Review</td>
+    <td><?php echo $this->formMultiCheckbox('review', $this->review, null, $this->reviews, ' ') ?></td>
+  </tr>
+  <tr>
+    <td valign="top">Keywords</td>
+    <td>
+      Keywords are important as they enable searching for related content in the curriculum.<br />
+Please use the <input id="submit" type="button" value="MeSH Crawler" onclick="javascript:crawlerPopup();"/>&nbsp;or&nbsp;&nbsp;<input type="button" id="submit" value="MeSH browser" onclick="javascript:meshPopup();"/> to select as many as apply: <br />
+      <ul id="keywordslist">
+      <?php
+        $keywords_arr = explode('|', $this->keywords);
+        foreach ($keywords_arr as $k => $v) {
+        	if (trim($v) !== '') {
+      ?>
+          <li id="keyword_<?php echo $k?>"><input type="hidden" name="keywords[]" value="<?php echo $v?>"><?php echo $v?>
+          <a style="padding-left:10px" href="javascript:remove('keyword_<?php echo $k?>')"><img src="<?php echo $this->baseUrl;?>/img/delete.gif" border="0"></a></li>
+      <?php }
+        }
+      ?>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><label class="required">Assessment&nbsp;Methods</label></td>
+    <td><?php echo $this->formMultiCheckbox('assesstype', $this->assesstype, null, $this->assesstypes, ' ') ?></td>
+  </tr>
+  <tr>
+  <td>Level&nbsp;of&nbsp;Achievement</td>
+    <td><?php echo $this->formSelect('achievement', $this->achievement, null, $this->achievements) ?></td>
+  </tr>  
+  <tr>
+    <td valign="top">JMO</td>
+    <td><?php echo $this->formSelect('jmo', $this->jmo, null, $this->jmos) ?></td>
+  </tr>
+  <tr>
+    <td valign="top">Graduate Attribute</td>
+    <td><?php echo $this->formSelect('gradattrib', $this->gradattrib, null, $this->gradAttribs) ?></td>
+  </tr>
+  <tr>
+    <td valign="top">Notes</td>
+    <td><?php echo $this->formTextarea('notes', $this->notes, array('cols'=>70, 'rows'=>2)) ?></td>
+  </tr>
+  <tr>
+  <?php if (count($this->linked_tas_old_arr) > 0): ?>
+  <tr>
+    <td colspan="2">
+    <h3>Please select the teaching activity(ies) this learning objective should link to:</h3><p>
+    <?php $taFinder = new TeachingActivities();?>
+    <?php foreach ($this->linked_tas_old_arr as $taid) : ?>
+      <?php $checked = (array_search($taid, $this->linked_tas_new_arr) !== false) ? 'checked="checked"' : '' ?>
+      <label><input type="checkbox" name="linkedta[]" <?php echo $checked ?> value="<?php echo $taid ?>" />
+      Teaching activity <?php echo $taid ?>: <?php echo $this->escape($taFinder->fetchRow("auto_id=$taid")->name)?></label><br/>
+    <?php endforeach; ?>
+    </p>
+    </td>
+  </tr>
+  <?php endif; ?>
+  <tr>
+    <td>&nbsp;</td>
+    <td><?php echo $this->formSubmit('submit', 'Submit Learning Objective', array('style'=>'margin-top: 10px', 'accesskey'=>'S')) ?>&nbsp;&nbsp;
+    <?php if(isset($this->lo_auto_id)):?>
+    <input id="submit" type="button" onclick="javascript:window.location ='<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view')); ?>';" value="Cancel">          
+    <?php endif;?>
+    </td>
+  </tr>
+</table>
+</div>
+</form>

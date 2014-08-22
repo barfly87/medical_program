@@ -1,0 +1,174 @@
+<link href="<?php echo $this->baseUrl;?>/css/help/search.css" media="all" type="text/css" rel="stylesheet">
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="all" type="text/css" rel="stylesheet">
+
+<div id="luceneHelp">
+    <div class="heading">Overview</div>
+    <div class="text">
+        You can do complex search by creating your own queries and entering them in the <span class="italics bold">'Search Text'</span> field and get very 
+        specific results as per your needs. You need to make sure that you select <span class="italics bold">'Lucene Syntax'</span> from the drop down next to 'Search Text'
+        before you start making complex search query.   
+    </div>
+
+    <div class="heading">Terms</div>
+    <div class="text">
+        You can look for exact terms by placing it in double quotes.<br />
+        <span class="italics bold">Single Term: </span>You can look for single terms like <span class="italics">"Anaesthesia"</span>  or <span class="italics">"blood"</span>.<br />
+        <span class="italics bold">Phrase: </span>You can look for a exact phrase like <span class="italics">"amino acids"</span> if you are looking for something 
+        like "proteins and amino acids ...".<br />
+        <span class="italics bold">Subquery: </span>A Subquery is a query surrounded by parentheses such as <span class="italics">(hello dolly)</span>. Usage explained below.<br />
+        Multiple terms can be combined together with boolean operators to form complex queries (see below).<br />
+    </div>
+
+    <div class="heading">Fields</div>
+    <div class="text">
+    When performing a search you can specify a field name. Field names are not the column names. So if you are 
+    looking to search for a particular column you would need to get the field name from the below mapping and do the 
+    search as stated below.<br />
+    <?php if(isset($this->mappings) && !empty($this->mappings) ) :?>
+        <?php if(isset($this->mappings['lo'])):?>
+        <span class="bold"><br />Learning Objective Mapping:</span>
+        <table class="tableNoSorter">
+            <tr><th>Field Name</th><th>Column Name</th></tr>
+            <?php foreach($this->mappings['lo'] as $luceneIndex => $columnName ): ?>
+            <tr><td><?php echo $luceneIndex; ?></td><td><?php echo $columnName;?></td></tr>
+            <?php endforeach;?>
+        </table> 
+        <?php endif;?>
+        <?php if(isset($this->mappings['ta'])):?>
+        <span class="bold"><br />Teaching Activity Mapping:</span>
+        <table class="tableNoSorter">
+            <tr><th>Field Name</th><th>Column Name</th></tr>
+            <?php foreach($this->mappings['ta'] as $luceneIndex => $columnName ): ?>
+            <tr><td><?php echo $luceneIndex; ?></td><td><?php echo $columnName;?></td></tr>
+            <?php endforeach;?>
+        </table>
+        <br /> 
+        <?php endif;?>
+        As an example you can search for particular theme and discipline name by querying<br />
+        <span class="italics">lo_theme:"Basic and Clinical Sciences" AND lo_discipline_names:"Anatomy"</span><br />
+        Or<br />
+        look for just theme by querying<br />
+        <span class="italics">lo_theme:"Basic and Clinical Sciences"</span><br />
+    <?php else :?>
+        <span style="color: red;">Error getting the mapping between the column names to field names.</span>
+    <?php endif;?>
+    </div>
+    
+    <div class="heading">Wildcards</div>
+    <div class="text">
+        Current search supports single and multiple character wildcard searches within single terms (but not within phrase queries).<br /><br />
+        To perform a single character wildcard search use the "?" symbol.<br />
+        To perform a multiple character wildcard search use the "*" symbol.<br /><br />
+        
+        The single character wildcard search looks for string that match the term with the "?" replaced by any single character.<br /> 
+        For example, to search for "text" or "test" you can use the search:<br /><span class="italics">te?t</span><br /><br />
+
+        Multiple character wildcard searches look for 0 or more characters when matching strings against terms.<br /> 
+        For example, to search for test, tests or tester, you can use the search:<br /><span class="italics">test*</span><br /><br />
+        You can use "?", "*" or both at any place of the term:<br /><span class="italics">*wr?t*</span><br />
+        It searches for "write", "wrote", "written", "rewrite", "rewrote" and so on.<br />     
+    </div>
+    
+    <div class="heading">Range Searches</div>
+    <div class="text">
+        Range queries allow the user to match documents whose field(s) values are between the lower and upper bound specified by the range query.<br />
+        Range Queries can be inclusive or exclusive of the upper and lower bounds. Sorting is performed lexicographically.<br />
+        This below search would find documents whose lo_theme fields have values between Patient and Population, inclusive.<br />
+        <span class="italics">lo_theme: [Patient TO Population]</span><br />
+        This below search will find all documents whose title fields would be sorted between Aida and Carmen, but not including Aida and Carmen. <br />
+        <span class="italics">title: {Aida TO Carmen}</span><br />
+        Inclusive range queries are denoted by square brackets. Exclusive range queries are denoted by curly brackets. <br /><br />
+        Please use single word on either end without any quotes to make the search possible. <br />
+        This would be <span class="italics">Incorrect</span>: title: {"Blood Vessels" TO Heart} / title: {"Blood" TO Heart}<br />
+    </div>
+    
+    <div class="heading">Fuzzy Searches</div>
+    <div class="text">
+        Current search supports fuzzy searches based on the Levenshtein Distance, or Edit Distance algorithm.<br /> 
+        To do a fuzzy search use the tilde, "~", symbol at the end of a Single word Term. <br />
+        For example to search for a term similar in spelling to "roam" use the fuzzy search:<br />
+        <span class="italics">roam~</span><br />
+        This search will find terms like foam,roam and roams.<br /><br />
+        Additional (optional) parameter can specify the required similarity.<br />
+        The value is between 0 and 1, with a value closer to 1 only terms with a higher similarity will be matched. For example:<br />
+        <span class="italics">roam~0.8</span><br />
+        The default that is used if the parameter is not given is 0.5.<br />
+    </div>
+  
+    <div class="heading">Proximity Searches</div>
+    <div class="text">
+        Current search supports finding words from a phrase that are within a specified word distance in a string.<br /> 
+        To do a proximity search use the tilde, "~", symbol at the end of the phrase. <br />
+        For example to search for a "Blood" and "Vessels" within 10 words of each other in a document use the search:<br />
+        <span class="italics">"Blood Vessels"~10</span><br />
+    </div>
+ 
+    <div class="heading">Boosting a Term</div>
+    <div class="text">
+        Current search supports to provide the relevance level of matching documents based on the terms found.<br />
+        To boost the relevance of a term use the caret, "^", symbol with a boost factor (a number) at the end of the term you are searching.<br />
+        The higher the boost factor, the more relevant the term will be.<br />
+        Boosting allows you to control the relevance of a document by boosting individual terms.<br />
+        For example, if you are searching for "Blood Vessels"<br />
+        and you want the term "Blood" to be more relevant boost it using the ^ symbol along with the boost factor next to the term. You would type:<br />
+        <span class="italics">Blood^4 Vessels</span><br />
+        This will make documents with the term 'Blood' appear more relevant. You can also boost phrase terms and subqueries as in the example:<br />
+        <span class="italics">"Heart"^4 "Blood Vessels"</span><br />
+        By default, the boost factor is 1. Although the boost factor must be positive, it may be less than 1 (e.g. 0.2).<br /> 
+    </div>
+    
+    <div class="heading">Boolean Operators</div>
+    <div class="text">
+        <span class="italics bold">AND</span><br />
+        The AND operator means that all terms in the "AND group" must match some part of the searched field(s).<br />
+        To search for documents that contain "Blood Vessels" and "Heart" use the query:<br />
+        <span class="italics">"Blood Vessels" AND "Heart"</span><br /><br />
+        
+        <span class="italics bold">OR</span><br />
+        The OR operator divides the query into several optional terms.<br />
+        To search for documents that contain "Blood Vessels" or "Heart" use the query:<br />
+        <span class="italics">"Blood Vessels" OR "Heart"</span><br /><br />
+
+        
+        <span class="italics bold">NOT</span><br />
+        The NOT operator excludes documents that contain the term after NOT. <br />
+        But an "AND group" which contains only terms with the NOT operator gives an empty result set instead of a full set of indexed documents.<br />
+        To search for documents that contain "Blood Vessels" but not "Heart" use the query:<br />
+        <span class="italics">"Blood Vessels" AND NOT "Heart"</span><br /><br />
+       
+        <span class="italics bold signs">+</span><br />
+        To search for documents that must contain "Blood" and may contain "Vessels" use the query:<br />
+        <span class="italics">+Blood Vessels</span><br /><br />
+        
+        <span class="italics bold signs">-</span><br />
+        The "-" or prohibit operator excludes documents that match the term after the "-" symbol.<br />
+        To search for documents that contain "Blood Vessels" but not "Heart" use the query:<br />
+        <span class="italics">"Blood Vessels" -"Heart"</span><br />            
+    </div>
+
+    <div class="heading">Grouping</div>
+    <div class="text">
+        Current search supports using parentheses to group clauses to form sub queries. <br />
+        This can be useful if you want to control the precedence of boolean logic operators for a query or mix different boolean query styles:<br />
+        <span class="italics">+(Blood OR Vessels) +Heart</span><br />
+    </div>
+ 
+    <div class="heading">Field Grouping</div>
+    <div class="text">
+        Current search supports using parentheses to group multiple clauses to a single field.<br />
+        To search for a lo_title that contains both the word "Heart" and the phrase "Blood Vessels" use the query:<br />
+        <span class="italics">lo_title:(+"Heart" +"Blood Vessels")</span><br />
+    </div>
+    
+    <div class="heading">Escaping Special Characters</div>
+    <div class="text">
+        Current search supports escaping special characters that are used in query syntax. The current list of special characters is:<br />
+        + - && || ! ( ) { } [ ] ^ " ~ * ? : \<br />
+        + and - inside single terms are automatically treated as common characters.<br />
+        For other instances of these characters use the \ before each special character you'd like to escape.<br />
+        For example to search for (1+1):2 use the query:<br />
+        <span class="italics">\(1\+1\)\:2</span><br />
+    </div>
+    
+</div>
+

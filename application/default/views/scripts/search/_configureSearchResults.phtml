@@ -1,0 +1,37 @@
+<link href="<?php echo $this->baseUrl;?>/css/tableNoSort.css" media="screen" rel="stylesheet" type="text/css" />
+<?php include_once('_configureSearchResultsJs.phtml') ;?>
+<div id="hiddenModalContent" style="display:none">
+    <form method="post" name="customSearchForm" action="<?php echo $this->url(array('module'=>'default','controller'=>'search', 'action'=>'configuresearch'),null,true); ?>">
+        <table style="font-weight:bold;color:#2F1D03;" align="center" width="100%">
+            <?php foreach($this->searchConfigure as $key => $value) :?>
+                <tr><td colspan="6" style="color:#FF4F4F;"><?php echo $value['heading'] ?></td></tr>
+                <tr>
+                    <?php $count = 1;?>
+                    <?php foreach($value['checkBoxes'] as $id => $displayName): ?>
+                        <?php if($count != 1 && $count%3 == 1):?>
+                        </tr><tr>                                   
+                        <?php endif;?>                            
+                        <td><input type="checkbox" id="column_<?php echo $id?>" name="configureSearchColumns[]" value="<?php echo $id?>"/></td>
+                        <td style="padding:1px; white-space: nowrap;">
+                            <label for="column_<?php echo $id?>"><?php echo $displayName?>&nbsp;&nbsp;</label>
+                        </td>
+                        <?php $count++;?>                            
+                    <?php endforeach;?>
+                </tr>
+            <?php endforeach;?>
+           <tr>
+                <td align="center" colspan="6">
+                    <input type="hidden" value="<?php echo $this->userId?>" id="configureSearchUserId" name="configureSearchUserId" />
+                    <input type="hidden" value="" id="configureSearchType" name="configureSearchType" />
+                    <input type="hidden" value="<?php echo $this->url?>" name="url" />
+                    <input type="hidden" value="<?php echo $this->encryptedUrl?>" name="q" />
+                    <input type="hidden" value="<?php echo $cookieName?>" name="cookieSearchPage" />
+                    <input type="button" id="TB_Reset" class="TB_button" name="reset" value="Reset" /> 
+                    <input type="button" id="TB_defaultSearch" class="TB_button" name="defaultSearch" value="Use System Defaults" />
+                    <input type="button" id="TB_configuredSearch" class="TB_button" name="configuredSearch" value="Use My Defaults" />
+                    <input type="submit" id="TB_configuredSearchSubmit" class="TB_button" name="submit" value="Save" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

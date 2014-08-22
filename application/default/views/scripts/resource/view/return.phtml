@@ -1,0 +1,10 @@
+<?php if(isset($_SERVER['HTTP_REFERER']) && !stristr($_SERVER['HTTP_REFERER'],'submission')):?>
+    <?php if($this->id > 0 && (!isset($this->tempResource) || $this->tempResource != true)) :?>
+    	<?php $hrefText = 'Return';?>
+        <?php $href =  $this->url(array('module'=>'default','controller'=> $this->typeController, 'action'=>'view','id'=>$this->id),null,true); ?>
+    <?php else :?>
+        <?php $hrefText = 'Go Back to Search';?>
+    	<?php $href='javascript:history.go(-1)';?>
+    <?php endif;?>
+	<p><b><a href="<?php echo $href;?>"><?php echo $hrefText;?></a></b></p>
+<?php endif;?>

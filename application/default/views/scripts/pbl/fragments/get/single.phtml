@@ -1,0 +1,25 @@
+<div class="pblSingleElem">
+    <?php if(isset($this->resourceData['title']) && !empty($this->resourceData['title'])) :?>
+        <p class="pblElemHeading"><?php echo $this->resourceData['title']; ?></p>
+    <?php endif;?>
+    <?php if(isset($this->resourceData['mid']) && !empty($this->resourceData['mid']) ) :?>
+        <?php
+            $fileNameArr = array();
+            switch($this->zendController) {
+                case PblBlockConst::$pbl:
+                    $fileNameArr[] = 'Pbl '.str_replace('.','_',$this->pblOrBlockRef);
+                break;
+                case PblBlockConst::$block:
+                    $fileNameArr[] = 'Block';
+                break;    
+            }
+            $fileNameArr[] = preg_replace('/[^0-9A-Za-z_-]/',' ',$this->pblOrBlockName);
+            if(isset($this->resourceData) && isset($this->resourceData['title'])) {
+                $fileNameArr[] = preg_replace('/[^0-9A-Za-z_-]/',' ',str_replace('::','-',$this->resourceData['title'])); 
+            }
+        ?>
+        <?php echo $this->action('pblblock','resource','default',array('mid' => $this->resourceData['mid'],'pblblockfn' => implode(' - ',$fileNameArr)));?>
+    <?php else:?>
+        <span class="red">Resource could not be found</span>        
+    <?php endif;?>
+</div>

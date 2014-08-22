@@ -1,0 +1,168 @@
+<?php include('../application/common/views/_jquery142UI.phtml');?>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#selectAllResources').click(function() {
+        checkUncheckResourceCheckboxes(true);
+    });
+    $('#unselectAllResources').click(function() {
+        checkUncheckResourceCheckboxes(false);
+    });
+    $('#unlinkResources').click(function() {
+        return processUnlinkResources();
+    });
+});
+function checkUncheckResourceCheckboxes(trueOrFalse) {
+    $('.resourceIdCheckbox').each(function() { 
+        $(this).attr('checked',trueOrFalse);               
+    });
+}
+
+var liIds               = new Array();
+var resourcesUnlinkUrl  = new Array();
+var titles              = new Array();
+var resourceCount       = new Array();
+
+function processUnlinkResources() {
+	_createResourceInfo();
+	
+    if(resourceCount == 0) {
+        //If no resources are selected for unlinking display the msg and return.
+        _noResourceToUnlinkMsg();
+        return false;
+    }
+    
+    //Loop through the titles and confirm with the user to unlink them.
+	var confirmMsg = _createConfirmationMsg();
+    $.prompt(confirmMsg, {
+        buttons:{Unlink:true, Cancel:false} ,
+        callback: function(v,m,f) {
+            //'v' is value of the button clicked. Like true if 'Unlink' clicked and false if 'Cancel' got clicked.
+            if(v) { 
+                //unlinkResources 
+                var error = _unlinkResources();
+                if(error == false) { //No Error was found
+                    $.prompt('<span style="font-size:110%;">Successfully Unlinked Resources.</span>', {
+                    	opacity : 0.7,
+                    	timeout : 3000,//close after 3 seconds
+                    	overlayspeed : 'fast',
+                    	buttons : {OK:true}
+                    });
+                } else {
+                    $.prompt(error, {
+                        buttons:{OK:true}
+                    });
+                }
+            }
+        }
+    });
+}
+function repairResource(repairUrl) {
+    $.ajax({
+        url: repairUrl,
+        async: false,
+        type: "GET",
+        success: function(data) {
+            $.prompt(data, {
+                timeout : 2000,//close after 2 seconds
+                buttons:{OK:true}
+            });
+        }
+    });     
+}
+
+<?php 
+/**
+ * Loop through resources which are checked for unlinking.
+ * Unique id is spread across various elements of a resource
+ * Namely.. li-handbook-1, input-handbook-1 which has handbook-1 as common unique id
+ * 
+ * Using input id we can find out li id and store it in liIds which would be later
+ * used for removing li's from HTML DOM
+ * 
+ * input element has two sibling
+ * 1) hrefSibling : First one is <a href> with class hrefSibling.
+ *    This element contains title of the resource and would be used to 
+ *    populate 'titles' array. 
+ * 2) resourceUnlinkUrlSibling : Second sibling is a hidden span element
+ *    which contains the url for deleting this resource and would be used
+ *    to populate 'resourcesUnlinkUrl' and later used for AJAX calls. 
+ */
+?>
+function _createResourceInfo() {
+    var count = 0;
+    var inputId = null;
+    $('.resourceIdCheckbox').each(function() {
+        if($(this).attr('checked') == true) {
+            inputId                    = $(this).attr('id');
+            titles[count]              = jQuery.trim($(this).siblings('.hrefSibling').html());
+            liIds[count]               = 'li-' + inputId.replace('input-','');
+            resourcesUnlinkUrl[count]  = jQuery.trim($(this).siblings('.resourceUnlinkUrlSibling').html());
+            count++;
+        }
+    });
+    resourceCount = count;
+}
+
+function _noResourceToUnlinkMsg() {
+    $.prompt('<span style="font-size:110%;color:#306FDF;">Please select resource(s) to unlink and try again !  </span>', {
+        buttons:{OK:true}
+    });
+}
+
+function _createConfirmationMsg() {
+    var confirmMsg = '<ol>';
+    var resourceTxt = (resourceCount > 1) ? 'resources' : 'resource';
+    confirmMsg = '<span style="font-size:110%;color:#306FDF;">Are you sure you want to unlink ' 
+                  + resourceCount + ' ' + resourceTxt + '.</span><br />' + confirmMsg;
+    for(var i=0; i<resourceCount; i++) {
+        confirmMsg += '<li>' + titles[i] + '</li>';
+    }
+    confirmMsg += '</ol>';
+    return confirmMsg;
+}
+
+<?php 
+/**
+ * Loop through resourcesUnlinkUrl and post each unlink url.
+ * On success remove the li from the HTML DOM
+ * On fail add the titles to be displayed back to user as an error.
+ */
+?>
+function _unlinkResources() {
+    var titlesTxt = '';
+    for(var i=0; i<resourceCount; i++) {
+        $.ajax({
+            url: resourcesUnlinkUrl[i],
+            async: false,
+            type: "POST",
+            success: function(data) {
+                if(data == 'success') {
+                	_removeLiFromDom(liIds[i]);
+                } else {
+                	titlesTxt += '<li>' + titles[i] + '</li>';
+                }
+            }
+        });     
+    }
+    if(titlesTxt.length > 0) {
+        return '<span class="red" style="font-size:110%">Error ! Could not unlink below resources.</span><br /><ol>' + titlesTxt + '</ol>'; 
+    }
+    return false;
+}
+
+function _removeLiFromDom(liId) {
+    var liIdObj         = $('#' + liId);
+    var parentObj       = liIdObj.parent();
+    var numOfResources  = parentObj.children().length;
+    
+    //If the number of resources attached to this resource type is 1 then the html should say
+    //'None Found'
+    if(numOfResources == 1) {
+        parentObj.html('<li class="resourceLiEmpty">None Found</li>');
+        parentObj.attr('style','padding-left:0px');
+    } else {
+        liIdObj.remove();
+    }
+}
+
+</script>

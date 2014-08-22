@@ -1,0 +1,53 @@
+#adminEvaluation, #adminEvaluation a {
+    color: #2F1D03;
+}
+#adminEvaluation a:hover {
+    color:#9F8F77;
+}
+#adminEvaluation ul {
+    width: 600px;
+}
+
+#adminEvaluation .headings {
+    font-weight: bold;
+    font-size: 85%;
+    font-style: italic;
+}
+.evaluateCheckBox {
+    border: 1px solid #2F1D03; 
+    background: #FFF1DF none repeat scroll 0%; 
+    overflow: auto; 
+    width:100px; 
+    height: 80px; 
+    -moz-background-clip: -moz-initial; 
+    -moz-background-origin: -moz-initial; 
+    -moz-background-inline-policy: -moz-initial; 
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 2px;
+}
+
+#year.searchContainers,
+#pbl.searchContainers,
+#block.searchContainers,
+#type.searchContainers {
+	float:left;
+	margin-right: 20px;
+}
+#year.searchContainers .evaluateCheckBox{
+    width:80px;
+}
+#block.searchContainers .evaluateCheckBox{
+    width:375px;
+}
+#pbl.searchContainers .evaluateCheckBox{
+    width:260px;
+}
+#type.searchContainers .evaluateCheckBox{
+    width:220px;
+}
+
+#evaluationContainer, #evaluateSubmitContainer {
+    clear: both;
+    padding-top: 15px;
+}

@@ -1,0 +1,40 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<link
+	href="<?php echo Compass::baseUrl();?>/css/table.css" media="screen"
+	rel="stylesheet" type="text/css" />
+
+<div style="float: left; max-width: 750px">
+<h2><?php echo $this->page;?></h2>
+<table id="teachingstafftable" class="tableSorter">
+	<thead>
+		<tr>
+			<th>Staff</th>
+			<th>Role</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php
+	$rowcount=0;
+	$laststafftype="Herpyderpderp";
+	foreach($this->staff as $staffperson):
+		if($staffperson['stafftype']!=$laststafftype) {
+			$laststafftype = $staffperson['stafftype'];
+			?>
+					<tr class="subheadrow">
+						<td colspan="2"><?php echo $staffperson['stafftype']; ?></td>
+					</tr>
+			
+			<?php 
+		}
+		$rowcount++;  ?>
+		
+		<tr class="<?php echo($rowcount%2?'even':'odd');?>">
+			<td><?php echo Compass::userInfoHtmlOnly($staffperson['uid']); ?></td>
+			<td><?php echo $staffperson['description'];?></td>
+		</tr>
+
+		<?php endforeach;?>
+	</tbody>
+</table>
+</div>

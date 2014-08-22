@@ -1,0 +1,22 @@
+<div id="tacontainer">
+  <div id="tatop">
+    <?php echo $this->render('teachingactivity/view/_taHeading.phtml')?>
+  </div>
+  
+  <div id="tametadata">
+    <?php echo $this->render('teachingactivity/view/_metadatablockhandbook.phtml')?>
+    <?php if (UserAcl::isStaffOrAbove()) echo $this->render('teachingactivity/view/_edithistory.phtml')?>
+  </div>
+  
+  <div id="tacontent">
+    <?php echo $this->render('teachingactivity/view/_principalteacher.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_prologue.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_learningobjectivesblockhandbook.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_contentblockhandbook.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_lecturerecordingsblockhandbook.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_resourcesblockhandbook.phtml')?>
+    <?php echo $this->render('teachingactivity/view/_references.phtml')?>
+  </div>
+  <div id="tapadding"></div>
+</div>
+

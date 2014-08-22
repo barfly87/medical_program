@@ -1,0 +1,98 @@
+<style type="text/css">
+table.taEvaluationAvgTable {
+    border-collapse:collapse;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+table.taEvaluationAvgTable td, table.taEvaluationAvgTable th {
+    text-align:center;
+    padding:4px 6px;
+}
+table.taEvaluationAvgTable th {
+    color:#2F1D03;
+    font-size:90%;
+    text-decoration:underline;
+}
+#feedbackContainer .feedback-ta-autoid {
+    font-weight:bold;
+    color:#2F1D03;
+    font-size:90%;
+}
+#feedbackContainer .li-feedback-ta-autoid {
+    list-style-image: none;
+    list-style-type:none;
+    padding-top: 10px;
+    padding-bottom:5px;
+}
+#feedbackContainer .li-feedback-info {
+    padding-bottom: 6px;
+}
+#feedbackContainer .feedback-info {
+    background-color: #FFF1DF;
+}
+</style>
+
+<div id="evaluation" class="rhsbox">
+	<h3 class="rhsheading">Feedback</h3>
+    <div id="feedbackContainer" class="mcontent">
+        <?php if($this->showGenericEvaluation === true):?>
+            <?php echo $this->action('index','evaluate','default',array('type'=>'ta', 'type_id'=> $this->ta->auto_id));?>
+            <?php if(UserAcl::isAdmin()) :?>
+                <?php if(!empty($this->taEvaluationAvg) && isset($this->taEvaluationAvg['years']) && !empty($this->taEvaluationAvg['years'])) :?>
+                    <table class="taEvaluationAvgTable">
+                        <tr>
+                            <th>Year&nbsp;</th>
+                            <th>Avg Rating</th>
+                            <th>No of Responses</th>
+                        </tr>
+                        <?php foreach($this->taEvaluationAvg['years'] as $year => $data) :?>
+                        <tr>
+                            <td><?php echo $year;?></td>
+                            <td><?php echo $data['ratingAvg'].'/5.0';?></td>
+                            <td><?php echo $data['noOfResponses'];?></td>
+                        </tr>
+                        <?php endforeach;?>   
+                    </table>         
+                <?php endif;?>
+                    <span class="responses">Responses</span>
+                    <?php if(isset($this->taEvaluations) && !empty($this->taEvaluations)): ?>
+                        <ul class="listSquare">
+                        <?php $currentTaAutoId = null;?>
+                        <?php foreach($this->taEvaluations as $evaluation): ?>
+                        	<?php if($currentTaAutoId != $evaluation['type_id']):?>
+                        	<li class="li-feedback-ta-autoid" style="list-style-image: none;list-style-type:none;">
+                        		<span class="feedback-ta-autoid">TA ID : <?php echo $evaluation['type_id'];?></span>
+                        		<?php $currentTaAutoId = $evaluation['type_id'];?>
+                        	</li>
+                        	<?php endif;?>
+                            <li class="li-feedback-info">
+                            	<div class="feedback-info">
+                                <span class="italicText"><?php print date('d/m/Y', $evaluation['epoch']); ?></span>
+                                <?php if(!empty($evaluation['tutors'])) :?>
+                                	&nbsp;-&nbsp;<?php print $evaluation['tutors'];?>
+                                <?php endif;?>
+                                <?php if(!empty($evaluation['rating'])) :?>
+                                	&nbsp;-&nbsp;Rating: <?php print $evaluation['rating']; ?>
+                                <?php endif;?>
+                                </div>
+                                <?php if(!empty($evaluation['comment'])) :?>
+                                	<?php print $evaluation['comment']; ?>
+                                <?php endif;?>
+                            </li>
+                        <?php endforeach;?>
+                        </ul>
+                    <?php else:?>
+                        <br />&nbsp;&nbsp;&nbsp;None            
+                    <?php endif;?>
+            <?php endif;?>  
+        <?php else:?>     
+            <?php $taEvaluationUrl = $this->url( array( 'module'=>'default', 'controller'=>'evaluate', 'action'=>'ta','ta_id'=>$this->ta->auto_id), null, true);?>
+            <a href="<?php echo $taEvaluationUrl; ?>" target="_blank">Evaluate <?php echo $this->ta->type;?></a><br />
+            
+            <?php if(UserAcl::isAdmin()) :?>
+                <?php $evaluationDataUrl = $this->url( array( 'module'=>'default', 'controller'=>'evaluate', 'action'=>'taresponses' ,'ta_id' => $this->ta->auto_id), null, true);?>
+                <a href="<?php echo $evaluationDataUrl?>">Responses</a>
+            <?php endif;?>
+        <?php endif;?>
+    </div>
+</div>

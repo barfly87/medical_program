@@ -1,0 +1,9 @@
+<?php if($this->result === true) :?>
+   <br />
+   <h3>Lectopia cache is successfully removed.</h3> 
+<?php else: ?>
+<div>
+    <span class="error">Could not remove lectopia cache.</span>
+    <span class="hide"><?php echo $this->result; ?></span>
+</div>    
+<?php endif;?>

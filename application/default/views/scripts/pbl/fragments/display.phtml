@@ -1,0 +1,38 @@
+<?php 
+$urlParams = array();
+$urlParams['module']     = $this->zendModule;
+$urlParams['controller'] = $this->zendController;
+$urlParams['action']     = $this->zendAction;
+$urlParams['type']       = $this->req['type'];
+if(isset($this->req['activityTypeId'])) {
+    $urlParams['activitytypeid'] = $this->req['activityTypeId'];
+}
+
+$taUrlFormat = $this->url($urlParams, null,true).'/typeid/%d/ref/'.$this->pblOrBlockRef;
+$urlParams['ref'] = $this->pblOrBlockRef;
+$taUrl = $this->url($urlParams, null,true);
+
+$pageTitle = 'Page Title Not Found';
+if(isset($this->req['reqConfig']['title']['plural'])) {
+    $pageTitle = $this->req['reqConfig']['title']['plural'];
+}
+
+
+switch($this->req['subaction']) {
+    case 'typeid':
+        $page = 'display/ta';
+        $allTaIds = array_keys($this->content['rows']);
+        $navigate = PblBlockConst::prevNextTa($allTaIds, $this->req['typeId'], $taUrlFormat);
+    break;
+    case 'resources':
+        $page = 'display/resources';
+    break;
+    case 'managepblresources':
+        $page = 'manageresources';
+    break;
+    default:
+        $page = 'display/list'; //default page is list
+    break;
+}
+include($page.'.phtml');
+?>

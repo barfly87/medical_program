@@ -1,0 +1,30 @@
+<div class="pblSingleElem">
+    <?php if(isset($this->requestParams['mid']) && !empty($this->requestParams['mid']) ) :?>
+        <?php 
+        switch($this->zendController) {
+            case PblBlockConst::$pbl:
+                $fileNameArr[] = 'Pbl '.str_replace('.','_',$this->pblOrBlockRef);
+            break;
+            case PblBlockConst::$block:
+                $fileNameArr[] = 'Block';
+            break;                
+        }
+        
+        $fileNameArr[] = preg_replace('/[^0-9A-Za-z_-]/',' ',$this->pblOrBlockName);
+        
+        if(isset($fileTitle) && !empty($fileTitle)) {
+            $fileNameArr[] = preg_replace('/[^0-9A-Za-z_-]/',' ',$fileTitle);
+        }
+        if(isset($this->requestParams['resourceTitle']) && !empty($this->requestParams['resourceTitle'])) {
+            $fileNameArr[] = 'Resource - '.preg_replace('/[^0-9A-Za-z_-]/',' ',$this->requestParams['resourceTitle']);
+        }
+        $resourcesCount = 1;
+        if(isset($customResourcesCount)) {
+            $resourcesCount = $customResourcesCount;
+        }
+        ?>
+        <?php echo $this->action('pblblock','resource','default',array('mid' => $this->requestParams['mid'],'resourcescount' => $resourcesCount, 'pblblockfn' => implode(' - ',$fileNameArr)));?>
+    <?php else:?>
+        <span class="red">Resource could not be found</span>        
+    <?php endif;?>
+</div>

@@ -1,0 +1,34 @@
+#resultPrintContainer {
+    width: 100%;
+}
+#resultContainer {
+    display:inline; 
+    float: left; 
+    margin-left:5px;
+}
+#printContainer {
+    display:inline;
+    margin-right:5px; 
+    float: right;
+}
+
+#printContainer a:link, #printContainer a:visited, #resultContainer  {
+	color: #306FDF;
+    font-weight: bold;
+}
+
+#printContainer a:hover, #printContainer a:active {
+    color: #FF0010;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#resultCount {
+    color: #0051DF;
+}
+
+#title{
+	vertical-align:top; 
+	padding:0px;
+	margin: 0px;
+}

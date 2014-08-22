@@ -1,0 +1,90 @@
+<link href="<?php echo $this->baseUrl;?>/css/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" rel="stylesheet" type="text/css" />
+
+<?php include('../application/common/views/_resrcUploadLinkJsAndCss.phtml'); ?>
+
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.autocomplete.min.js"></script>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.2.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/userautocomplete.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/addloandta.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#savenewta").click(function(){
+		$.post(BASE_URL + '/submission/insertnewta', $('#newtaform').serialize(), function(data){
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				window.location = BASE_URL + "/submission/editloandta/id/" + data;
+			}
+		});
+	});
+	$("#saveexistingta").click(function(){
+		$.post(BASE_URL + '/submission/inserttaid', {taid: $('#ta_id').val()}, function(data){
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				window.location = BASE_URL + "/submission/editloandta/id/" + data;
+			}
+		});
+	});
+	$("#savenewlo").click(function(){
+		$('#lo').val(CKEDITOR.instances.lo.getData());
+		$.post(BASE_URL + '/submission/insertnewlo', $('#newloform').serialize(), function(data){
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				window.location = BASE_URL + "/submission/editloandta/id/" + data;
+			}
+		});
+	});
+	$("#saveexistinglo").click(function(){
+		$.post(BASE_URL + '/submission/insertloid', {loid: $('#lo_id').val()}, function(data){
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				window.location = BASE_URL + "/submission/editloandta/id/" + data;
+			}
+		});
+	});
+	$("#savelink").click(function(){
+		$.post(BASE_URL + '/submission/insertlinkage', $('#strengthform').serialize(), function(data){
+			window.location = BASE_URL + "/submission/editloandta/id/" + data;
+		});
+	});
+	<?php if ($this->newTaLinkClassName == 'disabled') {
+		echo '$("#newtalink").unbind("click");';
+		}
+	?>
+});
+</script>
+<div>
+  <div id="graphicalview" align="center" style="padding-top: 20px;">
+    <table>
+    <tr align="center">
+      <td><b>Learning Objective</b><br /><br />
+        <table>
+          <tr><td align="center"><div id="newlolink" class="enabled">Add New</div></td></tr>
+          <tr><td align="center"><div id="existinglolink" class="enabled">Choose Existing</div></td></tr>
+          <tr><td align="center"><div id="loresource" class="disabled">Resources</div></td></tr>
+        </table>
+      </td>
+      <td><div id="strengthlink" class="enabled">Strength</div><img src="<?php echo $this->baseUrl;?>/img/hlinkage.jpg"></td>
+      <td><b>Teaching Activity</b><br /><br />
+        <table>
+          <tr><td align="center"><div id="newtalink" class="<?php echo $this->newTaLinkClassName; ?>">Add New</div></td></tr>
+          <?php ?>
+          <tr><td align="center"><div id="existingtalink" class="enabled">Choose Existing</div></td></tr>
+          <tr><td align="center"><div id="taresource" class="disabled">Resources</div></td></tr>
+        </table>
+      </td>
+      <td>
+        <table style="margin-left:20px">
+          <tr><td style="width:25px; background-color: #cfeace;"></td><td align="left">Editable</td></tr>
+          <tr><td style="background-color: #eeeeee;"></td><td align="left">Non-editable</td></tr>
+        </table>
+      </td>
+    </tr>
+    </table>
+  </div>
+<?php echo $this->action('loandtaform', 'submission') ?>
+</div>

@@ -1,0 +1,14 @@
+<?php 
+$medvidLinkage  = $this->url(array('module'=>'default','controller'=>'admin','action'=>'medvidconnector'),null,true);
+?>
+
+<script type="text/javascript">
+function confirmMedVidAction() {
+	var confirmTxt = 'Are you sure you want to create resource linking between compass and medvid collection';
+    var answer = confirm(confirmTxt);
+    return answer;
+}
+</script>
+
+<h3>Link Compass to Mediabank 'MedVid' Collection</h3>
+<a href="<?php echo $medvidLinkage; ?>" onclick="javascript: return confirmMedVidAction();">Click here</a> to add/update resource linkage between compass and mediabank medvid collection.

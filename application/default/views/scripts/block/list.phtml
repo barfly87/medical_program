@@ -1,0 +1,70 @@
+<?php if (UserAcl::isStaffOrAbove() || UserAcl::displayStage3Menu()) : ?>
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+  $(function() {
+      $("tr.header td").css('font-style', 'italic')
+      $("tr.special td").css('border-top','1px solid #ff0000');
+      $("td.pname").css('border-left','1px solid #ff0000').css('padding', '0px 5px').css('font-size', '95%');
+      $("td.pnum").css('padding-right', '2px').css('cursor','pointer').click(function() {
+          var href = $(this).find('a:first').attr('href');
+          if(typeof(href) != 'undefined') {
+        	  window.location = $(this).find('a:first').attr('href');
+          }
+      });
+      $("span.biglabel").css('display', 'block').css('font-size', '20px').css('float', 'left');
+      $("span.bname").css('display', 'block').css('font-size', '12px').css('font-weight', 'bold').css('margin', '15px 6px 5px 5px');
+      $("td a").css('text-decoration', 'none');
+      $("tr.special:last-child td").css('border-bottom','1px solid #ff0000');
+      $("td table tr").hover(function() {
+              $('td.pnum, td.pname', this).css('background-color', '#ffeccf');
+          }, function() {
+              $('td.pnum, td.pname', this).css('background-color', '#FFFFFF');
+          });
+  });
+</script>
+
+<?php if(!empty($this->blocks)) :?>
+<?php $blockUrl = $this->url(array('module' =>'default','controller'=>'block','action'=>'index','ref'=>'%d'),null,true,false);?>
+<?php $taUrl = $this->url(array('module' =>'default','controller'=>'teachingactivity','action'=>'view','id'=>'%d'),null,true,false);?>
+<?php $hankbookUrl = $this->url(array('controller'=>'guide','action'=>'proceduralskills','stage'=>'3'),null,true);?>
+    <table style="width:95%;">
+    <tr><td style="vertical-align: top;">
+    <table>
+        <tr><td><span class="bname">Blocks</span></td></tr>
+        <?php foreach($this->blocks as $blockId => $blockName) :?>
+        <tr class="special">
+            <td class="pnum">
+                <a href="<?php printf($blockUrl,$blockId);?>"><?php echo $blockName;?></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+    </table>
+    <br />
+    <table>
+    	<tr><td><span class="bname">Handbooks</span></td></tr>
+    	<tr class="special"><td class="pnum"><a href="<?php echo $hankbookUrl ?>">Procedural Skills Handbook</a></td></tr>
+    	<tr class="special"><td class="pnum"><a href="/compass/resource/viewordownload/mid/aHR0cDovL3NtcC5zeWRuZXkuZWR1LmF1L21lZGlhYmFuay98Y29tcGFzc3Jlc291cmNlc3wxMDQ2NQ==/type/loose/id/10465">Stage 3 Handbook</a></td></tr>
+    	<tr class="special"><td class="pnum"><a href="/compass/resource/viewordownload/mid/aHR0cDovL3NtcC5zeWRuZXkuZWR1LmF1L21lZGlhYmFuay98Y29tcGFzc3Jlc291cmNlc3wxMDQ2NA==/type/loose/id/10464">Information for Supervisors Stage 3</a></td></tr>
+    </table>
+    </td><td width="60%" style="vertical-align: top;">
+    
+    <table>
+        <tr><td><span class="bname">Core Curriculum - under review</span></td></tr>
+        <tr><td>The core curriculum content in Compass is still undergoing a final review, in the interim, please use the <a href="/apps/cds/x/19892.html">Core Curriculum PDF documents</a>.</td></tr>
+                <?php foreach($this->corecurriculum as $coreid => $coreTA) :?>
+        <tr class="special">
+            <td class="pnum">
+            	<!--<?php print_r($coreTA); ?>-->
+                <a style="opacity: 0.5;" href="<?php printf($taUrl,$coreTA->auto_id);?>"><?php echo $coreTA->name;?></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+        
+    </table>
+    </td></tr>
+        </table>
+    
+<?php endif;?>
+<?php else :?>
+<p>Stage 3 teaching activities are not released yet. </p>
+<?php endif;?>

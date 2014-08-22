@@ -1,0 +1,75 @@
+input {
+    background-color: #FFF1DF;
+    color: #2F1D03;
+    border: 1px solid #2F1D03; 
+}
+
+textarea {
+    background-color: #FFF1DF;
+    color: #2F1D03;
+    border: 1px solid #2F1D03; 
+}
+
+input#submit, input#reset, input#submitButton, input.submitButton {
+    font-weight: bold;
+    font-size: 11px;
+    background-color: #FFD79F;
+    margin-right: 6px;
+    cursor: pointer;
+    padding: 2px 4px;
+}
+
+select {
+    background-color: #FFF1DF;
+    color: #2F1D03;
+    border:  solid 1px #2F1D03; 
+}
+
+#selectCheckBox, .selectCheckBox {
+    border: 1px solid #2F1D03; 
+    background: #FFF1DF none repeat scroll 0%; 
+    overflow: auto; 
+    width:470px; 
+    height: 120px; 
+    -moz-background-clip: -moz-initial; 
+    -moz-background-origin: -moz-initial; 
+    -moz-background-inline-policy: -moz-initial; 
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 2px;
+}
+
+p.selectActivityType {
+    width:230px !important;
+}
+
+.qqSelectCheckBox {
+    clear:both !important;
+    height:60px !important;
+    margin:0px !important;
+    padding:0px !important;
+}
+
+.red {
+    color: #FF0600;
+}
+
+.resultContainer {
+	color:#306FDF;
+	font-weight:bold;
+}
+
+.fancyFieldName {
+    color: #2F1D03;
+}
+
+lable {
+	font:13px/150% Verdana, Tahoma, sans-serif;
+}
+
+label.required:after {
+	content:"*";
+	padding-left:5px;
+	color:red;
+	font-size: 110%;
+}

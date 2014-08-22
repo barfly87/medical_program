@@ -1,0 +1,40 @@
+<?php 
+    $totalNoOfColumnsForTFoot = 6;
+    if(isset($customNoOfColumns) && strlen($customNoOfColumns) > 0) {
+        $totalNoOfColumnsForTFoot = $customNoOfColumns;
+    } 
+    $defaultPaginationBg = (isset($paginationBg)) ? $paginationBg : 'bottom';
+    $paginationStyle = ($defaultPaginationBg == 'top') ?
+                    "background:url('".$this->baseUrl."/img/paginationTopBg.gif') repeat-x" :
+                    "background:url('".$this->baseUrl."/img/paginationBottomBg.gif') repeat-x";
+?>
+
+<tfoot>
+    <tr class="pagerOne">
+        <td colspan="<?php echo $totalNoOfColumnsForTFoot;?>" style="<?php echo $paginationStyle;?>">
+            <img src="<?php echo $this->baseUrl;?>/img/default/table/first.gif" class="first" title="First"/>
+            <img src="<?php echo $this->baseUrl;?>/img/default/table/prev.gif" class="prev" title="Previous"/>
+            <input type="text" class="pagedisplay" />
+            <img src="<?php echo $this->baseUrl;?>/img/default/table/next.gif" class="next" title="Next"/>
+            <img src="<?php echo $this->baseUrl;?>/img/default/table/last.gif" class="last" title="Last"/>
+            <select class="pagesize" style="vertical-align:top;">
+            <script type="text/javascript">
+                   cookieName = 'PAGE_SIZE';
+                   pageSizeValue = ( $.cookie(cookieName) == null ) ? 10 : $.cookie(cookieName);
+                   var keyValue = new Array(10,20,30,40,50,50000);
+                   for(var i=0; i<keyValue.length; i++) {
+                       var selected = '';    
+                       if(keyValue[i] == pageSizeValue) {
+                           selected = 'selected="selected"';
+                       }                       
+                       if(keyValue[i] != 50000) {
+                            document.write('<option '+selected+' value="'+keyValue[i]+'">'+keyValue[i]+'</option>');
+                       } else {
+                           document.write('<option '+selected+' value="50000">All</option>');
+                       }
+                   }                   
+                </script> 
+            </select><span id="itemsPerPage">&nbsp;Items per page</span>
+        </td>
+    </tr>
+</tfoot>

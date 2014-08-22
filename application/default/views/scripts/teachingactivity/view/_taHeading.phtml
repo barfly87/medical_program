@@ -1,0 +1,21 @@
+<h2>
+  <?php echo strtoupper($this->ta->type)?> - <?php echo $this->escape($this->ta->name)?>
+  <span class="prevnextlink">
+    
+    <?php if (!empty($this->pblTaTypePrev)): ?>
+    <a href="<?php echo MediabankResourceConstants::decode($this->pblTaTypePrev);?>"><img src="<?php echo $this->baseUrl;?>/img/back.png"></a>
+    <?php elseif (($prevTaId = $this->ta->prevTaId) != NULL) : ?>
+    <a href="<?php echo $this->baseUrl;?>/teachingactivity/view/id/<?php echo $prevTaId ?>"><img src="<?php echo $this->baseUrl;?>/img/back.png"></a>
+    <?php else : ?>
+    <img src="<?php echo $this->baseUrl;?>/img/back.png" style="opacity:0.2;">
+    <?php endif; ?>
+    
+    <?php if (!empty($this->pblTaTypeNext)): ?>
+    <a href="<?php echo MediabankResourceConstants::decode($this->pblTaTypeNext);?>"><img src="<?php echo $this->baseUrl;?>/img/next.png"></a>
+    <?php elseif (($nextTaId = $this->ta->nextTaId) != NULL) : ?>
+    <a href="<?php echo $this->baseUrl;?>/teachingactivity/view/id/<?php echo $nextTaId ?>"><img src="<?php echo $this->baseUrl;?>/img/next.png"></a>
+    <?php else : ?>
+    <img src="<?php echo $this->baseUrl;?>/img/next.png" style="opacity:0.2;">
+    <?php endif; ?>
+  </span>
+</h2>

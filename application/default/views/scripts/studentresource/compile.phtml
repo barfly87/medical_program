@@ -1,0 +1,23 @@
+<h2>Student Resource Compilation for <?php echo $this->summaryfor; ?></h2>
+<?php 
+$quizids = array();
+foreach($this->lodata as $loid => $LO):
+	foreach($LO['studentresources'] as $res) {
+		if($res['mimetype']=='text/xml') {
+			$quizids[] = $res['auto_id'];
+		}
+	}
+endforeach;
+?>
+<h3><a href="<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'quiz','quizids'=>implode(',',$quizids)),'default',true);?>">Quiz (<?php echo count($quizids);?> questions)</a></h3>
+<?php 
+	foreach($this->lodata as $loid => $LO):
+			if(count($LO['studentresources'])>0) { ?>
+				<b><?php echo $LO['title'];?></b><br>
+				<?php 
+				$this->studentresources = $LO['studentresources'];
+				$this->showallstudentresources = true;
+				include('studentresourcelarge.phtml');
+			}
+			?>
+	<?php endforeach; ?>

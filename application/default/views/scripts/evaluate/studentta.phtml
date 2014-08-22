@@ -1,0 +1,120 @@
+<?php 
+/***********************************************************************************************************************
+ START JS,CSS AND INITIALIZATION 
+***********************************************************************************************************************/
+?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<link href="<?php echo $this->baseUrl?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/evaluate.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl?>/js/evaluation.js"></script>
+<?php $pblLink = $this->url(array('module'=>'default', 'controller'=>'pbl','action'=>'index','ref' => ''),null,true).'%s' ;?>
+
+<?php 
+/***********************************************************************************************************************
+ START FORM 
+***********************************************************************************************************************/
+?>
+<div>
+    <form id="evaluateSearch" name="evaluateSearch" method="get" action="" >
+    <div id="year" class="searchContainers">
+        Select Year(s):
+        <p class="evaluateCheckBox">
+        <?php $selectedYears = (isset($this->fp->input['years'])) ? $this->fp->input['years'] : '';?>
+        <?php echo $this->formMultiCheckbox('years', $selectedYears,array('style' => ''),$this->formData['years']);?>
+        </p>
+    </div>
+    
+    <div id="block" class="searchContainers">
+        Select Block(s):
+        <p class="evaluateCheckBox">
+        <?php $selectedBlocks = (isset($this->fp->input['blocks'])) ? $this->fp->input['blocks'] : '';?>
+        <?php echo $this->formMultiCheckbox('blocks', $selectedBlocks,array('style' => ''),$this->formData['blocks']);?>
+        </p>
+    </div>
+    
+    <div id="pbl" class="searchContainers">
+        Select Pbl(s):
+        <p class="evaluateCheckBox">
+        <?php $selectedPbls = (isset($this->fp->input['pbls'])) ? $this->fp->input['pbls'] : '';?>
+        <?php echo $this->formMultiCheckbox('pbls', $selectedPbls,array('style' => ''),$this->formData['pbls']);?>
+        </p>
+    </div>
+ 
+    <div id="type" class="searchContainers">
+        Select Type(s):
+        <p class="evaluateCheckBox">
+        <?php $selectedTypes = (isset($this->fp->input['types'])) ? $this->fp->input['types'] : '';?>
+        <?php echo $this->formMultiCheckbox('types', $selectedTypes,array('style' => ''),$this->formData['types']);?>
+        </p>
+    </div>
+    <div id="evaluateSubmitContainer">
+        <input id="submit" type="submit" value="submit" />
+        <input id="" type="hidden" name="search_evaluation" value="1" />
+        <input id="reset" type="button" value="Reset"/>
+    </div>
+    </form>
+</div>
+
+<?php 
+/***********************************************************************************************************************
+ START EVALUATION RESULTS 
+***********************************************************************************************************************/
+?>
+<?php $taHrefFormat = $this->url( array( 'module'=>'default', 'controller'=>'teachingactivity', 'action'=>'view'), null, true).'/id/%d';?>
+<div id="evaluationContainer">
+<?php if(isset($this->evaluations)): ?>
+    <?php if(is_array($this->evaluations) && !empty($this->evaluations)):?>
+    
+    <h2>Teaching Activity Student Evaluation</h2>
+        <div id="adminEvaluation">
+        <span><a href="<?php echo $this->url().'?format=csv&'.$_SERVER['QUERY_STRING'];?>">Click to download CSV</a></span>
+        <?php //LOOP THROUGH BLOCKS?>
+        <?php foreach($this->evaluations as $block => $pbls) :?>
+        <ul class="listSquare">
+            <li><span class="headings">BLOCK:</span> <?php echo $block; ?>
+                <ul>
+                    <?php //LOOP THROUGH PBLS FOR THIS BLOCK?>
+                    <?php foreach($pbls as $pbl => $doctypes) :?>
+                        <li><span class="headings">PROBLEM:</span> <a href="<?php printf($pblLink,$doctypes['pblId']); ?>"><?php echo $pbl; ?></a>
+                            <ul>
+                            <?php //LOOP THROUGH TA TYPES FOR THIS PBL?>
+                            <?php foreach($doctypes as $doctype => $tas): ?>
+                                <?php //pblId is not a doctype. It is just used above to create pbl link?>
+                                <?php if(in_array($doctype, array('pblId'))):?>
+                                    <?php continue;?>
+                                <?php endif;?>
+                                 <li><?php  echo $doctype ;?>s
+                                    <ul>
+                                        <?php //LOOP THROUGH TA'S FOR THIS TA TYPE?>
+                                        <?php foreach($tas as $taId=>$taData):?>
+                                        <li>
+                                            <a href="<?php printf($taHrefFormat, $taId);?>"><?php print $taData['taDesc']; ?></a>&nbsp;&nbsp;<?php echo ' (TA ID - '.$taId.' - '.$taData['status'].')';?>
+                                            <ul>
+                                                <?php //LOOP THROUGH EVALUATIONS FOR THIS TA?>
+                                                <?php foreach($taData['evaluation'] as $evaluation): ?>
+                                                    <li>
+                                                        <?php /* <div><span class="headings">USER ID: </span><?php echo Compass::userInfoHtml($evaluation['uid']); ?></div> */?>
+                                                        <div><span class="headings">COMMENT: </span><?php echo $evaluation['comment']; ?></div>
+                                                        <?php if(isset($evaluation['data_key']) && isset($evaluation['data_val']) && !empty($evaluation['data_key'])) :?>
+                                                            <div><span class="headings"><?php echo strtoupper(str_replace("_"," ",$evaluation['data_key']));?>: </span><?php echo $this->escape($evaluation['data_val']);?></div>
+                                                        <?php endif;?>
+                                                    </li>
+                                                <?php endforeach;?>
+                                            </ul>
+                                        </li>
+                                        <?php endforeach;?>
+                                    </ul>
+                                 </li>                               
+                            <?php endforeach; ?>
+                            </ul>
+                        </li>
+                    <?php endforeach;?>
+                </ul>
+            </li>    
+        <?php endforeach;?>
+        </div>
+    <?php else:?>
+        None
+    <?php endif;?>
+<?php endif;?>
+</div>

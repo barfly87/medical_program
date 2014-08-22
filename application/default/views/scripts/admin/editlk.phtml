@@ -1,0 +1,58 @@
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.2.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/removeuser.js"></script>
+<script type="text/javascript">
+	function confirmdelete(id) {
+		if(confirm("Are you sure you want to delete entry #"+id+"?")) {
+			window.location='<?php echo $this->url(array('action'=>'deletelk', 'controller'=>'admin', 'lk'=>$this->lkname), null, true); ?>/id/'+id;
+		}
+	}
+</script>
+<h1>List Editor: <?php echo $this->lkname;?></h1>
+<?php if (count($this->lklist) > 0) :?>
+<form action="<?php echo $this->url(array('action'=>'editlk', 'controller'=>'admin', 'lk'=>$this->lkname), null, true); ?>">
+<table>
+    <thead>
+        <tr align="left">
+        	<?php foreach($this->cols as $col): ?>
+        	<th><?php echo $col; ?></th>
+        	<?php endforeach; ?>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->lklist as $lk): ?>
+    <tr class="lkitem" id="lk<?php echo $lk['auto_id'] ?>">
+		<?php foreach($this->cols as $col): ?>
+	    <td>
+	    	<?php if($col=='auto_id'):?>
+	    		<?php echo $lk[$col];?>
+	    	<?php else: ?>
+	    		<input name="edit_<?php echo $col; ?>_<?php echo $lk['auto_id']; ?>" value="<?php echo $lk[$col];?>">
+	    	<?php endif;?>
+        </td>
+        <?php endforeach; ?>
+        <td><a href="javascript:confirmdelete(<?php echo $lk['auto_id']; ?>);">Delete</a></td>
+    </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<input type="submit" name="updating" value="Update names">
+</form>
+<?php else : ?>
+<p>No List entries found.</p>
+<?php endif; ?>
+
+<h2>Add new entry</h2>
+<form action="<?php echo $this->url(array('action'=>'addlk', 'controller'=>'admin', 'lk'=>$this->lkname), null, true); ?>">
+<table>
+	<?php foreach($this->cols as $col): ?>
+	  	<?php if($col!='auto_id'):?>
+			<tr>
+				<td><?php echo $col;?>:</td>
+				<td><input name="lkitem_<?php echo $col;?>"></td>
+			</tr>
+	    <?php endif;?>
+    <?php endforeach; ?>
+</table>
+<input type="submit" value="Add">
+</form>

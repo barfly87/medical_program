@@ -1,0 +1,22 @@
+<?php 
+$createMediabankCollectionUrl   = $this->baseUrl.'/cms/do/service/create_mediabank_collection';
+$compareNameSearch              = $this->baseUrl.'/cms/do/service/compare_name';
+$compareSequenceSearch          = $this->baseUrl.'/cms/do/service/compare_sequence';
+$compareSequenceNameSearch      = $this->baseUrl.'/cms/do/service/compare_sequence_name';
+$compareNameDoctypeSearch       = $this->baseUrl.'/cms/do/service/compare_name_doctype';
+$createResourceLink             = $this->baseUrl.'/cms/do/service/compare_name_doctype';
+$linkCmsDocument                = $this->baseUrl.'/cms/do/service/linkcmsdocs';
+?>
+
+<div>
+    <h2 style="color:#3A2B14;">Actions</h2>
+    <h3><a class="" href="<?php echo $createMediabankCollectionUrl ;?>">Create Mediabank Collection</a></h3>
+    <h3>Compare on TA</h3>
+    <ul>
+        <li><a class="" href="<?php echo $compareNameSearch ;?>">NAME</a></li>
+        <li><a class="" href="<?php echo $compareSequenceSearch ;?>">BLOCK, WEEK, DOCTYPE, DOCTYPE_SEQ</a></li>
+        <li><a class="" href="<?php echo $compareSequenceNameSearch ;?>">BLOCK, WEEK, DOCTYPE, DOCTYPE_SEQ <span class="error" style="text-decoration:;">or</span> NAME</a></li>
+        <li><a class="" href="<?php echo $compareNameDoctypeSearch ;?>">BLOCK, WEEK, DOCTYPE, NAME <span class="error" style="text-decoration:none;">or</span> BLOCK, WEEK, DOCTYPE, DOCTYPE_SEQ</a></li>
+    </ul>
+    <h3><a class="" href="<?php echo $linkCmsDocument ;?>">Link CMS Documents</a></h3>
+</div>

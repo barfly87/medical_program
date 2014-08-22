@@ -1,0 +1,45 @@
+table#viewResource {
+    width : 700px;
+}
+table#viewResource td, table#viewResource th {
+    text-align: left;
+}
+table#viewResource td {
+    padding: 2px 4px;
+}
+table#viewResource th {
+    padding: 2px 20px 2px 4px;
+}
+table#viewResource td.viewResourceImage {
+    background-color: #FFFFFF;
+    padding-left: 0px;
+}
+
+table#viewNewResource {
+    width : auto;
+}
+table#viewNewResource td, table#viewNewResource th {
+    text-align: left;
+}
+table#viewNewResource td {
+    padding: 2px 4px;
+    width: 500px;
+}
+table#viewNewResource th {
+    padding: 2px 20px 2px 4px;
+    width: 200px;
+}
+table#viewNewResource td.viewResourceImage {
+    background-color: #FFFFFF;
+    padding-left: 0px;
+}
+
+table#mainTable  td{
+	vertical-align: top;
+}
+
+.mainTableRightTd {
+	padding-top: 14px; 
+	padding-left: 10px; 
+	width: 350px;
+}

@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+p, div {
+   color:#2F1D03; 
+   font-size: 0.8em;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+}
+h2 {
+    color:#2F1D03;
+    font-size:110%;
+    font-weight:bold;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+}

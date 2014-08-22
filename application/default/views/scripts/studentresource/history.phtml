@@ -1,0 +1,9 @@
+<?php 
+	$v = 	$this->versions;
+	ksort($v);
+	$counter=0;
+	foreach($v as $key => $version):
+		$counter++; ?>
+		Version <?php echo $counter;?>: 
+		<a href="<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'viewordownload', 'mid'=>base64_encode($version['mid']),'type'=>'studentresource','id'=>$version['auto_id']),'default',true); ?>"><?php echo date('r',$version['datecreated'])?></a><br>
+<?php endforeach;?>

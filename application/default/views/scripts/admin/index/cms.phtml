@@ -1,0 +1,49 @@
+<script type="text/javascript">
+    var createMediabankCollection = 'Are you sure you want to create mediabank collection.\nThis action would overwrite the existing collection.';
+    var linkCmsDocs = 'Are you sure you want to link cms documents into compass.\nThis action would create new links in database.\nPlease make sure you delete the existing links before you do this action.';
+    var linkPbls = 'Are you sure you want to link pbl docs into compass.\nThis action would create new links in database.\nPlease make sure you delete the existing links before you do this action.'
+    function confirmCmsAction(action) {
+        var confirmTxt = 'EXTREME CAUTION\n\n';
+        switch(action) {
+            case 'create_collection':
+                confirmTxt += createMediabankCollection;
+            break;
+            case 'link_cms':
+                confirmTxt += linkCmsDocs;
+            break;
+            case 'link_pbl':
+                confirmTxt += linkPbls;
+            break;
+            default:
+                return false;
+        }
+        var answer = confirm(confirmTxt);
+        return answer;
+    }
+</script>
+<?php 
+$cmsBasePath                    = $this->baseUrl.'/cms/do/service';
+$createMediabankCollectionUrl   = $cmsBasePath.'/create_mediabank_collection';
+$compareNameSearch              = $cmsBasePath.'/compare_name';
+$compareSequenceSearch          = $cmsBasePath.'/compare_sequence';
+$compareSequenceNameSearch      = $cmsBasePath.'/compare_sequence_name';
+$compareNameDoctypeSearch       = $cmsBasePath.'/compare_name_doctype';
+$createResourceLink             = $cmsBasePath.'/compare_name_doctype';
+$linkCmsDocument                = $cmsBasePath.'/linkcmsdocs';
+$linkCmsPbls                    = $cmsBasePath.'/linkcmspbls';
+?>
+
+<h3>CMS Actions</h3>
+<ul>
+    <li><a class="" href="<?php echo $createMediabankCollectionUrl ;?>" onclick="javascript: return confirmCmsAction('create_collection');">Create Mediabank Collection</a></li>
+    <li>Compare on TA
+        <ul>
+            <li><a class="" href="<?php echo $compareNameSearch ;?>">Name</a></li>
+            <li><a class="" href="<?php echo $compareSequenceSearch ;?>">Block, Week, Doctype, Doctype Sequence</a></li>
+            <li><a class="" href="<?php echo $compareSequenceNameSearch ;?>">Block, Week, Doctype, Doctype Sequence<span class="error" style="text-decoration:none;"> OR </span>Name</a></li>
+            <li><a class="" href="<?php echo $compareNameDoctypeSearch ;?>">Block, Week, Doctype, Name<span class="error" style="text-decoration:none;"> OR </span>Block, Week, Doctype, Doctype Sequence</a></li>
+        </ul>                    
+    </li>
+    <li><a class="" href="<?php echo $linkCmsDocument ;?>" onclick="javascript: return confirmCmsAction('link_cms');">Link CMS Documents</a></li>
+    <li><a class="" href="<?php echo $linkCmsPbls ;?>" onclick="javascript: return confirmCmsAction('link_pbl');">Link CMS Pbls</a></li>
+</ul>

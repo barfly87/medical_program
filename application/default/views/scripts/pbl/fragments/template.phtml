@@ -1,0 +1,41 @@
+<link href="<?php echo $this->baseUrl;?>/css/form.css" rel="stylesheet" media="all" type="text/css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/pbl.css" media="all"  />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/recordings.css" media="all"  />
+&nbsp;
+<?php 
+//$this->req['reqConfig']['view'] is set in application/default/models/FormProcessor/Pbl/Display.php
+$renderPage = (isset($this->req['reqConfig']['view']) && !empty($this->req['reqConfig']['view'])) ?
+                    $this->req['reqConfig']['view'] : $this->renderPage;
+?>
+<table id="pblContainer" width="100%">
+    <tr>
+        <td class="pblBar pblBarLeft">
+            <img src="<?php echo $this->baseUrl;?>/img/pbl/menuborder.gif" width="2" height="500"  alt=""/>
+        </td>
+        <td id="pblContainerLeft">
+            <?php 
+                switch($this->zendController) {
+                    case 'pbl':
+                        include_once('menu.phtml');
+                    break;
+                    case 'block':
+                        include_once('blockmenu.phtml');
+                    break;
+                }
+            ?>
+        </td>
+        <td class="pblBar pblBarRight">
+            <img src="<?php echo $this->baseUrl;?>/img/pbl/menuborder.gif" width="2" height="500" alt=""/>
+        </td>
+        <td id="pblContainerRight">
+            <?php if(isset($renderPage) && file_exists(dirname(__FILE__).'/'.$renderPage.'.phtml')) :?>
+                <?php include($renderPage.'.phtml');?>
+            <?php else: ?>
+                <h2 class="red">Error !</h2><p>Page not found.</p>
+            <?php endif; ?> 
+        </td>
+    </tr>
+</table>
+<div id="jsErrors" style="display:none;color:#2F1D03;"><ul></ul></div>
+
+   

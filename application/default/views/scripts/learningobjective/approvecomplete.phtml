@@ -1,0 +1,4 @@
+<div style="float:left; max-width:750px; min-width:600px">
+<h2>Thank you!</h2>
+<?php $lourl = $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view', 'id'=>$this->lo_id))?>
+<p>Teaching activity <?php echo $this->ta_id ?> now links to learning objective <a href="<?php echo $lourl ?>"><?php echo $this->lo_id; ?></a>.</p>

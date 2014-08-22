@@ -1,0 +1,9 @@
+#header, #menu {
+    display: none;
+}
+body {
+    font-size: 40px !important;
+}
+#submit {
+    font-size: 40px !important;
+}

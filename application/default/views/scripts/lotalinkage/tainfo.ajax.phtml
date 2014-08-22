@@ -1,0 +1,14 @@
+<?php if ($this->ta) : ?>
+<fieldset style="font-size:x-small; color:#999999">
+  <legend>Information related to teaching activity <?php echo $this->ta->auto_id?></legend>
+  <table style="font-size:x-small; color:#999999">
+    <tr><th width="180">Title:</th>		<td><?php echo $this->escape($this->ta->name); ?></td></tr>
+    <tr><th>Type</th>					<td><?php echo $this->escape($this->ta->type); ?></td></tr>
+    <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?></th>
+    	<td><?php echo $this->ta->stage; ?></td>
+    </tr>
+    <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></th>					<td><?php echo $this->escape($this->ta->block); ?></td></tr>
+    <tr><th>PBL/CRS</th>				<td><?php echo $this->escape($this->ta->pbl); ?></td></tr>
+  </table>
+</fieldset>
+<?php endif; ?>

@@ -1,0 +1,34 @@
+<div id="releasedate" class="rhsbox">
+	<?php 
+		$event_url = $this->ta->getEventUrl;
+		$event_link = '';
+		if (!empty($event_url)) {
+			$event_link = '<span class="editlink"><a href="'.$event_url.'"><img title="View Event" border="0" src="'.$this->baseUrl.'/img/events.png" /></a></span>';
+		}
+	?>
+	<h3 class="rhsheading">Release Date<?php echo $event_link ?></h3>
+	<div class="mcontent">
+		<?php $release_date = $this->ta->release_date; ?>
+		<?php if (count($release_date) > 0): ?>
+		    <a href="#" id="showhidelink">Show dates</a><br/>
+		    <table id="datetable" width="100%">
+			<?php
+				if ($this->debugdate == 'true') {
+					$dates_in_index = $this->ta->release_date_from_lucene;
+				}
+				foreach ($release_date as $k => $v) {
+					echo "<tr><th style=\"padding-left: 5px; width:100px;\">$k:</th><td width=\"250\">$v";
+					if ($this->debugdate == 'true') {
+						if (isset($dates_in_index[$k])) {
+							echo '<br />', $dates_in_index[$k];
+						}
+					}
+					echo "</td></tr>\n";
+				}
+			?>
+			</table>
+		<?php else: ?>
+	    	No release date information available.
+		<?php endif; ?>
+	</div>
+</div>

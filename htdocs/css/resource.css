@@ -1,0 +1,12 @@
+#resourceTable td {
+	padding-top: 4px;
+    padding-right: 20px;
+}
+#showHideError {
+	cursor: pointer;
+}
+#exception {
+	display:none;
+	list-style-type:none;
+	color:#2F1D03;
+}

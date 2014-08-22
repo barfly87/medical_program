@@ -1,0 +1,37 @@
+<?php
+//Set image width to be used by captureResult.phtml  
+$this->result['imageWidth'] = ($this->id == 'new') ? '250' : '500' ;
+?>
+<?php include('captureResult.phtml');?>
+<?php $tableId      = ($this->id == 'new') ? 'viewNewResource'  : 'viewResource' ;?>
+<div>
+    <h2>Resource: <?php echo $this->placeholder('title');?></h2>
+    <div>
+    <table id="<?php echo $tableId;?>" class="tableNoSorter">
+        <tr>
+            <td class="viewResourceImage" colspan="2" valign="top">
+                <?php echo $this->placeholder('displayResource');?>
+            </td>
+        </tr>
+        <?php if(isset($this->result['image']['allowDownload'])):?>
+        <tr>
+            <td style="background-color: #FFF;">
+                <a href="<?php echo $this->placeholder('imageDownloadLink');?>">Click to download</a></td>
+            </td>
+        </tr>
+        <?php elseif(isset($this->result['video']['allowDownload'])) :?>
+        <tr>
+            <td style="background-color: #FFF;"><?php echo $this->placeholder('videoDownloadLink');?></td>
+        </tr>
+        <?php elseif(isset($this->result['audio']['allowDownload'])) :?>
+        <tr>
+            <td style="background-color: #FFF;"><?php echo $this->placeholder('audioDownloadLink');?></td>
+        </tr>
+        <?php elseif(isset($this->result['URL'])) :?>
+        <tr>
+            <td style="background-color: #FFF;"><?php echo $this->placeholder('viewUrlLink');?></td>
+        </tr>
+        <?php endif;?>
+    </table>    
+    </div>
+</div>

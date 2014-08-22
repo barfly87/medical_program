@@ -1,0 +1,13 @@
+<?php $addLooseResourceUrl = $this->url( array( 'module'=>'default', 'controller'=>'resource', 'action'=>'loose'), 'default', true).'/upload';?>
+
+<h3><span class="boldText">Manage Loose Resources</span></h3>
+<p>'Loose Resource' is a resource which you would like to link or embed with in other resource(s). It is NOT attached to 
+a teaching activity, learning objective,<br /> pbl or block. It is a standalone resource stored in Mediabank and is used purely 
+for linking or embedding with in other resource(s).<br /><br />
+Once you have uploaded a loose resource it would provide you with a compass URL to link or embed.<br/><br/>
+<a class="actionLink" style="font-size:110%, text-decoration:none;" href="<?php echo $addLooseResourceUrl; ?>">Upload Loose Resource</a>
+<a class="actionLink" style="font-size:110%, text-decoration:none;" href="javascript: void(0);" onclick="$('.subSectionLooseResource').hide();$('#findUrlContainer').show();$('form#findUrl #mid').focus();">Find URL for Loose Resource</a>
+
+</p>
+
+<?php include_once('manage_loose_resource/find_url.phtml');?>

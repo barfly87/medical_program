@@ -1,0 +1,17 @@
+<style>
+td {padding: 2px 10px;}
+tr:nth-child(odd) {background-color: #FFECCF;}
+</style>
+<div>
+	<h2>Sending message</h2>
+	<table>
+	<?php foreach ($this->results as $k => $v) : ?>
+		<tr>
+		  <td><?php echo $this->escape($k); ?></td>
+		  <td><?php echo $this->escape($v[0]); ?></td>
+		  <td><?php echo $this->escape($v[1]); ?></td>
+		</tr>
+    <?php endforeach; ?>
+	</table>
+	<p><a href="<?php echo $this->baseUrl ;?>/sms/index">Back to SMS form</a></p>
+</div>

@@ -1,0 +1,91 @@
+.tableNoSorter tr td{
+    padding: 4px;
+    padding-right:10px;
+    padding-left:10px;
+}
+
+.tableNoSorter tr th{
+    padding: 4px;
+    padding-right:10px;
+    padding-left:10px;
+    text-align: center;
+}
+
+.curriculumAreasCenter {
+    text-align: center;
+}
+
+#curriculumAreaMenuContainer {
+    display:inline;
+    width: 100px;
+    height: 100%;
+}
+
+.curriculumAreaMenuItem {
+    display: inline;
+    width: 70px;
+    margin-right: 15px;
+    padding: 0px 10px;
+    margin-bottom: 3px;
+    font-weight: bold;
+    font-size: 110%;
+    color: #473212;
+    border-left: 4px solid #AF9A78;
+    border-bottom: 1px solid #AF9A78;
+    border-right: 4px solid #BFAC8F;
+    border-top: 1px solid #BFAC8F;
+    background-color: #CFC0A8;
+}
+
+#curriculumAreaMenuContent {
+    display: inline;
+    height: 100%;
+    clear:left;
+}
+
+.curriculumAreaMenuSelected {
+    border-left: 4px solid #7F663F;
+    border-bottom: 1px solid #000000;
+    border-right: 4px solid #7F663F;
+    border-top: 1px solid #000000;  
+}
+
+#curriculumAreaTitle{
+    color: #306FDF;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+#curriculumAreaEditTitle {
+    color: #306FDF;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+.curriculumAreaDisciplineName {
+    font-style: italic;
+    font-size: 125%;
+}
+
+.curriculumAreaListItems {
+    color: #493414;
+    font-size: 100%;
+}
+
+.curriculumAreaMenuItem a:link, .curriculumAreaMenuItem a:visited{
+    color: #473212;
+    text-decoration: underline;
+}
+.curriculumAreaMenuItem a:hover {
+    color: #473212;
+    text-decoration: none;
+}
+.curriculumAreaDrag {
+    opacity:0.60;  
+    filter:alpha(opacity=60);
+}
+#sortMsg {
+	color: #473212;
+	font-weight: bold;
+	margin-left: 2px;
+}

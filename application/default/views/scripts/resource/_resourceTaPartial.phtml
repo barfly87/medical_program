@@ -1,0 +1,18 @@
+<?php 
+
+$allowEdit = (isset($this->row['allowEdit']) && $this->row['allowEdit'] === true ) ? true : false;
+$resource = (isset($this->row['resource']) && !empty($this->row['resource'])) ? $this->row['resource'] : array();
+
+if(!empty($resource)) {
+    if($allowEdit) {
+        echo '<div style="position:relative">';
+    }
+    echo $this->action('taview', 'resource', 'default', array('mid' => $resource['resource_id'], 'id' => $resource['auto_id']));
+    if($allowEdit) {
+        echo '  <span class="tacontentcontrol">
+                    <a href="'. MediabankResourceConstants::createResourceEditUrl($resource['type'],$resource['type_id'],$resource['auto_id'], $resource['resource_type_id']) .'">Edit</a>
+                </span>
+             </div>';
+    }
+}
+?>

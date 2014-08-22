@@ -1,0 +1,7 @@
+<?php $lourl = $this->url(array('module'=>'default','controller'=> 'learningobjective', 'action'=>'view', 'id'=>$this->lo_id)); ?>
+<?php $taurl = $this->url(array('module'=>'default','controller'=> 'teachingactivity', 'action'=>'view', 'id'=>$this->ta_id)); ?>
+<div>
+<h2>Thank you!</h2>
+  <p>Linkage between teaching activity <a href="<?php echo $taurl; ?>"><?php echo $this->ta_id ?></a> and 
+    learning objective <a href="<?php echo $lourl; ?>"><?php echo $this->lo_id ?></a> has been deleted.</p>
+</div>

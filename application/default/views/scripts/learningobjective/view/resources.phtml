@@ -1,0 +1,112 @@
+<div>
+    <div class="subHeadings subHeadingsResources">
+        <span style="float:right">
+            <?php if($this->allowAddResources == true && isset($this->resourceAcl['upload']) && $this->resourceAcl['upload']['allow'] === true) :?>
+                <a class="sectionLink" href="<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'manage','page' =>'lo','ref'=>$this->lo->auto_id), null, true); ?>">Manage Resources</a>
+            <?php elseif($this->isStaffOrAbove && isset($this->resourceAcl['upload']['err']) ):?>
+                <a class="sectionLink notAuthorized" href="javascript:unAuthorized('<?php echo $this->resourceAcl['upload']['err']; ?> to this learning objective.');">Manage Resources</a>
+            <?php endif;?>
+        
+            <?php /* 
+    		<?php ### UPLOAD ### ?>
+            <?php if($this->allowAddResources == true && isset($this->resourceAcl['upload']) && $this->resourceAcl['upload']['allow'] === true) :?>
+    			<a class="sectionLink" href="<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'upload','type' =>'lo')); ?>">Upload</a>
+    		<?php elseif($this->isStaffOrAbove && isset($this->resourceAcl['upload']['err']) ):?>
+	    		<a class="sectionLink notAuthorized" href="javascript:unAuthorized('<?php echo $this->resourceAcl['upload']['err']; ?> to this learning objective.');">Upload</a>
+    		<?php endif;?>
+    		
+    		<?php ### LINK EXISTING RESOURCES ### ?>
+    		<?php if(isset($this->resourceAcl['link']) && $this->resourceAcl['link']['allow'] === true) :?>
+    			<a class="sectionLink" href="<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'link','type' =>'lo')); ?>">Link Existing</a>
+    		<?php elseif($this->isStaffOrAbove && isset($this->resourceAcl['link']['err']) ):?>
+				<a class="sectionLink notAuthorized" href="javascript:unAuthorized('<?php echo $this->resourceAcl['link']['err']; ?> to this learning objective.');">Link Existing</a>
+    		<?php endif;?>
+            */?>    		
+    		<?php ### HISTORY ### ?>
+    		<?php if($this->isStaffOrAbove):?>
+    			<a class="sectionLink" href="<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'history','type' =>'lo','id' => $this->lo->auto_id), null, true); ?>">History</a>
+    		<?php endif;?>
+        </span>Resources
+    </div>
+    <div id="resourceContainer">
+    <?php if($this->resourceError == false) :?>
+        <?php if(isset($this->resources) && count($this->resources) > 0): ?>
+            <?php $style = (count($this->resources) > 3) ? 'margin-right: 5px;': ''; ?>
+            <?php foreach($this->resources as $resource) :?>
+                <?php $viewUrl = $this->url(array('module'=>'default','controller'=>'resource','action'=>'view','type'=>'lo','resourceid'=>$resource['auto_id'],'id'=>$this->lo->auto_id),null,true); ?>
+                <?php $viewUrl = $this->escape($viewUrl.'?mid='.$resource['mid']);?>
+                <?php $imageUrl = $this->url(array('module'=>'default','controller'=>'resource','action'=>'image'),null,true); ?>
+                <?php $imageUrl = $this->escape($imageUrl.'?size=128&mid='.$resource['mid']);?>
+                <div class="resourceElem" id="resourceElem_<?php echo $resource['auto_id'];?>" style="<?php echo $style;?>">
+                    <?php ### SORT ### ?>
+                    <?php if($this->resourceAcl['sort']['allow'] === true) :?>
+                    <div class="resourceSortButtonContainer" style="float:right;">
+                        <a style="cursor:move" href="javascript:sortAlert();" title="Drag up or down to sort">
+                            <img style="border: 0px; height:24px;" src="<?php echo $this->baseUrl;?>/img/sort_arrow.gif" />
+                        </a>
+                    </div>
+                    <?php elseif($this->isStaffOrAbove && isset($this->resourceAcl['sort']['err']) ):?>
+                    <div style="float:right;">
+                        <a style="cursor:move" href="javascript:unAuthorized('<?php echo $this->resourceAcl['sort']['err'];?>');">
+                            <img class="notAuthorized" style="border: 0px; height:24px;" src="<?php echo $this->baseUrl;?>/img/sort_arrow.gif"/>
+                        </a>
+                    </div>
+                    <?php endif;?>
+                    
+                    <?php ### IMAGE ### ?>
+                    <?php if(!isset($resource['error'])) :?>
+                    <div class="resourceImgContainer">
+                        <a href="<?php echo $viewUrl;?>">
+                            <img src="<?php echo $imageUrl;?>" alt="" style="float:left;" />
+                        </a>
+                    </div>
+                    
+                    <?php ### TITLE ### ?>
+                    <div class="resourceTitleContainer" >
+                        <a href="<?php echo $viewUrl;?>">
+                            <?php echo $resource['title']; ?>
+                        </a>
+                    </div>
+                    <div class="resourceActionContainer">
+                        <?php ### EDIT ### ?>
+                    	<?php if($resource['edit'] == true && $this->resourceAcl['edit']['allow'] === true) :?>
+                        <div class="resourceButtonContainer">
+                            <a class="resourceButtonHref" href="<?php echo $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'edit','type' =>'lo','resourceid' => $resource['auto_id'] )); ?>">
+                                Edit
+                            </a>
+                        </div>
+                        <?php elseif($this->isStaffOrAbove && isset($this->resourceAcl['edit']['err']) ):?>
+                        <div class="resourceButtonContainer notAuthorized">
+                            <a class="resourceButtonHref" href="javascript:unAuthorized('<?php echo $this->resourceAcl['edit']['err']; ?>');">
+                                Edit
+                            </a>
+                        </div>
+                        <?php endif;?>
+                        
+                        <?php ### REMOVE ### ?>
+                        <?php if($this->resourceAcl['remove']['allow'] === true) :?>
+                        <div class="resourceButtonContainer">
+                            <a class="resourceButtonHref" href="javascript:removeResource('lo','<?php echo (int)$this->lo->auto_id;?>','<?php echo $this->escape($resource['mid']); ?>','<?php echo $resource['auto_id'];?>')">
+                                Remove
+                            </a>
+                        </div>
+                        <?php elseif($this->isStaffOrAbove && isset($this->resourceAcl['remove']['err'])):?>
+                        <div class="resourceButtonContainer notAuthorized">
+                            <a class="resourceButtonHref" href="javascript:unAuthorized('<?php echo $this->resourceAcl['remove']['err']; ?>');">
+                                Remove
+                            </a>
+                        </div>
+                       <?php endif;?>
+                    </div>
+                    <?php else :?>
+                        <span class="red">Error !</span> Cannot retrieve details for <span style="cursor: pointer;text-decoration:underline;" onclick="javascript:resourceError('<?php echo MediabankResourceConstants::sanitizeMid($resource['mid']); ?>');">resource id</span>
+                        <span class="hide"><?php echo $resource['mid'];?></span>                        
+                    <?php endif;?>                    
+                </div>
+            <?php endforeach;?>
+        <?php endif;?>        
+    <?php else :?>
+		<span class="red">Error getting resources !</span>
+	<?php endif;?>
+    </div>
+</div>

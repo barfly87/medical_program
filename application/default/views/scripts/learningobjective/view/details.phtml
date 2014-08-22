@@ -1,0 +1,136 @@
+<div id="linkContainer">
+    <div class="subHeadings">
+    	About this objective
+    </div>
+    <div id="linkContent">
+<table id="loViewTableNoSorter" class="tableNoSorter">
+<?php 
+	$showrows = 0;
+	if(strlen($this->escape($this->lo->discipline1Name))>0):?>
+  <tr><th>Main Discipline</th>					<td><?php echo $this->escape($this->lo->discipline1Name); ?></td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->curriculumarea1Name))>0):?>
+  <tr><th>Curriculum Area</th>				    <td><?php echo $this->escape($this->lo->curriculumarea1Name); ?></td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->discipline2Name))>0):?>
+  <tr><th>Additional Discipline</th>			<td><?php echo $this->escape($this->lo->discipline2Name); ?></td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->curriculumarea2Name))>0):?>
+  <tr><th>Curriculum Area</th>				    <td><?php echo $this->escape($this->lo->curriculumarea2Name); ?></td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->discipline3Name))>0):?>
+  <tr><th>Additional Discipline</th>			<td><?php echo $this->escape($this->lo->discipline3Name); ?></td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->curriculumarea3Name))>0):?>
+  <tr><th>Curriculum Area</th>				    <td><?php echo $this->escape($this->lo->curriculumarea3Name); ?></td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->theme1))>0):?>
+  <tr>
+  	<th><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th>
+  	<td><?php echo $this->escape($this->lo->theme1); ?></td>
+  </tr>
+ <?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->theme2))>0):?>
+  
+  <tr>
+  	<th>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th>
+  	<td><?php echo $this->escape($this->lo->theme2); ?></td>
+  </tr>
+  <?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->theme3))>0):?>
+  
+  <tr>
+  	<th>Additional <?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th>
+  	<td><?php echo $this->escape($this->lo->theme3); ?></td>
+  </tr>
+ <?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->skill))>0):?>
+  <tr><th>Clinical Skills</th>					<td><?php echo $this->escape($this->lo->skill); ?></td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->system))>0):?>
+  <tr><th>System</th>							<td><?php echo $this->escape($this->lo->system); ?></td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->keywords))>0):?>
+  <tr><th>Keywords</th><td>
+  <?php
+    $keywords_arr = explode('|', $this->lo->keywords);
+    if (count($keywords_arr) > 0) {
+        sort($keywords_arr);
+        $li = '';
+        foreach ($keywords_arr as $word) {
+            if (trim($word) !== '')
+                $li .= "<li>".$this->escape($word)."</li>";
+        }
+        if($li != '') {
+            echo '<ul>'.$li.'</ul>';
+        }
+         
+    }
+  ?>
+  </td></tr>
+<?php $showrows++;endif;?>
+
+<?php if(strlen($this->escape($this->lo->review))>0):?>
+  <tr><th>Curriculum Review</th>               <td><?php echo $this->escape($this->lo->review); ?></td></tr>
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->assessment_type))>0):?>
+  <tr><th>Assessment Methods</th>				<td><?php echo $this->escape($this->lo->assessment_type); ?></td></tr>  
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->achievement))>0):?>
+  <tr><th>Level&nbsp;of&nbsp;Achievement</th>	<td><?php echo $this->escape($this->lo->achievement); ?></td></tr>  
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->jmo))>0):?>
+  <tr><th>JMO</th>								<td><?php echo $this->lo->jmo ?></td></tr>
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->gradattrib))>0):?>
+  <tr><th>Graduate attribute</th>				<td><?php echo $this->lo->gradattrib ?></td></tr>
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->notes))>0):?>
+  <tr><th>Notes</th>							<td><?php echo $this->escape($this->lo->notes); ?></td></tr>
+<?php endif;?>
+
+  <tr><th>LO ID</th>							<td><?php echo $this->lo->loid ?></td></tr>
+  <tr><th>Version ID</th>							<td><?php echo $this->lo->auto_id ?></td></tr>
+
+<?php if(strlen($this->escape($this->lo->version))>0):?>
+  <tr><th>Version</th>							<td><?php echo $this->lo->version ?></td></tr>
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->created_by))>0):?>
+  <tr><th>Submitted by</th>						<td><?php echo Compass::userInfoHtml($this->lo->created_by);?></td></tr>
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->date_created))>0):?>
+  <tr><th>Date Submitted</th>					<td><?php echo $this->lo->date_created; ?></td></tr>
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->approved_by))>0):?>
+  <tr><th>Approved by</th>						<td><?php echo Compass::userInfoHtml($this->lo->approved_by);?></td></tr>
+<?php endif;?>
+
+<?php if(strlen($this->escape($this->lo->date_approved))>0):?>
+  <tr><th>Date Approved</th>					<td><?php echo $this->lo->date_approved; ?></td></tr>
+<?php endif;?>
+</table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+    	showHideRows('#loViewTableNoSorter', <?php echo $showrows-1;?>);
+    });
+</script>

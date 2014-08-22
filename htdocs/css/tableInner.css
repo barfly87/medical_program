@@ -1,0 +1,39 @@
+table.tableInner {
+    font-size:small;
+    color: #2F1D03;    
+}
+
+table.tableInner td {
+    padding: 3px;
+    /* text-align: center; */
+}
+
+.bogusClass {
+    background-color: #FFECCF;
+}
+
+.tableInnerTh {
+	padding: 3px;
+    height: auto;
+    text-decoration: none;
+    text-align: center;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+table.tableInner tr td a:link {
+    color: #2F1D03;
+}
+
+table.tableInner tr td a:visited {
+    color: #2F1D03;
+}
+
+table.tableInner tr td a:hover{
+    color: #7F6B4F; 
+    text-decoration: none;
+}
+
+table.tableInner tr td a:active {
+    color: #FF9C00
+}

@@ -1,0 +1,20 @@
+<?php if(!empty($this->result)) :?>
+    <?php if(!empty($this->result['deleted'])) :?>
+        <h2>Deleted</h2>
+        <ul>
+        <?php foreach($this->result['deleted'] as $uid) :?>
+            <li><?php echo $uid; ?></li>
+        <?php endforeach?>
+        </ul>
+    <?php endif;?>
+    <?php if(!empty($this->result['undeleted'])) :?>
+        <h2>Undeleted</h2>
+        <ul>
+        <?php foreach($this->result['undeleted'] as $uid) :?>
+            <li><?php echo $uid; ?></li>
+        <?php endforeach?>
+        </ul>
+    <?php endif;?>
+<?php else :?>
+    <h3><span class="error">Do not have any uids to remove from the cache.</span></h3>    
+<?php endif;?>

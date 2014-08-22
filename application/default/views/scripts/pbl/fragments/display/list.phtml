@@ -1,0 +1,56 @@
+
+<?php 
+//TABLE SORTER LOGIC
+echo $this->partial('pbl/fragments/sortable.phtml', array('customSortableId' => null));
+?>
+<div class="pblElem">
+	<p class="pblElemHeading"><?php echo $pageTitle;// This title is defined in display.phtml?></p>
+	<?php if(isset($this->content['rows']) && !empty($this->content['rows']) && !isset($this->content['error'])):?>
+    	<table width="100%" id="lttable" class="tableSorter">
+        	<thead>
+        		<tr>
+                	<?php foreach($this->req['columnHeadings'] as $columnHeading) :?>
+                	    <th><?php echo $columnHeading; ?></th>
+                    <?php endforeach;?>
+        		</tr>
+        	</thead>
+        	<tbody>
+        	<?php foreach($this->content['rows'] as $row) :?>
+        	    <tr>
+        	    <?php foreach($row as $column):?>
+        	        <td>
+        	            <?php echo $column; ?>
+        	        </td>
+        	    <?php endforeach;?>
+        	    </tr>
+        	<?php endforeach;?>
+        	</tbody>
+    	</table>
+	<?php else :?>
+		<?php $contentError = (isset($this->content['error'])) ? $this->content['error']: null;?>
+		<?php PblConst::printErrorOrNoneFound($contentError);?>
+	<?php endif;?>
+</div>
+
+<?php //This code should only display if type is 'lo' and moreover when column 'Student Resources' are displayed?>
+    <style>
+    a:visited.resourceButtonHref, a:link.resourceButtonHref,a:active.resourceButtonHref,a:hover.resourceButtonHref {
+        border:1px solid #2F1D03;
+        color:#2F1D03;
+        background-color:#FFD79F;
+        cursor:pointer;
+        font-weight:bold;
+        margin-right:6px;
+        padding:2px 4px;
+        font-size: 11px;
+        font-family: sans,verdana, arial;
+        text-decoration: none;
+    }
+    </style>
+    <script type="text/javascript">
+    <?// This function is only used when listing learning objectives for display student resources functionality?>
+    function showloresources(loid) {
+        var taloresourceurl = '<?php echo $this->url(array('controller' => 'studentresource', 'action' => 'studentresourcesmall'), null, true); ?>/id/' + loid;
+        $('#studentresourcepanel_'+loid).load(taloresourceurl);
+    } 
+    </script>

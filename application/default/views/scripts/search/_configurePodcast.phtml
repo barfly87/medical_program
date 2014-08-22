@@ -1,0 +1,247 @@
+<style type="text/css">
+#podcast-container table td.podcast-heading {
+    padding-left: 0px;
+    padding-bottom: 6px;
+}
+
+#podcast-container table td.podcast-title {
+    padding:0px 2px;
+    color:#FF4F4F;
+}
+
+#podcast-container .podcast-text {
+    padding: 0px 4x;
+    
+}
+</style>
+<script type="text/javascript">
+<?php if(!empty($this->url)) :?>
+<?php
+$podcastUrl = '';
+if(isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])) { 
+    $podcastUrl = $_SERVER['QUERY_STRING'].'&searchtype=main&format=podcast';
+}
+$httpHost = 'smp.sydney.edu.au';
+if(isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
+    $httpHost = $_SERVER['HTTP_HOST'];
+}
+
+$podcastNoOfYears = PodcastUrlService::getNoOfYearsAllowedToCreateUrl();
+$inputPodcastYears = PodcastConst::formPodcastYears;
+$inputPodcasts = PodcastConst::formPodcasts;
+
+?>
+var podcastUrl       = '<?php echo $podcastUrl; ?>';
+var hostInfo         = 'http://<?php echo $httpHost; ?>';
+var podcastError     = '<span style="font-size:120%">Error !</span><br />Please select atleast one media type.<br /><br />';
+var createPodcastUrl =  BASE_URL + '/podcast/createurl?' + podcastUrl;
+var searchPodcastUrl =  hostInfo + BASE_URL + '/podcast/search/pid/'; 
+
+$(document).ready(function() {
+    $('#podcast-form').submit(function() {
+    	$('#podcast-url-loading').show();
+    	$('#podcast-url-content').hide();
+    	$('#podcast-url-textarea').val('');
+
+    	var podcastErrorId = $('#podcast-error');
+    	podcastErrorId.html('');
+        var podcastSelected = false;
+        $('#podcast-form input[name="<?php echo $inputPodcasts;?>[]"]').each(function(){
+            if(this.checked == true) {
+                podcastSelected = true;
+            }
+        });
+        if(podcastSelected == false) {
+            $('#podcast-url-loading').hide();
+            podcastErrorId.html(podcastError);    
+        } else {
+            var createUrl = createPodcastUrl + '&' + $(this).serialize();
+            $.ajax({
+                url: createUrl,
+                async: false,
+                type: "GET",
+                success: function(data) {
+            	   $('#podcast-url-loading').hide();
+                    if(data == 'fail') {
+                    	$('#podcast-error').html('Error ! Could not create podcast URL.<br /><br />');
+                    } else {
+                    	$('#podcast-url-content').show(); 
+                        var displayUrl = searchPodcastUrl + data;
+            	        $('#podcast-url-textarea').val(displayUrl);
+                    } 
+                }
+            });     
+        }
+
+        return false;
+    });
+    $('#podcast-form input[name="<?php echo $inputPodcastYears;?>[]"]').click(function() {
+        var yearSelected = $(this).val();
+        var inputYearsObj = $('#podcast-form input[name="<?php echo $inputPodcastYears;?>[]"]');
+        if(yearSelected == 'All') {
+            inputYearsObj.each(function() {
+                if($(this).val() != 'All') {
+                    $(this).removeAttr('checked');
+                }
+            });
+        } else {
+            inputYearsObj.each(function() {
+                if($(this).val() == 'All') {
+                    $(this).removeAttr('checked');
+                }
+            });
+        }
+        var oneItemSelected = false;
+        inputYearsObj.each(function() {
+            if(this.checked) {
+                oneItemSelected = true;
+            }
+        });
+        if(oneItemSelected == false) {
+            inputYearsObj.each(function(index, val) {
+                if(index == 0) {
+                    this.checked = true;                
+                }
+            });
+        }
+    });
+});
+<?php endif;?>
+</script>
+<div id="podcast-container" style="display:none;">
+    <form method="post" name="podcast-form" id="podcast-form">
+    <table style="font-weight:bold;color:#2F1D03;">
+        <tr>
+            <td class="podcast-heading" colspan="2">
+                <span id="podcast-error" class="error"></span>
+                <span style="text-decoration:underline">Please select:<span>
+            </td>
+        </tr>
+        <tr>
+            <td class="topText" colspan="2">
+                <span class="podcast-title" style="color:#FF4F4F;">Select media type(s) for your podcast</span>
+                <table>
+                    <tr>
+                        <td>&nbsp;&nbsp;
+                            <input type="checkbox" value="<?php echo PodcastConst::fileFormatAudio; ?>" id="<?php echo PodcastConst::fileFormatAudio; ?>" name="<?php echo $inputPodcasts;?>[]" />
+                        </td>
+                        <td>
+                            <label for="<?php echo PodcastConst::fileFormatAudio; ?>">
+                                <span class="podcast-text">&nbsp;&nbsp;Audio</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;
+                            <input type="checkbox" value="<?php echo PodcastConst::fileFormatVideo; ?>" id="<?php echo PodcastConst::fileFormatVideo; ?>" name="<?php echo $inputPodcasts;?>[]" /></td>
+                        <td>
+                            <label for="<?php echo PodcastConst::fileFormatVideo; ?>">
+                                <span class="podcast-text">&nbsp;&nbsp;Video</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;&nbsp;
+                            <input type="checkbox" value="<?php echo PodcastConst::fileFormatImage; ?>" id="<?php echo PodcastConst::fileFormatImage; ?>" name="<?php echo $inputPodcasts;?>[]" />
+                        </td>
+                        <td>
+                            <label for="<?php echo PodcastConst::fileFormatImage; ?>">
+                                <span class="podcast-text">&nbsp;&nbsp;Image</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;&nbsp;
+                            <input type="checkbox" value="<?php echo PodcastConst::fileFormatPdf; ?>" id="<?php echo PodcastConst::fileFormatPdf; ?>" name="<?php echo $inputPodcasts;?>[]" />
+                        </td>
+                        <td>
+                            <label for="<?php echo PodcastConst::fileFormatPdf; ?>">
+                                <span class="podcast-text">&nbsp;&nbsp;Pdf</span>
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="topText" style="border-right: 1px dotted #FF6A6A;padding-right:10px;">
+                <span class="podcast-title" style="color:#FF4F4F;">Select resources</span>
+                <table>
+                    <tr>
+                        <td>
+                            &nbsp;&nbsp;
+                            <input type="radio" checked="checked" value="<?php echo PodcastConst::formResourceTypeRecordingsOnly; ?>" 
+                                    id="<?php echo PodcastConst::formResourceTypeRecordingsOnly; ?>" name="<?php echo PodcastConst::formResourceType; ?>" />
+                        </td>
+                        <td>
+                            <label for="<?php echo PodcastConst::formResourceTypeRecordingsOnly; ?>">
+                                <span class="podcast-text">&nbsp;&nbsp;Recordings Only</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="boldText centerText">&nbsp;&nbsp;OR</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;
+                            <input type="radio" value="<?php echo PodcastConst::formResourceTypeAllResources; ?>" 
+                                    id="<?php echo PodcastConst::formResourceTypeAllResources; ?>" name="<?php echo PodcastConst::formResourceType; ?>" />
+                        </td>
+                        <td>
+                            <label for="<?php echo PodcastConst::formResourceTypeAllResources; ?>">
+                                <span class="podcast-text">&nbsp;&nbsp;All Resources</span>
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <?php if(!empty($podcastNoOfYears)) :?>
+            <td style="padding-left:10px;">
+                <span class="podcast-title" style="color:#FF4F4F;">Select year(s) when recording happened</span>
+                <?php 
+                $all = PodcastConst::formYearsAll;
+                $podcastNoOfYears[$all] = $all;
+                $yearCounter = 1;
+                ?>
+                <table>
+                    <?php foreach($podcastNoOfYears as $year) :?>
+                    <?php $checked = ($yearCounter == 1) ? 'checked="checked"' : '';$yearCounter++;?>
+                    <tr>
+                        <td>
+                            &nbsp;&nbsp;
+                            <input type="checkbox" value="<?php echo $year;?>" id="year-<?php echo $year;?>" <?php echo $checked;?> name="<?php echo $inputPodcastYears;?>[]" />
+                        </td>
+                        <td>
+                            <label for="year-<?php echo $year;?>">
+                                <span class="podcast-text">&nbsp;&nbsp;<?php echo $year;?></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <?php endforeach;?>
+                </table>
+            </td>
+            <?php endif;?>
+        </tr>
+        <tr>            
+            <td colspan="2">
+                <input type="submit" name="podcast-submit" id="podcast-submit" class="TB_button" value="submit" style="margin-left:0px;"/>
+            </td>
+        </tr>
+    </table>
+    <table style="color:#2F1D03;"> 
+        <tr>
+            <td id="podcast-url" colspan="2">
+                <p id="podcast-url-loading" style="display:none;">
+                    <img style="padding-left: 10px;" src="<?php echo $this->baseUrl;?>/img/loading.gif" />
+                </p>
+                <p id="podcast-url-content" style="font-weight:normal;display:none;">
+                    Copy this URL into your podcast download application. eg. If you are using iTunes, choose "Subscribe to Podcast..." from the "Advanced" menu, and paste this URL into the text box that pops up.<br /><br />
+                    <textarea rows="2" cols="70" id="podcast-url-textarea" readonly="yes"></textarea>
+                </p>
+            </td>
+        </tr>
+    </table>
+    </form>
+</div>

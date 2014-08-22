@@ -1,0 +1,251 @@
+<?php 
+$resrc = array();
+if(! empty($this->fp->link->type)) {
+    switch($this->fp->link->type) {
+        case 'LO' : $resrc = array('lo[]' => $this->fp->lo->auto_id);                                       break;
+        case 'TL' : $resrc = array('lo[]' => $this->fp->lo->auto_id,'ta[]' => $this->fp->ta->auto_id);      break;        
+        case 'TA' : $resrc = array('ta[]' => $this->fp->ta->auto_id);                                       break;
+        case 'NT' : $resrc = array('ta[]' => $this->fp->ta->auto_id);                                       break;
+        case 'NL' : $resrc = array('lo[]' => $this->fp->lo->auto_id);                                       break;
+    }
+}
+?>
+
+<?php include('../application/common/views/_resrcUploadLinkJsAndCss.phtml'); ?>
+
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.autocomplete.min.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.2.js" type="text/javascript"></script>
+<script type="text/javascript">
+<?php if(count($resrc) > 0) :?>
+var resourcesToDisplay = <?php echo Zend_Json::encode($resrc);?>;
+<?php endif;?>
+</script>
+<script src="<?php echo $this->baseUrl;?>/js/userautocomplete.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl;?>/js/addloandta.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#savenewlo").click(function(){
+		$('#lo').val(CKEDITOR.instances.lo.getData());
+		$.post(BASE_URL + '/submission/savenewlo/id/' + <?php echo $this->fp->link->auto_id ?>, $('#newloform').serialize(), function(data) {
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				updateStatus();
+				$("#graphicalview").show();
+				$("#newlo").hide();
+			}
+		});
+	});
+	$("#saveexistinglo").click(function(){
+		$.post(BASE_URL + '/submission/saveloid', {id: <?php echo $this->fp->link->auto_id ?>, loid: $('#lo_id').val()}, function(data) {
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				updateStatus();
+				$("#graphicalview").show();
+				$("#existinglo").hide();
+			}
+		});		
+	});
+	$("#savenewta").click(function(){
+		$.post(BASE_URL + '/submission/savenewta/id/' + <?php echo $this->fp->link->auto_id ?>, $('#newtaform').serialize(), function(data) {
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				updateStatus();
+				$("#graphicalview").show();
+				$("#newta").hide();
+			}
+		});
+	});
+	$("#saveexistingta").click(function(){
+		$.post(BASE_URL + '/submission/savetaid', {id: <?php echo $this->fp->link->auto_id ?>, taid: $('#ta_id').val()}, function(data) {
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				updateStatus();
+				$("#existingta").hide();
+				$("#graphicalview").show();
+			}
+		});
+	});
+	$("#savelink").click(function(){
+		$.post(BASE_URL + '/submission/savelinkage/id/' + <?php echo $this->fp->link->auto_id ?>, $('#strengthform').serialize(), function(data) {
+			if (isNaN(data)) {
+				$.prompt(data);
+			} else {
+				updateStatus();
+				$("#graphicalview").show();
+				$("#strength").hide();
+			}
+		});
+	});
+	updateStatus();
+});
+
+function updateStatus() {
+    $.get(BASE_URL + '/submission/status/id/<?php echo $this->fp->link->auto_id ?>', null, function(data) {
+    	var json = eval("(" + data + ")");
+    	$("#newtalink").html(json.newtalink);
+    	$("#existingtalink").html(json.existingtalink);
+    	$("#taresource").html(json.taresource);
+
+    	$("#newlolink").html(json.newlolink);
+    	$("#existinglolink").html(json.existinglolink);
+    	$("#loresource").html(json.loresource);
+    	
+    	$("#strengthlink").html('<b>Strength:</b> ' + json.strength);
+
+    	if (json.tastatus == 'new') {
+    		<?php
+    		if ($this->newTaLink == true) {
+    			echo '$("#newtalink").attr("className", "enabled").css("cursor", "pointer");';
+    		} else {
+    			echo '$("#newtalink").attr("className", "disabled").css("cursor", "auto").unbind("click");';
+    		}
+    		?>
+    		$("#existingtalink").attr("className", "enabled").css('cursor', 'pointer');
+    	} else if (json.tastatus == 'existing') {
+    		$("#newtalink").attr("className", "disabled").unbind('click').css('cursor', 'auto');
+    		$("#existingtalink").attr("className", 'complete').css('cursor', 'pointer');
+    	} else if (json.tastatus.indexOf("complete") >= 0) {
+    		$("#newtalink").attr("className", json.tastatus).css('cursor', 'pointer');
+    		$("#existingtalink").attr("className", "disabled").css('cursor', 'auto').unbind('click');
+    	}
+
+    	if (json.lostatus == 'new') {
+    		$("#newlolink").attr("className", "enabled").css('cursor', 'pointer');
+    		$("#existinglolink").attr("className", "enabled").css('cursor', 'pointer');
+    	} else if (json.lostatus == 'existing') {
+    		$("#existinglolink").attr("className", "complete").css('cursor', 'pointer');
+    		$("#newlolink").attr("className", "disabled").css('cursor', 'auto').unbind('click');
+    	} else if (json.lostatus.indexOf('complete') >= 0) {
+    		$("#newlolink").attr("className", json.lostatus).css('cursor', 'pointer');
+    		$("#existinglolink").attr("className", "disabled").css('cursor', 'auto').unbind('click');
+    	}
+
+    	$("#strengthlink").attr("className", "enabled").css('cursor', 'pointer');
+    	
+    	if ((json.lostatus == 'complete' || json.lostatus == 'existing') && (json.tastatus == 'complete' || json.tastatus == 'existing')) {
+    		$("#submitlink").show();
+    	} else {
+    		$("#submitlink").hide();
+    	}
+    });
+}
+</script>
+<div>
+  <div id="graphicalview" align="center" style="padding-top: 20px;">
+    <table>
+    <tr align="center">
+      <td><b>Learning Objective</b><br /><br />
+        <table>
+          <tr><td align="center"><div id="newlolink"></div></td></tr>
+          <tr><td align="center"><div id="existinglolink"></div></td></tr>
+          <tr><td align="center"><div id="loresource" class="disabled"></div></td></tr>
+        </table>
+      </td>
+      <td><div id="strengthlink" class="enabled"></div><img src="<?php echo $this->baseUrl;?>/img/hlinkage.jpg"></td>
+      <td><b>Teaching Activity</b><br /><br />
+        <table>
+          <tr><td align="center"><div id="newtalink"></div></td></tr>
+          <tr><td align="center"><div id="existingtalink"></div></td></tr>
+          <tr><td align="center"><div id="taresource" class="disabled"></div></td></tr>
+        </table>
+      </td>
+      <td style="margin-left:20px">
+        <table>
+          <tr><td style="width:25px; background-color: #cfeace;"></td><td align="left">Editable</td></tr>
+          <tr><td style="background-color: #eeeeee;"></td><td align="left">Non-editable</td></tr>
+          <tr><td style="background-color: #ffe0af;"></td><td align="left">Incomplete</td></tr>
+          <tr><td style="background-color: #00ff00;"></td><td align="left">Complete</td></tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" colspan="3">
+      <?php $role = Zend_Auth::getInstance()->getIdentity()->role; ?>
+      <div id="submitlink" class="hidden">
+      <?php if ($role == 'staff' || $role == 'blockchair') : ?>
+      	<?php $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'submitloandta','id'=>$this->fp->link->auto_id),null,true); ?>
+        <a href="<?php echo $url?>">Submit to stage coordinator for approval</a>
+      <?php else : ?>
+        <?php $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'approveloandta','id'=>$this->fp->link->auto_id),null,true); ?>
+        <a href="<?php echo $url?>">Approve this LO/TA/Linkage</a>
+      <?php endif; ?>
+      </div>
+      </td><td>&nbsp;</td>
+    </tr>
+    </table>
+  </div>
+
+<?php
+$lo = $this->fp->lo->lo;
+$activity = NULL;
+$ability = NULL;
+
+if (preg_match('/^At the end of (.+), students should be able to ([a-z]+) (.*)$/sU', $lo, $match)) {
+	$scopeFinder = new LOScopes();
+	$activities = $scopeFinder->getAllScopes();
+	if (in_array($match[1], $activities)) {
+		$activity = $match[1];
+	}
+	$verbFinder = new LOVerbs();
+	$abilities = $verbFinder->getAllVerbs();
+	if (in_array($match[2], $abilities)) {
+		$ability = $match[2];
+	}
+	$lo = $match[3];
+}
+$checked = false;
+if(isset($activity) && isset($ability)) {
+	$checked = true;
+}
+
+echo $this->action('loandtaform', 'submission', NULL, array (
+	'lotype'			=> $this->fp->lotype,
+	'lo_id'				=> $this->fp->lo->auto_id,
+	'discipline1'		=> $this->fp->lo->discipline1ID,
+	'curriculumarea1'	=> $this->fp->lo->curriculumarea1,
+	'discipline2'		=> $this->fp->lo->discipline2ID,
+	'curriculumarea2'	=> $this->fp->lo->curriculumarea2,
+	'discipline3'		=> $this->fp->lo->discipline3ID,
+	'curriculumarea3'	=> $this->fp->lo->curriculumarea3,
+	'theme1'			=> $this->fp->lo->theme1ID,
+	'theme2'			=> $this->fp->lo->theme2ID,
+	'theme3'			=> $this->fp->lo->theme3ID,
+	'skill'				=> $this->fp->lo->skillID,
+	'system'			=> $this->fp->lo->systemID,
+	'activity'			=> $activity,
+	'ability'			=> $ability,
+	'lo'				=> $lo,
+	'checked'			=> $checked,
+	'review'			=> $this->fp->reviewArr,
+	'keywords'			=> $this->fp->lo->keywords,
+	'assesstype'		=> $this->fp->assesstypeArr,
+	'achievement'		=> $this->fp->lo->achievementID,
+	'jmo'				=> $this->fp->lo->jmoID,
+	'gradattrib'		=> $this->fp->lo->gradattribID,
+	'lo_notes'			=> $this->fp->lo->notes,
+
+	'tatype'			=> $this->fp->tatype,
+	'ta_id'				=> $this->fp->ta->auto_id,
+	'name'				=> $this->fp->ta->name,
+	'type'				=> $this->fp->ta->typeID,
+	'stage'				=> $this->fp->ta->stageID,
+	'year'				=> $this->fp->ta->yearID,
+	'block'				=> $this->fp->ta->blockID,
+	'block_week'		=> $this->fp->ta->block_weekID,
+	'pbl'				=> $this->fp->ta->pblID,
+	'sequence_num'		=> $this->fp->ta->sequence_numID,
+	'student_grp'		=> $this->fp->ta->student_grpID,
+	'principal_teacher'	=> $this->fp->ta->principal_teacher,
+	'current_teacher'	=> $this->fp->ta->current_teacher,
+	'ta_notes'			=> $this->fp->ta->notes,
+
+	'strength'			=> $this->fp->link->strengthID,
+	'link_notes'		=> $this->fp->link->notes,
+)); ?>
+</div>

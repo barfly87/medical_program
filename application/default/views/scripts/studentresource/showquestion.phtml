@@ -1,0 +1,86 @@
+<script type="text/javascript" src="/compass/js/json2.js"></script>
+<script type="text/javascript" src="/compass/js/jquery/jquery-ui-1.6.custom.min.js"></script>
+<script type="text/javascript" src="/compass/js/swfobject.js"></script>
+<?php 
+	$q = 	$this->question;
+	$mid = $this->midencoded;
+	$id = $this->id;
+	$q = $q['question'];
+	$qstats = $this->qstats;
+	$totalresponses = $this->qstatstotal;
+?>
+<style>
+	.questionstatsextra<?php echo $id; ?> {
+		display:none;
+	}
+</style>
+<script>
+    function checkquestion<?php echo $id; ?>() {
+        var val = $("input:radio[name=options<?php echo $id; ?>]:checked").val();
+        if(val == <?php echo $q['correct'];?>) {
+    	    $('#questionresponse<?php echo $id; ?>').html("Correct");
+  	  } else {
+			$('#questionresponse<?php echo $id; ?>').html("Incorrect");
+			$('#tickbox<?php echo $id; ?>_'+val).html("<img src=\"<?php echo $this->baseUrl;?>/img/cross.png\" height=\"12\" width=\"12\">");
+  	  }
+      $('#questionstats<?php echo $id; ?>').load('<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'questioncompleted', 'id'=>$id, 'mid'=>$mid, 'correct'=>$q['correct']),'default',true); ?>/choice/'+$("input:radio[name=options<?php echo $id; ?>]:checked").val());
+      $('#questionexplanation<?php echo $id; ?>').show();
+      <?php if($this->showstats): ?>$('#questionstats<?php echo $id; ?>').show();<?php endif;?>
+      $('.questionstatsextra<?php echo $id; ?>').show();
+    }
+    function open_flash_chart_data() {
+        return JSON.stringify(data);
+    }
+</script>
+<table>
+	<tr>
+		<td colspan="4">
+			<?php echo $q['question']; ?>
+		</td>
+	</tr>
+	<tr class="questionstatsextra<?php echo $id; ?>">
+		<td style="width: 15px;"></td>
+		<td style="width: 15px;"></td>
+		<td></td>
+		<td><small>Your colleagues responded:</small></td>
+	</tr>
+	<?php for($i=1;$i<=5;$i++):?>
+	<tr>
+		<td style="width: 15px;">
+			<input type="radio" name="options<?php echo $id; ?>" value="<?php echo $i; ?>"></input>
+		</td>
+		<td id="tickbox<?php echo $id; ?>_<?php echo $i; ?>" style="width: 15px;" class="questionstatsextra<?php echo $id; ?>">
+			<?php if($i == $q['correct']) :?>
+			<img src="<?php echo $this->baseUrl;?>/img/tick.png" height="12" width="12">
+			<?php endif;?>
+		</td>
+		<td>
+			<?php echo $q['option'.$i]; ?>
+		</td>
+		
+		<td class="questionstatsextra<?php echo $id; ?>">
+			<div style="width: <?php echo sprintf("%d",100*$qstats[$i]/$totalresponses); ?>px; background-color: #8888FF"><?php echo sprintf("%d",100*$qstats[$i]/$totalresponses); ?>%</div>
+		</td>
+		
+		
+	</tr>
+	<?php endfor;?>
+	<tr>
+		<td colspan="4">
+			<input type="button" onclick="checkquestion<?php echo $id; ?>();" value="Check">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4" id="questionresponse<?php echo $id; ?>">
+			
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4" id="questionexplanation<?php echo $id; ?>" style="display:none">
+			<?php echo stripslashes($q['explanation']); ?>
+		</td>
+	</tr>
+
+</table>
+<span id="questionstats<?php echo $id; ?>" style="display:none"></span>
+  <div id="my_chart_<?php echo strtr($this->midencoded,array('='=>'')); ?>"></div>

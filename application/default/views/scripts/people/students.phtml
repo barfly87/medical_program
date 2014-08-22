@@ -1,0 +1,55 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<?php $cols = 4; ?>
+<div style="float: left; max-width: 950px">
+<h2>Student List</h2>
+<table>
+	<tr>
+		<td colspan="<?php echo($cols * 2);?>" style="text-align: center;"><form><?php foreach(range('a','z') as $ch) { 
+			if($this->ch == $ch) echo strtoupper($ch); else { ?> <a
+			href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'students', 'ref'=>$ch),'default',true); ?>"><?php echo strtoupper($ch);?></a>
+			<?php }
+			/*if($ch != 'z') */echo ' - ';
+		} ?>
+		Search:&nbsp;<input name="search" value="<?php echo($this->search_query);?>">&nbsp;<input type="submit" value="Search">
+		<!-- Search tool requested by Henry Elbourne-Binns. Thanks, Henry. -->
+		</form>
+		<br />
+		<br />
+		</td>
+	</tr>
+	<?php 
+	$keys = array_keys($this->studentList);
+	$studentsleft = true;
+	$numstudentspercol = ceil(count($this->studentList)/4);
+	for($row=0; $row < $numstudentspercol;$row++) {
+		echo "<tr>";
+		for($col=0;$col<$cols;$col++) {
+			$studentnum = $row + $numstudentspercol*$col;
+			if(!isset($keys[$studentnum])) {
+				continue;
+			}
+			$key = $keys[$studentnum];
+			$student = $this->studentList[$key];
+			$uid = $student['uid'][0];
+			$cn = $student['cn'][0];
+			if($cn == strtoupper($cn))
+				$cn = ucwords(strtolower($cn));
+			?>
+			<td>
+				<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$uid),'default',true); ?>">
+					<img src="<?php echo isset($student['photo']) ? $student['photo'] : ''; ?>">
+				</a>
+			</td>
+			<td>
+				<a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'view', 'uid'=>$uid),'default',true); ?>">
+					<?php echo $cn;?>
+				</a>
+			</td>
+			<?php
+		}
+		echo "</tr>";
+	}
+	?>
+</table>
+</div>

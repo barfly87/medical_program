@@ -1,0 +1,122 @@
+<?php 
+$postCommentUrl = $this->url(array('module'=>'default','controller'=>'evaluate','action'=>'index'));
+$display = (! empty($this->display)) ? 'display:'.$this->display : '';
+?>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery.growfield2.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('textarea.growfield').growfield({min:100});
+});
+
+function showFeedback(type,type_id) {
+	$('#feedback_type').val(type);
+	$('#feedback_type_id').val(type_id);
+	$('#feedback').show();
+	return false;
+}
+
+function submitFeedback() {
+	var error = false;
+	var error_msg = '';
+
+    <?php if(isset($this->data['rating']) && isset($this->data['rating']['mandatory']) && $this->data['rating']['mandatory'] === true) :?>
+    var rating = $.trim($("input[name='DATA_rating']:checked").val());
+    if(rating == ''){
+        error_msg += 'Please give your rating and re-submit.<br />';
+        error = true;
+    }
+    <?php endif;?>
+
+	<?php if(isset($this->data['comment']) && isset($this->data['comment']['mandatory']) && $this->data['comment']['mandatory'] === true) :?>
+	var comment = $.trim($('textarea#comment').val());
+	//'dummy text' is put by the jquery library autogrow for reason unknown.
+	if(comment == 'dummy text' || comment == ''){
+        error_msg += 'Please make sure that your comment is not empty.<br />';
+        error = true;
+    }
+	<?php endif;?>
+
+	<?php if(isset($this->data['clinicalSchool']) && isset($this->data['clinicalSchool']['mandatory']) && $this->data['clinicalSchool']['mandatory'] === true ) :?>
+    var clinicalSchool = $.trim($("select[name='DATA_clinical_school']").val());
+    if(clinicalSchool == '') {
+        error_msg += 'Please choose your clinical school.<br />';
+        error = true;
+    }	
+	<?php endif;?>	
+	
+	<?php if(isset($this->data['pblgroup']) && isset($this->data['pblgroup']['mandatory']) && $this->data['pblgroup']['mandatory'] === true ) :?>
+    var pblgroup = $.trim($("select[name='DATA_pbl_group']").val());
+    //'dummy text' is put by the jquery library autogrow for reason unknown.
+    if(pblgroup == 0){
+        error_msg += 'Please choose your pbl group.<br />';
+        error = true;
+    }
+	<?php endif;?>
+	
+    if(error == true) {
+        $('#feedbackMsg').html('<span class="red">' + error_msg + '</span>');
+    } else {
+    	$.post("<?php echo $postCommentUrl; ?>",$("#feedback_form").serialize(),function(data){
+    		var msg = '';
+    		if(data == 'fail') {
+    		    msg = '<span class="red">Error! System was not able to process your feedback at this stage.</span>';
+    		} else {
+    		    msg = '<span class="boldText">&nbsp;Thank you for your feedback.</span>'; 
+    		    $('div#feedback table').hide();
+    		}
+    		$('#feedbackMsg').html(msg);
+    	});
+	}
+	return false;
+}
+</script>
+<?php if(isset($this->data) && !empty($this->data)) :?>
+<div id="feedback" style="color: #2F1D03;<?php echo $display;?>">
+    <div id="feedbackMsg"></div>
+    <form method="post" name="feedback_form" id="feedback_form" onsubmit="return submitFeedback();" action="">
+    <table width="100%">
+        <?php if(isset($this->data['feedback']) && isset($this->data['feedback']['title'])) :?>
+        <tr><td class="italicText"><?php echo $this->data['feedback']['title']; ?></td></tr>
+        <?php endif;?>
+        <?php if(isset($this->data['rating'])): ?>
+        <tr>
+            <td class="italicText">
+                <?php if(isset($this->data['rating']['title'])) :?>
+                    <?php echo $this->data['rating']['title'];?><br />
+                <?php endif;?>
+                <?php echo $this->formRadio('DATA_rating', '',array('style' => ''),array('1' => 'Poor','2'=>'Fair','3'=>'Satisfactory','4'=>'Good','5'=>'Excellent'),'') ?>
+                <br />
+            </td>
+        </tr>
+        <?php endif;?>
+        <?php if(isset($this->data['comment']) ):?>
+        <tr>
+            <td>
+                <?php if(isset($this->data['comment']['text'])) :?>
+                    <?php echo $this->data['comment']['text'];?>
+                    <br />
+                <?php endif;?>
+                <div style="padding-right:6px"><textarea class="growfield" name="comment" id="comment" style="width:100%; border-width:1;}"></textarea></div>
+            </td>
+        </tr>
+        <?php endif;?>
+        <tr>
+            <td>
+                <input type="hidden" name="feedback_type" id="feedback_type" value="<?php echo $this->type;?>" />
+                <input type="hidden" name="feedback_type_id" id="feedback_type_id"  value="<?php echo $this->type_id; ?>" />
+                <?php if(isset($this->data['clinicalSchool']) && isset($this->data['clinicalSchool']['list']) && count($this->data['clinicalSchool']['list']) > 0 ) :?>
+                    <span class="class="italicText">Clinical school</span><br />
+                    <?php echo $this->formSelect('DATA_clinical_school','',array('style' => 'margin: 2px 0px 7px 0px;'), array('' => 'Choose') + $this->data['clinicalSchool']['list']) ;?> <br />
+                <?php endif;?>
+                <?php if(isset($this->data['pblgroup']) && isset($this->data['pblgroup']['list']) && count($this->data['pblgroup']['list']) > 0 ) :?>
+                    <span class="class="italicText">Your pbl group.</span><br />
+                    <?php echo $this->formSelect('DATA_pbl_group','',array('style' => 'margin: 2px 0px 7px 0px;'), array('0' => 'Choose') + $this->data['pblgroup']['list']) ;?> <br />
+                <?php endif;?>
+                 
+                <input type="submit" value="Submit" id="submit"/>
+            </td>
+        </tr>
+    </table>                
+    </form>
+</div>
+<?php endif;?>

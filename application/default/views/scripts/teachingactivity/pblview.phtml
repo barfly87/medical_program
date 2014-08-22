@@ -1,0 +1,106 @@
+<?php 
+$loViewUrl = $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view'),null,true).'/id/%d';
+$resourceViewUrl = (! empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'].'/resource/%d?mid=%s' : false ;
+$resourceImageUrl = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'image'),null,true).'?size=128&mid=%s';
+?>
+
+<p class="pblElemHeading"><?php echo $this->escape($this->ta->name); ?></p>
+
+<div>
+    <table class="tableNoSorter">
+        <tr>
+            <th class="leftText">Principal Teacher</th>
+            <td style="width:600px;"><?php echo Compass::userInfoHtml($this->ta->principal_teacher); ?></td>
+        </tr>
+        <tr>
+            <th class="leftText">Objectives</th>
+            <td>
+                <?php $loCnt = 1;?>
+                <?php foreach ($this->released_los as $lo) : ?>
+                    <?php if($loCnt > 1):?><br /><br /><?php endif;?>
+                    <a href="<?php printf($loViewUrl,$lo['auto_id']);?>"><?php echo $lo['lo']; ?></a>
+                    <?php $loCnt++ ;?>
+                <?php endforeach;?>
+            </td>
+        </tr>
+        <tr>
+            <th class="leftText">Resources</th>
+            <td>
+                <?php if($this->resourceError == false) :?>
+                    <?php if(isset($this->resources) && count($this->resources) > 0): ?>
+                        <table>
+                        <?php $resourceCnt = 0;?>
+                        <?php $resourceUrlFormat = $this->url(array('module'=>'default','controller'=>'resource','action'=>'pbl'),null,true).'/mid/%s'; ?>
+                        <?php foreach($this->resources as $resource) :?>
+                            <?php (($resourceCnt%4) == 0) ? print '<tr>' : '' ; ?>
+                            <td valign="top">
+                                <div style="width:150px;" class="centerText">
+                                <?php if(!isset($resource['error'])) :?>
+                                    <?php if(isset($resource['customViewUrl']) && ! empty($resource['customViewUrl'])) :?>
+                                        <div>
+                                            <a class="noUnderlineText" href="<?php echo $resource['customViewUrl'];?>">
+                                                <?php if(isset($resource['customImageUrl']) && ! empty($resource['customImageUrl'])) :?>
+                                                    <img src="<?php echo $resource['customImageUrl'];?>" class="noBorder"  alt=""/>
+                                                <?php else: ?>
+                                                    <img src="<?php echo MediabankResourceConstants::$noImageSmall;?>" class="noBorder"  alt=""/>
+                                                <?php endif;?>
+                                            </a>                                                
+                                        </div>
+                                        <div>
+                                            <span>
+                                                <a class="" href="<?php echo $resource['customViewUrl'];?>"><?php echo $resource['title'];?></a>
+                                            </span>
+                                        </div>
+                                    <?php else :?>
+                                        <?php                                         
+                                        $imageUrl = sprintf($resourceImageUrl,$resource['mid']);
+                                        $viewResourceUrl = ($resourceViewUrl !== false) ? sprintf($resourceViewUrl,$resource['auto_id'], $resource['mid']) : '' ;
+                                        ?>
+                                        <div>
+                                            <span>
+                                                <a class="noUnderlineText" href="<?php echo $viewResourceUrl;?>">
+                                                    <img src="<?php echo $this->escape($imageUrl);?>" class="noBorder" alt=""/><br />
+                                                    <span class="underlineText"><?php echo $resource['title'];?></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    <?php endif;?>
+                                         
+                                <?php else :?>
+                                    <span class="red">Error !</span>
+                                    <?php if(isset($resource['mid'])):?><span class="hide"><?php echo $resource['mid'];?></span><?php endif;?>                         
+                                <?php endif;?>                    
+                                </div>
+                            </td>
+                            <?php (($resourceCnt%4) == 3) ? print '</tr>' : '' ; ?>
+                            <?php $resourceCnt++ ;?>
+                        <?php endforeach;?>
+                            <?php (($resourceCnt < 3) || ($resourceCnt%4 != 0)) ? print '</tr>' : ''; ?>
+                        </table>
+                    <?php endif;?>
+                <?php else :?>
+                    <span class="red">Error getting resources !</span>
+                <?php endif;?>
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: #FFF">
+                <?php if(!empty($this->pblTaTypePrev)) :?>
+                    <a class="noUnderlineText" href="<?php echo MediabankResourceConstants::decode($this->pblTaTypePrev);?>">&lt;&lt;&nbsp;Previous&nbsp;</a>&nbsp;
+                <?php endif;?>
+            </td>
+            <td style="background-color: #FFF;text-align:right;" >
+                <?php if(!empty($this->pblTaTypeNext)) :?>
+                    <a class="noUnderlineText" href="<?php echo MediabankResourceConstants::decode($this->pblTaTypeNext);?>">&nbsp;Next&nbsp;&gt;&gt;</a>&nbsp;
+                <?php endif;?>
+            </td>
+        </tr>
+    </table>
+    <br />        
+    <div>
+        <?php $doctypelink = $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'view','id' => $this->ta->auto_id),null,true); ?>
+        <a href=""></a>
+        <a href="<?php echo $doctypelink;?>" class="buttonLink">View <?php echo $this->ta->type(); ?> Details</a>&nbsp;
+        <a href="" class="buttonLink" onclick="return showFeedback('ta',<?php echo $this->ta->auto_id;?>);">Feedback</a>&nbsp;
+    </div>
+</div>

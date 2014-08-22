@@ -1,0 +1,29 @@
+<?php echo $this->action('menu1', 'learningobjective'); ?>
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<link href="<?php echo Compass::baseUrl();?>/css/table.css" media="screen" rel="stylesheet" type="text/css" />
+
+<div style="float:left; max-width:750px">
+  <h2>Block Chairs</h2>
+    <table id="blockchairtable" class="tableSorter">
+    	<thead>
+    		<tr>
+    			<th>#</th>
+    			<th>Block</th>
+    			<th>Block Chair</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+      	<?php foreach($this->blocks as $ind => $chair): ?>
+      	  	<tr class="<?php echo($ind%2?'even':'odd');?>">
+      	  		<td><?php echo $ind;?></td>
+				<td><?php echo $chair['name'];?></td>
+				<td><?php foreach($chair['uids'] as $uid) {
+  						echo Compass::userInfoHtmlOnly($uid);
+  					}
+  					?>
+				</td>
+      	  	</tr>
+      	<?php endforeach;?>
+    </tbody>
+    </table>
+</div>

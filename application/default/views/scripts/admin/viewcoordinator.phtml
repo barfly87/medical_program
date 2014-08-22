@@ -1,0 +1,32 @@
+<style type="text/css">
+.user{ border: solid 1px #bbbbbb; background-color: #eeeeee;}
+.horizontal1 {float: left; margin: 4px; width: 80px; }
+.horizontal2 {float: left; margin: 4px; width: 200px; text-align: center; }
+.horizontal3 {float: left; margin: 4px; width: 300px; padding-left: 50px; }
+.horizontal4 {float: left; margin: 4px; width: 80px; }
+.deleteimg {border: 0px; padding-left:16px; }
+</style>
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.2.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/removeuser.js"></script>
+
+<?php if (count($this->coordinators) > 0) :?>
+<table>
+  <thead><tr align="left"><th><div class="horizontal1">Delete</div><div class="horizontal2">Stage</div><div class="horizontal3">Stage Coordinator</div><div class="horizontal4">Domain</div></th></tr></thead>
+  <tbody>
+<?php foreach ($this->coordinators as $coordinator): ?>
+  <tr class="user" id="userid<?php echo $coordinator['id'] ?>">
+    <td>
+      <div class="horizontal1"><a href="javascript:;" onclick="removeUser('deletecoordinator', <?php echo $coordinator['id']?>, '<?php echo $coordinator['uid']?>');"><img src="<?php echo $this->baseUrl;?>/img/delete.gif" class="deleteimg"></a></div>
+      <div class="horizontal2"><?php echo $coordinator['name']?></div>
+      <div class="horizontal3"><span class="userid"><?php echo $this->escape($coordinator['uid']) ?></span><div class="userdetail"></div></div>
+      <div class="horizontal4"><?php echo $coordinator['domain']?></div>      
+    </td>
+  </tr>
+<?php endforeach; ?>
+  </tbody>
+</table>
+<?php else : ?>
+<p>No stage coordinator found.</p>
+<?php endif; ?>
+<p><a href="<?php echo $this->url(array('action' => 'addcoordinator', 'controller' => 'admin'), null, true); ?>">Add Stage Coordinator</a></p>

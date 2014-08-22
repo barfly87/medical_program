@@ -1,0 +1,11 @@
+<div class="rhsbox">
+    <h3 class="rhsheading">Manage Photos</h3>
+    <div class="mcontent">
+        <div>
+  <h2>Are you sure?</h2>
+  <img src="<?php echo $this->photoURL; ?>"/><br>
+  <a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'actuallydeletephoto', 'mid'=>$this->midencoded, 'uid'=>$this->uid),'default',true); ?>">Yes, I want to delete this photo</a><br><br>
+  <a href="<?php echo $this->url(array('module'=>'default','controller'=>'people', 'action'=>'managephotos','uid'=>$this->uid),'default',true); ?>">No, take me back to the Manage Photos screen</a>
+        </div>
+    </div>
+</div>

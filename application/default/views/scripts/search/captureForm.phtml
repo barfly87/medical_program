@@ -1,0 +1,106 @@
+<?php $this->placeholder('searchIn')->captureStart();?>
+    <?php $formContext = $this->fp->context ? $this->fp->context : 'lo';?>
+    <?php echo $this->formRadio('context', $formContext,array('style' => ''),array('lo' => 'Learning Objective','ta'=>'Teaching Activity'),'&nbsp;&nbsp;') ?>
+<?php $this->placeholder('searchIn')->captureEnd() ?>
+
+<?php $this->placeholder('qstr')->captureStart();?>
+    <?php echo $this->formText('qstr', $this->fp->qstr,array('size' => 50))?>
+<?php $this->placeholder('qstr')->captureEnd() ?>
+
+<?php $this->placeholder('qoption')->captureStart();?>
+    <?php echo $this->formSelect('qoption', $this->fp->qoption ,array('style' => ''),array('any' => 'Contains Any','all' => 'Contains All', 'exact' => 'Exact Phrase','lucene' => 'Lucene Syntax'))?>
+<?php $this->placeholder('qoption')->captureEnd() ?>
+
+<?php $this->placeholder('domain')->captureStart();?>
+	<?php $domainSelected = $this->fp->domain;
+          $domainSelected = (!empty($domainSelected)) ? $domainSelected : array(Zend_Auth::getInstance()->getIdentity()->domain); ?>
+    <?php echo $this->formMultiCheckbox('domain[]', $domainSelected, array('style' => ''), array('Any' => 'Any') + $this->domains,'&nbsp;&nbsp;')?>
+<?php $this->placeholder('domain')->captureEnd() ?>
+
+<?php $this->placeholder('disciplines')->captureStart();?>
+<p id="selectCheckBox">
+    <?php unset($this->disciplines[1]);?>
+    <?php foreach($this->disciplines as $k=>$v) :?>
+        <label>
+        <input type="checkbox" name="discipline[]" id="discipline_id_<?php echo $k; ?>" <?php if(isset($this->fp->selected[$k])) { echo 'checked ' ;} ?> value="<?php echo $k; ?>"/>
+        <?php             
+        $split = split("/",$v);
+        $count = count($split);
+        if($count > 1) {
+            $split[$count-1] = '<span class="headings">'.$split[$count-1].'</span>';
+            $v = implode("/", $split);
+            for($i=0; $i< $count ; $i++) {
+                $v = "&nbsp;&nbsp;".$v;
+            }
+            echo $v;
+        } else {
+            echo '<span class="headings">'.$v.'</span>';
+        }                  
+        ?>
+        </label>
+        <br/>
+    <?php endforeach;?>
+</p>
+<?php $this->placeholder('disciplines')->captureEnd() ?>
+
+<?php $this->placeholder('acttype')->captureStart();?>
+    <p class="selectCheckBox selectActivityType">
+    <?php foreach($this->types as $type) :?>
+        <?php $activityTypeId = "acttype_id_".preg_replace('#[^[:alnum:]]#','_',strtolower($type));?>
+        <input type="checkbox" name="acttype[]" id="<?php echo $activityTypeId; ?>" <?php if(isset($this->fp->activityTypesSelected[$type])) { echo 'checked ' ;} ?> value="<?php echo $type; ?>"/>
+        <label for="<?php echo $activityTypeId; ?>">
+            <?php echo $type?>
+        </label><br />    
+    <?php endforeach;?>
+    </p>
+<?php $this->placeholder('acttype')->captureEnd() ?>
+
+<?php $this->placeholder('stage')->captureStart();?>
+    <?php $stagesSelected = $this->fp->stage;
+          $stagesSelected = (!empty($stagesSelected)) ? $stagesSelected : array('Any'); ?>
+    <?php echo $this->formMultiCheckbox('stage[]', $stagesSelected,array('style' => ''),array('Any' => 'Any') + $this->stages,'&nbsp;&nbsp;')?>
+<?php $this->placeholder('stage')->captureEnd() ?>
+
+<?php $this->placeholder('block')->captureStart();?>
+    <?php echo $this->formSelect('block', $this->fp->block ,array('style' => ''),array('' => 'Any') + $this->blocks)?>
+<?php $this->placeholder('block')->captureEnd() ?>
+
+<?php $this->placeholder('blockweek')->captureStart();?>
+    <?php echo $this->formSelect('blockweek', $this->fp->blockweek ,array('style' => ''),array('Any' => 'Any') + $this->weeks)?>
+<?php $this->placeholder('blockweek')->captureEnd() ?>
+
+<?php $this->placeholder('pbl')->captureStart();?>
+    <?php echo $this->formSelect('pbl', stripslashes($this->fp->pbl) ,array('style' => ''),array('' => 'Any') + $this->pbls)?>
+<?php $this->placeholder('pbl')->captureEnd() ?>
+
+<?php $this->placeholder('theme')->captureStart();?>
+    <?php echo $this->formSelect('theme', $this->fp->theme ,array('style' => ''),array('' => 'Any') + $this->themes)?>
+<?php $this->placeholder('theme')->captureEnd() ?>
+
+<?php $this->placeholder('skill')->captureStart();?>
+    <?php echo $this->formSelect('skill', $this->fp->skill,array('style' => ''),array('' => 'Any') + $this->skills)?>
+<?php $this->placeholder('skill')->captureEnd() ?>
+
+<?php $this->placeholder('hiddenLoContext')->captureStart();?>
+    <?php echo $this->formHidden('context', 'lo' ,array('style' => ''))?>
+<?php $this->placeholder('hiddenLoContext')->captureEnd() ?>
+
+<?php $this->placeholder('hiddenTaContext')->captureStart();?>
+    <?php echo $this->formHidden('context', 'ta' ,array('style' => ''))?>
+<?php $this->placeholder('hiddenTaContext')->captureEnd() ?>
+
+<?php $this->placeholder('displayQueryLink')->captureStart();?>
+    <?php if (UserAcl::isAdmin()) :?>
+    <a href="#TB_inline?width=300&height=200&inlineId=hiddenQueryContent" title="Lucene Query Used For Current Search" class="thickbox" style="text-decoration:none;">
+        <input type="button" id="submitButton" value="Get Lucene Query">
+    </a>
+    <div id="hiddenQueryContent" style="display:none;">
+        <div align="center">
+            <textarea readonly="readonly" cols="60" rows="6"><?php echo trim($this->lucenQueryString) ;?></textarea>
+        </div>
+    </div>
+    <?php endif; ?>
+<?php $this->placeholder('displayQueryLink')->captureEnd() ?>
+
+
+

@@ -1,0 +1,114 @@
+<?php include_once('_lecturerecordingsblockhandbook_jscss.phtml');?>
+
+<?php $imageUrlLectureRecordings = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'image'),null,true).'?size=128&mid=%s';?> 
+<?php $downloadUrlLectureRecordings = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'download'),null,true).'?mid=%s&fn=%s&mt=%s';?>
+<?php $medvids = $this->resources['lectures']['medvid']; ?>
+<?php $echo360 = $this->resources['lectures']['echo360'];?>
+<?php $otherRecordings = $this->resources['lectures']['other']; ?>
+
+<?php if(!empty($medvids) || !empty($otherRecordings) || !empty($echo360)): ?>
+<div id="recordings-container">
+    <h2>Recordings</h2><hr />
+    <ul class="recordings-ul">
+        <?php foreach($medvids as $year => $data):?>
+        <li id="medvid_<?php echo $year;?>">
+            <div class="recording">
+                <div class="recording-desc">
+                    <img src="<?php printf($imageUrlLectureRecordings, $data['image']['midEncoded']); ?>" /><br /><br />
+                    <span class="boldText"><?php echo $year?>&nbsp;Lecture</span><br />
+                    <?php (!empty($data['duration'])) ? $data['duration'].'<br />' : '';?>
+                </div>
+                <div class="recording-links">
+                <?php foreach($data['info'] as $type => $typeinfo) :?>
+                    <?php $viewUrl = (isset($typeinfo['customUrl'])) ? $typeinfo['customUrl'] : sprintf($downloadUrlLectureRecordings, $typeinfo['metadata']['midEncoded'],$typeinfo['customFileName'], $typeinfo['metadata']['mimeType']); ?>
+                    <?php $viewUrl = (isset($typeinfo['normalUrl'])) ? $typeinfo['normalUrl'] : $viewUrl; ?>
+                    <img src="<?php echo $typeinfo['icon']?>" />&nbsp;<a href="<?php echo $viewUrl;?>"><?php echo $typeinfo['title']; ?></a><br />
+                <?php endforeach;?>
+                </div>
+            </div>
+        </li>
+        <?php endforeach;?>
+
+        <?php if(!empty($echo360)) :?>
+            <?php foreach($echo360 as $year => $data):?>
+            <li id="echo360_<?php echo $year;?>">
+                <div class="recording">
+                    <div class="recording-desc">
+                        <img src="<?php echo LectureRecordings::getLectureImage();?>" /><br /><br />
+                        <span class="boldText"><?php echo $year?>&nbsp;Lecture</span><br />
+                    </div>
+                    <div class="recording-links">
+                        <table style="width:100%; margin:-8px;">
+                            <tr>
+                                <td style="text-align:center;width:100%">
+                                <?php foreach($data['links'] as $link):?>
+                                    <?php echo $link['aHref']?>
+                                <?php endforeach;?>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </li>
+            <?php endforeach;?>
+        <?php endif;?>
+        
+        <?php 
+        $imageUrlFormat = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'image'),null,true).'?size=128&mid=%s'; 
+        $viewUrlFormat = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'view','type'=>'ta','resourceid'=>'%d','id'=>'%d','resourcetypeid'=>ResourceTypeConstants::$RECORDINGS_ID),null,true,false).'?mid=%s';
+        $viewOrDownloadUrlFormat = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'viewordownload','type'=>'ta','resourceid'=>'%d','id'=>'%d','resourcetypeid'=>ResourceTypeConstants::$RECORDINGS_ID),null,true,false).'?mid=%s';
+        ?>
+        
+        <?php foreach($otherRecordings as $resource) :?>
+            <?php
+                if(!isset($resource['customViewUrl'])) {
+                    $viewUrl = $this->escape(sprintf($viewUrlFormat, $resource['auto_id'], $this->ta->auto_id, $resource['mid']));
+                    $viewOrDownloadUrl = $this->escape(sprintf($viewOrDownloadUrlFormat, $resource['auto_id'], $this->ta->auto_id, $resource['mid']));
+                } else {
+                    $viewUrl = $resource['customViewUrl'];
+                    $viewOrDownloadUrl = $resource['customViewUrl'];
+                }
+                if(!isset($resource['customImageUrl'])) {
+                    $imageUrl = $this->escape(sprintf($imageUrlFormat, $resource['mid']));
+                } else {
+                    $imageUrl = $resource['customImageUrl'];
+                }
+                if(!isset($resource['customOnclick'])) {
+                    $onclick = '';
+                } else {
+                    $onclick = ' onclick ="'.$resource['customOnclick'].'"';
+                }
+            ?>
+        
+            <li id="resourceElem_<?php echo $resource['auto_id'];?>">
+                <div class="recording">
+                    <div class="recording-other-img">
+                        <a href="<?php echo $viewOrDownloadUrl?>">
+                            <img src="<?php echo $imageUrl ?>"  <?php echo $onclick?> />
+                        </a>
+                    </div>
+                    <div class="recording-desc-other">
+                        <p><a href="<?php echo $viewOrDownloadUrl?>" class="rlink" <?php echo $onclick?>><?php echo $resource['title'];?></a></p>                       
+                    </div>
+                </div>
+            </li>
+        <?php endforeach;?>
+   </ul>        
+</div>
+<?php else:?>
+    <?php $showNoRecordingsAvailableTaTypeIds = LectureRecordings::getNoRecordingsAvailableTaTypeIds(); ?>
+    <?php if(!empty($showNoRecordingsAvailableTaTypeIds) && in_array($this->ta->typeID, $showNoRecordingsAvailableTaTypeIds)) :?>
+    <div id="recordings-container">
+        <h2>Recordings</h2><hr />
+        <ul class="recordings-ul">
+            <li>
+                <div class="recording">
+                    <div class="recording-desc">
+                        <img alt="No recording available" src="<?php echo $this->baseUrl;?>/img/ta/no_recording_available.png" />
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>    
+    <?php endif;?>
+<?php endif;?>

@@ -1,0 +1,47 @@
+<?php echo $this->render('teachingactivity/view/_jsCss.phtml')?>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/smartcolumn.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/lotaview.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.7.js"></script>
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" media="screen" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+$(document).ready(function(){
+	smartColumns(180);	
+
+	$(window).resize(function () {
+		smartColumns(180);
+	});
+});
+</script>
+<h2 align="center"><?php echo date('Y')?> Block Handbook - <?php echo $this->block_name?></h2>
+<p>Total <?php echo count($this->tas) ?> teaching activities.</p>
+
+<?php
+	$i = 0;
+	$bps = new BlockPblSeqs();
+	if (count($this->tas) > 0) {
+		if ($this->block_no <= 10) {
+			$week_no = $this->tas[0]->block_week;
+			$pbl_name = $bps->getPblNameForBlockWeek($this->block_no, $week_no);
+			echo "<h3>". sprintf("%d.%02d", $this->block_no, $week_no). " - $pbl_name</h3>";
+		}
+		echo "<ul>";
+		foreach ($this->tas as $ta) {
+			if ($this->block_no <= 10 && $ta->block_week != $week_no) {
+				$week_no = $ta->block_week;
+				$pbl_name = $bps->getPblNameForBlockWeek($this->block_no, $week_no);
+				echo "</ul>\n<h3>". sprintf("%d.%02d", $this->block_no, $week_no). " - $pbl_name</h3>\n<ul>";
+			}
+			echo "<li><a href=\"#ta_$i\">", $ta->type, ' ', $ta->sequence_num, ' - ', $ta->name, "</a></li>\n";
+			$i++;
+		}
+		echo "</ul>";
+		echo "<br />";
+		$i = 0;
+		foreach ($this->tas as $ta) {
+			echo "<a name=\"ta_$i\">&nbsp;</a>";
+			echo $this->action('handbookview', 'teachingactivity', NULL, array('id' => $ta->auto_id));
+			$i++;
+		}
+	}
+?>

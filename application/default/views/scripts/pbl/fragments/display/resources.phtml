@@ -1,0 +1,43 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/printPblBlockResource.css" media="print"  />
+<div class="pblSingleElem">
+    <?php if(isset($this->req['resources']) && count($this->req['resources']) > 0):?>
+        <?php $pblResources = $this->req['resources'];?>
+        <?php $count = 1;?>
+        <p class="pblElemHeading">
+            <?php if(isset($this->req['resourceIdTitle'])) :?>
+                <?php echo $this->req['resourceIdTitle'];?>
+            <?php elseif(isset($this->req['resourceTypeName'])): ?>
+                <?php echo $this->req['resourceTypeName']; ?>
+            <?php endif;?>
+        </p>
+        <?php $resourcesCount = count($pblResources); ?>
+        <?php foreach($pblResources as $resource) :?>
+            <?php if(isset($resource['resource_id']) && !empty($resource['resource_id']) ) :?>
+                <?php
+                    $fileNameArr = array();
+                    switch($this->zendController) {
+                        case PblBlockConst::$pbl:
+                            $fileNameArr[] = 'Pbl '.str_replace('.','_',$this->pblOrBlockRef);
+                        break;
+                        case PblBlockConst::$block:
+                            $fileNameArr[] = 'Block';
+                        break;    
+                    }
+                    $fileNameArr[] = preg_replace('/[^0-9A-Za-z_-]/',' ',$this->pblOrBlockName);
+                    $fileNameArr[] = $resource['resource_type_name'];
+                    if($count > 1) {
+                        $fileNameArr[] = $count;
+                    }
+                ?>
+                <?php echo $this->action('pblblock','resource','default',array(
+                                                                                'mid'               => $resource['resource_id'],
+                                                                                'pblblockfn'        => implode(' - ',$fileNameArr),
+                                                                                'resourcescount'    => $resourcesCount)
+                );?>
+                <?php $count++;?>
+            <?php endif;?>
+        <?php endforeach;?>
+    <?php else:?>
+        <?php echo PblConst::$errorResourcesNotFound; ?>   
+    <?php endif;?>
+</div>

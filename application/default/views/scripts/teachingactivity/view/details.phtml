@@ -1,0 +1,54 @@
+<?php
+$pblLink = $this->url(array('module'=>'default', 'controller'=>'pbl', 'action'=>'index', 'ref'=> $this->ta->block_no.'.'.$this->ta->block_week_zero_padded),null,true);
+?>
+
+<div id = "loViewDetailsContainer">
+<table id="taViewTableNoSorter" class="tableNoSorter" width="100%">
+  <tr><th width="200">Id</th>		<td><?php echo $this->ta->auto_id; ?></td></tr>
+  <tr><th>Title</th>				<td><?php echo $this->escape($this->ta->name); ?></td></tr>
+  <tr><th>Type</th>					<td><?php echo $this->escape($this->ta->type); ?></td></tr>
+  <tr>
+  	<th><?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?></th>
+  	<td><?php echo $this->ta->stage; ?></td>
+  </tr>
+  <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></th>				<td><?php if($this->ta->block_no != null) echo $this->ta->block_no, ":";?> <?php echo $this->escape($this->ta->block); ?></td></tr>
+  <tr><th><?php echo Zend_Registry::get('Zend_Translate')->_('Week') ?></th>			<td><?php echo $this->ta->block_week; ?></td></tr>
+  <tr><th>PBL/CRS</th>				<td><a href="<?php echo $pblLink;?>"><?php echo $this->escape($this->ta->pbl); ?></a></td></tr>
+  <tr><th>Sequence No.</th>			<td><?php echo $this->ta->sequence_num; ?></td></tr>
+  <tr><th>Student Group</th>		<td><?php echo $this->escape($this->ta->student_grp); ?></td></tr>
+  <tr><th>Principal Teacher</th>	
+    <td>
+    <?php
+  	if (count($this->ta->principal_teacher_uid_arr) > 0) {
+  		echo "<table>";
+  		foreach($this->ta->principal_teacher_uid_arr as $row) {
+  			echo "<tr><td>".Compass::userInfoHtml($row)."</td></tr>";
+  		}
+  		echo "</table>";
+  	}
+  	?>
+    </td>
+  </tr>
+  <tr><th>Current Teacher</th>		
+    <td>
+    <?php
+  	if (count($this->ta->current_teacher_uid_arr) > 0) {
+  		echo "<table>";
+  		foreach($this->ta->current_teacher_uid_arr as $row) {
+  			echo "<tr><td>".Compass::userInfoHtml($row)."</td></tr>";
+  		}
+  		echo "</table>";
+  	}
+  	?>
+    </td>
+  </tr>
+  <tr><th>Notes</th>				<td><?php echo $this->escape($this->ta->notes) ?></td></tr>
+  <tr><th>Version</th>				<td><?php echo $this->ta->version ?></td></tr> 
+  <tr><th>Submitted by</th>			<td><?php echo Compass::userInfoHtml($this->ta->created_by);?></td></tr>
+  <tr><th>Date Submitted</th>	    <td><?php echo $this->ta->date_created; ?></td></tr>
+  <tr><th>Approved by</th>			<td><?php echo Compass::userInfoHtml($this->ta->approved_by);?></td></tr>
+  <tr><th>Date Approved</th>		<td><?php echo $this->ta->date_approved; ?></td></tr> 
+  <tr><th>Reviewed by</th>			<td><?php echo Compass::userInfoHtml($this->ta->reviewed_by);?></td></tr>
+  <tr><th>Date Reviewed</th>		<td><?php echo $this->ta->date_reviewed; ?></td></tr> 
+</table><br/>
+</div>

@@ -1,0 +1,26 @@
+<?php 
+
+$resourceHistoryUrl = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'history'), null, true);
+$resourceHistoryUrl .= '/type/'.$this->pageType.'/id/'.$this->pageTypeId;
+$resourceHistoryUrl .= '/returnurl/'.base64_encode('http://'.$_SERVER['HTTP_HOST'].$this->url());
+
+switch($this->pageType) {
+    case 'ta':
+        $resourceHistoryUrl  .= '/title/'.base64_encode($this->manageResourceData->title);
+        break;
+    case 'lo':
+        $resourceHistoryUrl  .= '/title/'.base64_encode($this->manageResourceData->title);
+        break;
+    case 'pbl':
+        $resourceHistoryUrl  .= '/title/'.base64_encode('Pbl - '.$this->pblOrBlockRef.' - '.$this->pblOrBlockName);
+        break;
+    case 'block':
+        $resourceHistoryUrl  .= '/title/'.base64_encode('Block - '.$this->pblOrBlockName);
+        break;
+}
+?>
+<h3><span class="boldText">History of Resources</span></h3>
+<p>
+<a class="actionLink" target="_blank" style="font-size:110%, text-decoration:none;" href="<?php echo $resourceHistoryUrl;?>">
+    Click to View</a>
+</p>

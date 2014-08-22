@@ -1,0 +1,134 @@
+<?php $this->placeholder('title')->captureStart('SET'); ?>
+    <?php $title = (isset($this->result['title'])) ? $this->result['title'] : 'Title Not Found' ;?>
+    <?php echo $title;?>
+<?php $this->placeholder('title')->captureEnd();?>
+
+<?php $this->placeholder('repositoryId')->captureStart('SET');?>
+    <?php $repositoryId = (isset($this->result['repositoryId'])) ? $this->escape($this->result['repositoryId']) : 'Repository Id Not Found'; ?>
+    <?php echo $repositoryId; ?>
+<?php $this->placeholder('repositoryId')->captureEnd();?>
+
+<?php $this->placeholder('collectionId')->captureStart('SET');?>
+    <?php $collectionId = (isset($this->result['collectionId'])) ? $this->escape($this->result['collectionId']) : 'Collection Id Not Found'; ?>
+    <?php echo $collectionId; ?>
+<?php $this->placeholder('collectionId')->captureEnd();?>
+
+<?php $this->placeholder('objectId')->captureStart('SET'); ?>
+    <?php $objectId = (isset($this->result['objectId'])) ? $this->escape($this->result['objectId']) : 'Object Id Not Found'; ?>
+    <?php echo $objectId; ?>
+<?php $this->placeholder('objectId')->captureEnd();?>
+
+<?php //This placeholder is used by displayResource place holder. So make sure this comes before the 'displayResource' placeholder?>
+<?php $this->placeholder('author')->captureStart('SET') ;?>
+    <?php if(isset($this->result['data']) && isset($this->result['data']['author']) && strlen(trim($this->result['data']['author'])) > 0) :?>
+        <?php echo MediabankResourceConstants::createAuthorHtml(trim($this->result['data']['author']));?>
+    <?php endif;?>
+<?php $this->placeholder('author')->captureEnd(); ?>
+
+<?php $this->placeholder('displayResource')->captureStart('SET') ;?>
+    <?php if(isset($this->result['text'])): ?>
+        <?php echo $this->result['text']['val'] ;?>
+        <?php echo $this->placeholder('author');?>
+    <?php elseif(isset($this->result['html'])) :?>
+        <?php echo $this->result['html']['val'];?>
+        <?php echo $this->placeholder('author');?>
+    <?php elseif(isset($this->result['image']['src'])) :?>
+        <?php $imageWidth = (isset($this->result['imageWidth'])) ? $this->result['imageWidth'] : '500' ;?>
+        <?php $imgSrc = $this->url(array('module'=>'default','controller'=>'resource','action'=>'image'),null,true).'?size='.$imageWidth.'&amp;mid='.$this->result['midEncoded']; ?>
+        <img style="border:0px" src="<?php echo $imgSrc;?>" alt=""/>
+    <?php elseif(isset($this->result['URL'])) :?>
+        <?php $imageWidth = (isset($this->result['imageWidth'])) ? $this->result['imageWidth'] : '250' ;?>
+        <?php $imgSrc = $this->url(array('module'=>'default','controller'=>'resource','action'=>'image'),null,true).'?size='.$imageWidth.'&amp;mid='.$this->result['midEncoded']; ?>
+        <?php 
+        $URLVal = $this->result['URL']['val'];
+        if(stristr($URLVal, "/ess/echo/presentation")) {
+            $echo360Service = new Echo360Service();
+            $path = parse_url($URLVal,PHP_URL_PATH);
+            $explodePath = explode('/', $path);
+            $presentationId = $explodePath[count($explodePath) -1];
+            $echo360Url = $echo360Service->generateUrl($presentationId);
+            if($echo360Url['success'] == true) {
+                $URLVal = $echo360Url['url'];
+            }
+        }
+        ?>
+        <a href="<?php echo $URLVal; ?>"> <img style="border:0px" src="<?php echo $imgSrc;?>" alt="No Image Found"/></a>
+    <?php elseif(isset($this->result['video'])):?>
+        <?php FlowPlayer::playVideo($this->result['video']); ?>
+    <?php elseif(isset($this->result['audio'])):?>
+        <?php FlowPlayer::playAudio($this->result['audio']); ?>
+    <?php endif;?>      
+<?php $this->placeholder('displayResource')->captureEnd(); ?>
+
+<?php $this->placeholder('imageDownloadLink')->captureStart('SET') ;?>
+    <?php if(isset($this->result['image']['allowDownload'])):?>
+        <?php if(isset($this->result['mimeType']) && isset($this->result['fileName'])) :?>
+            <?php $downloadUrl = $this->url(array('module'=>'default','controller'=>'resource','action'=>'download'),null,true);?>
+            <?php $downloadUrl .= '?mid='.$this->result['midEncoded'].'&mt='.$this->result['mimeType'].'&fn='.$this->result['fileName'];?>
+        <?php else :?>
+            <?php $downloadUrl = '#';?>
+        <?php endif;?>
+        <?php echo $downloadUrl; ?>
+    <?php endif;?>
+<?php $this->placeholder('imageDownloadLink')->captureEnd();?>
+
+<?php $this->placeholder('videoDownloadLink')->captureStart('SET') ;?>
+    <?php if(isset($this->result['video']['allowDownload'])):?>
+        <?php if(isset($this->result['mimeType']) && isset($this->result['fileName'])) :?>
+            <?php $videoDownloadUrl = $this->url(array('module'=>'default','controller'=>'resource','action'=>'download'),null,true);?>
+            <?php $videoDownloadUrl .= '?mid='.$this->result['midEncoded'].'&mt='.$this->result['mimeType'].'&fn='.$this->result['fileName'];?>
+        <?php else :?>
+            <?php $videoDownloadUrl = '#';?>
+        <?php endif;?>
+        <?php $sizeInMb = '';?>
+        <?php if(isset($this->fileInfo['file-size-in-mb']) && $this->fileInfo['file-size-in-mb'] > 0) :?>
+            <?php $sizeInMb = ' ('.$this->fileInfo['file-size-in-mb'].'Mb) '?>
+        <?php endif;?>
+        <a href="<?php echo $videoDownloadUrl; ?>">Click to download</a> Original High-Quality Video<?php echo $sizeInMb; ?>
+    <?php endif;?>
+<?php $this->placeholder('videoDownloadLink')->captureEnd();?>
+
+<?php $this->placeholder('audioDownloadLink')->captureStart('SET') ;?>
+    <?php if(isset($this->result['audio']['allowDownload'])):?>
+        <a href="<?php echo $this->result['audio']['mp3Url']; ?>">Click to download</a>
+    <?php endif;?>
+<?php $this->placeholder('audioDownloadLink')->captureEnd();?>
+
+<?php $this->placeholder('viewUrlLink')->captureStart('SET') ;?>
+    <?php if(isset($this->result['URL']) && !empty($this->result['URL']['val'])):?>
+        <a href="<?php echo $this->result['URL']['val']; ?>">Click to go to URL</a>
+    <?php endif;?>
+<?php $this->placeholder('viewUrlLink')->captureEnd();?>
+
+
+<?php $this->placeholder('pblBlockImageDownloadLink')->captureStart('SET') ;?>
+    <?php if(isset($this->result['image']['allowDownload'])):?>
+        <?php if(isset($this->result['mimeType']) ) :?>
+            <?php $fileName = (isset($this->pblBlockFileName) && !empty($this->pblBlockFileName)) ? $this->pblBlockFileName.'.'.$this->result['fileTypeExtension'] : 'file'; ?>
+            <?php $pblDownloadUrl = $this->url(array('module'=>'default','controller'=>'resource','action'=>'download'),null,true);?>
+            <?php $pblDownloadUrl .= '?mid='.$this->result['midEncoded'].'&mt='.$this->result['mimeType'].'&fn='.MediabankResourceConstants::encode($fileName);?>
+        <?php else :?>
+            <?php $pblDownloadUrl = '#';?>
+        <?php endif;?>
+        <?php echo $pblDownloadUrl; ?>
+    <?php endif;?>
+<?php $this->placeholder('pblBlockImageDownloadLink')->captureEnd();?>
+
+<?php $this->placeholder('metadata')->captureStart('SET'); ?>
+    <?php if( isset($this->result['data'])  && is_array($this->result['data']) && count($this->result['data']) > 0):?>
+        <?php foreach($this->result['data'] as $key => $val) :?>
+            <tr>
+                <th><?php echo ucfirst($key);?></th>
+                <td>
+                    <?php 
+                    if(is_string($val)) {
+                        echo $val;    
+                    } else {
+                        echo ResourceConstants::createMetadataTable($val);                        
+                    }
+                    ?>
+                </td>
+            </tr>
+        <?php endforeach;?>
+    <?php endif;?>
+<?php $this->placeholder('metadata')->captureEnd(); ?>

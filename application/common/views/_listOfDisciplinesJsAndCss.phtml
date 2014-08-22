@@ -1,0 +1,28 @@
+
+
+<!--  Select Option JS And CSS : START -->
+<link href="<?php echo $this->baseUrl;?>/css/dropdown.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="<?php echo $this->baseUrl;?>/js/listofdisciplines.js" type="text/javascript"></script>
+
+<?php if(isset($this->disciplineIdsTree)) :?>
+<script type="text/javascript">
+var disciplineIdsTree = <?php echo Zend_Json::encode($this->disciplineIdsTree) ;?> ;
+$(document).ready(function(){
+	$("input[@name='discipline[]']").click(function(){
+	    var disciplineId = $(this).val();
+	    var checked = $(this).attr('checked');
+	    if(typeof disciplineIdsTree[disciplineId] != 'undefined') {
+	    	if(checked == true) {
+	            for(var id in disciplineIdsTree[disciplineId]) {
+		            $('#discipline_id_'+ disciplineIdsTree[disciplineId][id]).attr('checked',true);
+		        }
+	    	}
+		}
+	});
+	
+});
+</script>
+<?php endif;?>
+<!--  Select Option JS And CSS : END -->
+
+

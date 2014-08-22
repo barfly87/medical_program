@@ -1,0 +1,24 @@
+<h2 style="text-align: middle;"><b><?php echo $this->escape($this->title);?></b></h2>
+<?php if(count($this->lo)) : ?>
+    <?php include_once('objective.phtml');?>
+    <div class="viewEmptyDiv"></div>
+	<?php if($this->socialtools): ?>
+    <br>
+    <div style="position: relative; width: 100%; height: 28px;">
+    	<div style="position: absolute; left: 0; "><h3 style="margin-top: 0px;margin-bottom: 0px">Student Resources</h3>
+    	
+    	</div>
+    	<div style="position: absolute; right: 0px; top: 5px;font-size:smaller">
+		    <span>Sort by:
+		    <?php if($this->studentresourcesortorder=='date'): ?><a href="<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view', 'id'=>$this->lo->auto_id),'default',true); ?>/sortby/rating"><?php endif; ?>rating<?php if($this->studentresourcesortorder=='date'): ?></a><?php endif; ?>
+			|
+		    <?php if($this->studentresourcesortorder!='date'): ?><a href="<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view', 'id'=>$this->lo->auto_id),'default',true); ?>/sortby/date"><?php endif; ?>date<?php if($this->studentresourcesortorder!='date'): ?></a><?php endif; ?>
+		   </span>
+		</div>
+	</div>
+	<div style="clear:both"></div>
+ 	   <?php include_once('../application/default/views/scripts/studentresource/uploadresource.phtml');?>
+   
+ 	   <?php include_once('../application/default/views/scripts/studentresource/studentresourcelarge.phtml');?>
+    <?php endif;?>
+<?php endif; ?>

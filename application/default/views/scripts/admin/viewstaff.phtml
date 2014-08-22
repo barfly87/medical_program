@@ -1,0 +1,68 @@
+<style type="text/css">
+.user{ border: solid 1px #bbbbbb; background-color: #eeeeee;}
+.horizontal1 {float: left; margin: 4px; width: 60px; }
+.horizontal2 {float: left; margin: 4px; width: 60px; text-align: center;}
+.horizontal3 {float: left; margin: 4px; width: 350px; padding-left: 20px;}
+.horizontal4 {float: left; margin: 4px; width: 300px; }
+.horizontal5 {float: left; margin: 4px; width: 60px; }
+.deleteimg {border: 0px; padding-left:16px; }
+</style>
+<link href="<?php echo $this->baseUrl;?>/css/impromptu.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/jquery/jquery-impromptu.2.2.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/removeuser.js"></script>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.tablednd_0_5.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	try {
+	    $("#stafflist").tableDnD({
+	    	onDragClass: 'curriculumAreaDrag',
+	    	//onDragStart: function(table, row) {
+	    	//	$('#sortMsg').html('Sorting in progess.');
+	    	//},
+		    onDrop: function(table, row) {
+	    		var curriculumAreaIds = $.tableDnD.serialize(); 
+	    		var url = BASE_URL + '/admin/sortstaff/?' + curriculumAreaIds;
+	    		$.get(url, function(data){
+	    			if(data == 'successful') {
+			            var order = 1;
+			            $('#stafflist tr').each(function(){
+			            	if($(this).attr('id') != '') {
+			            		$(this).find("td:first").html(order);
+			            		order++;
+			            	}
+			            });
+			            $('#sortMsg').html('Sorting was successful.');
+	    			} else {
+	    				$('#sortMsg').html('<span class="red">Error ! Sorting was not successful.</span>');
+	    			}
+	    		});
+		    }
+	    });
+	} catch (err){
+		debugCurriculumAreas(err);
+	}
+});
+
+</script>
+<?php if (count($this->staff) > 0) :?>
+<table class="tableNoSorter" id="stafflist">
+  <thead><tr align="left"><th>Delete</th><th>Staff Page</th><th>Staff Type</th><th>Description</th><th>Staff Member</th><th>Domain</th></tr></thead>
+  <tbody>
+  <?php foreach ($this->staff as $staff): ?>
+    <tr class="user" id="userid<?php echo $staff['id'] ?>">
+         <td><a href="javascript:;" onclick="removeUser('deletestaff', <?php echo $staff['id']?>, '<?php echo $staff['uid']?>');"><img src="<?php echo $this->baseUrl;?>/img/delete.gif" class="deleteimg"></a></td>
+         <td><?php echo $staff['staffpage']?></td>
+         <td><?php echo $staff['stafftype']?></td>
+         <td><?php echo $staff['description']?></td>
+         <td><span class="userid"><?php echo $staff['uid'] ?></span><div class="userdetail"></div></div></td>
+         <td><?php echo $staff['domain'] ?></td>
+         <td><a href="<?php echo $this->url(array('action' => 'editstaff', 'controller' => 'admin', "staffid" => $staff['id']), null, true); ?>">Edit</a></td>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
+<?php else : ?>
+<p>No staff found.</p>
+<?php endif; ?>
+
+<p><a href="<?php echo $this->url(array('action' => 'addstaff', 'controller' => 'admin'), null, true); ?>">Add Staff Member</a></p>

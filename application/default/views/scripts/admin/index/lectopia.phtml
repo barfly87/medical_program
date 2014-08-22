@@ -1,0 +1,14 @@
+<?php 
+$lectopiaLinkage  = $this->url(array('module'=>'default','controller'=>'admin','action'=>'lectopiaconnector'),null,true);
+?>
+
+<script type="text/javascript">
+function confirmLectopiaAction() {
+    var confirmTxt = 'Are you sure you want to link lectopia from mediabank to compass';
+    var answer = confirm(confirmTxt);
+    return answer;
+}
+</script>
+
+<h3>Link lectopia from Mediabank to compass</h3>
+<a href="<?php echo $lectopiaLinkage; ?>" onclick="javascript: return confirmLectopiaAction();">Click here</a>

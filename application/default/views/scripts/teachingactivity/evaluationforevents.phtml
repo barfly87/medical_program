@@ -1,0 +1,24 @@
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+
+<style>
+#tacontainer #tacontent div {
+    padding: 0px;
+}
+#tametadata h3 {
+    margin:0px;
+}
+body {
+	min-width:400px;
+	width: 420px
+}
+</style>
+
+<div id="tacontainer" style="border:0px;">
+  <?php // Added class 'eventsResources' to remove 360px right margin ?>
+  <div id="tametadata" class="eventsResources" style="float:left;margin:0px;min-width:400px;min-height:300px;padding:0px;">
+    <?php echo $this->render('teachingactivity/view/_evaluation.phtml')?>
+  </div>
+  <div id="tapadding"></div>
+</div>
+
+ 

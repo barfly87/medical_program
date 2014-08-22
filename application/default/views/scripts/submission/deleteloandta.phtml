@@ -1,0 +1,11 @@
+<h2>Delete submission</h2>
+<p>If you delete this submission, there is no way to retrieve it.</p>
+<p>Are you sure you want to proceed?</p>
+<form method="post">
+  <p>
+    <input type="hidden" name="block" value="<?php echo $this->block ?>"></input>
+    <input type="radio" name="sure" value="yes" /> Yes
+    <input type="radio" name="sure" value="no" checked="checked" /> No&nbsp;&nbsp;&nbsp;
+    <input type="submit" value="Submit" id="submit"/>
+  </p>
+</form>

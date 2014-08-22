@@ -1,0 +1,8 @@
+<?php if($this->result === true) :?>
+   <h3>Mediabank metadata cache is successfully removed.</h3> 
+<?php else: ?>
+<div>
+    <span class="error">Could not remove Mediabank metadata cache. Please try again since there are huge number of files and lot of people trying to access those files it might need another run.</span>
+    <span class="hide"><?php echo $this->result; ?></span>
+</div>    
+<?php endif;?>

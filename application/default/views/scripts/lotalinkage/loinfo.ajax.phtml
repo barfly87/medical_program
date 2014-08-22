@@ -1,0 +1,27 @@
+<?php if ($this->lo) : ?>
+<fieldset style="font-size:x-small; color:#999999">
+  <legend>Information related to learning objective <?php echo $this->lo->auto_id?></legend>
+  <table style="font-size:x-small; color:#999999">
+    <tr>
+    	<th width="180">Learning Objective</th>
+    	<td><?php echo $this->lo->lo; ?></td>
+    </tr>
+    <tr>
+    	<th>Main Discipline</th>
+    	<td><?php echo $this->escape($this->lo->discipline1Name); ?></td>
+    </tr>
+    <tr>
+    	<th><?php echo Zend_Registry::get('Zend_Translate')->_('Theme') ?></th>
+    	<td><?php echo $this->escape($this->lo->theme1); ?></td>
+    </tr>
+    <tr>
+    	<th>System</th>
+    	<td><?php echo $this->escape($this->lo->system); ?></td>
+    </tr>
+    <tr>
+    	<th>Assessment Methods</th>
+    	<td><?php echo $this->escape($this->lo->assessment_type); ?></td>
+    </tr>
+  </table>
+</fieldset>
+<?php endif; ?>

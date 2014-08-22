@@ -1,0 +1,7 @@
+<?php if($this->result['error'] == false): ?>
+    <h4>Successfully linked</h4>
+<?php elseif(!empty($this->result['error_string'])):?>
+    <span class="error"<?php echo $this->result['error_string'];?>
+<?php else:?>
+    <h4>Nothing to link.</h4>
+<?php endif;?>

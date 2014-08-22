@@ -1,0 +1,23 @@
+<link media="screen" rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/form.css"/>
+<link type="text/css" rel="stylesheet" media="screen" href="<?php echo $this->baseUrl;?>/css/tableLinkExistingResources.css" />
+<br />
+<h2>Link resources to <?php echo $this->data->typeName; ?><?php if(!isset($this->tempResource)) :?>: <a href="<?php echo $this->data->typeReturnUrl;?>" /><b><?php echo $this->data->typeReturnUrlTitle; ?></b></a><?php endif;?></h2>
+<?php if(strlen($this->data->typeDescription) > 0 ) :?>
+	<span class="title"><?php echo $this->data->typeDescription;?></span><br />
+<?php endif;?>
+
+<div id="linkResourcesContainer">
+    <?php include('link/form.phtml');?>
+    
+    <?php if(isset($this->fp)):?>
+        <?php if(is_array($this->fp->results) && count($this->fp->results) > 0) :?>
+            <?php include('link/result.phtml');?>
+        <?php else:?>
+            <div class="error" style="font-size:110%;">Your search did not returned any results back from Mediabank.<br />Please try again with different set of keyword(s).</div>
+        <?php endif;?>
+    <?php endif;?>
+    <?php if(!isset($this->tempResource)) :?>
+	<p><b><a href="<?php echo $this->data->typeReturnUrl;?>">Return</a></b></p>
+	<?php endif;?>
+</div>
+

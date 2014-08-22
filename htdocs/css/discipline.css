@@ -1,0 +1,39 @@
+/*****************
+  Default 
+*****************/
+
+.discipline_center {
+    text-align: center;
+}
+
+.discipline_left {
+    text-align: left;
+}
+
+.discipline_selected {
+    text-decoration: none;
+}
+
+.discipline_gray {
+    color : #8F8F8F;
+}
+/*****************
+ Add/Edit
+*****************/
+.discipline_add_red {
+    color: red;
+}
+.discipline_add_name_required {
+    display: none;
+}
+.discipline_add_type_required {
+    display: none;
+}
+
+/*****************
+ List
+*****************/
+
+.discipline_list_center {
+    text-align: center;
+}

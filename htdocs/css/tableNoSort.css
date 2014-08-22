@@ -1,0 +1,69 @@
+table.tableNoSorter {
+    font-size:small;
+    color: #2F1D03;    
+}
+
+table.tableNoSorter td {
+    padding: 2px;
+    background-color: #FFECCF;
+}
+
+table.tableNoSorter td.emptyRow {
+    background-color: #FFF3DF;
+}
+
+.even {
+    background-color: #FFFFFF;
+}
+
+.odd {
+    background-color: #FFECCF;
+}
+
+.over {
+    background-color: #FFE6BF;
+}
+
+table.tableNoSorter th {
+    background-color: #FFD38F;
+    padding: 2px;
+    height: auto;
+}
+
+table.tableNoSorter th {
+    text-decoration: none;
+    text-align: center;
+    vertical-align: top;
+    padding-right: 20px;
+    font-weight:bold;
+    white-space:nowrap;
+    background-color: #FFE0AF;
+}
+
+table.tableNoSorter tr td a:link {
+    color: #2F1D03;
+}
+
+table.tableNoSorter tr td a:visited {
+    color: #2F1D03;
+}
+
+table.tableNoSorter tr td a:hover{
+    color: #7F6B4F; 
+    text-decoration: none;
+}
+
+table.tableNoSorter tr td a:active {
+    color: #FF9C00
+}
+
+td.newResourceTd {
+	min-width: 100px;
+	max-width: 100px;
+}
+
+th.newResourceTh {
+	min-width: 100px;
+	max-width: 110px;
+}
+

@@ -1,0 +1,3 @@
+<?php 
+	$resource = $this->studentresource;
+?>Rating: <?php if(isset($resource['count'])):?><?php echo $resource['score']; ?> <small>(<?php echo $resource['count']; ?> <?php echo $resource['count']==1?'person':'people';?>: <?php if(isset($resource['ratingdescription']))echo implode(', ',$resource['ratingdescription']); ?>)</small><?php else:?> not yet rated.<?php endif;?>

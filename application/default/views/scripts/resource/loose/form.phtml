@@ -1,0 +1,113 @@
+<?php 
+/**
+WARNING :
+This page uses identical UI code across 2 scripts 
+
+1) /view/scripts/resource/loose/form.phtml. (THIS PAGE)
+    This page is used to ADD loose resources to mediabank
+2) /view/scripts/resource/uploadedit/form.phtml
+    This page is used to ADD/EDIT resource to a single pbl,block,ta or lo.
+    
+I believe in most cases changing one script would require to change the other script, so please check 
+before you do any changes to this page.
+*/
+?>
+
+<link media="screen" rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/form.css"/>
+<link media="screen" rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/resource.css"/>
+<?php include('../application/common/views/_jquery142UI.phtml');?>
+<?php include('../application/common/views/_ckeditorJsAndCss.phtml');?>
+
+
+<?php 
+$titleDefaultVal            = '';   
+$descDefaultVal             = '';   
+$authorDefaultVal           = '';
+$htmlTextDefaultVal         = '';   
+$copyrightDefaultVal        = '';
+$otherDefaultVal            = '';
+$urlDefaultVal              = '';
+$defaultTabSelectVal        = 0 ;
+
+if(property_exists($this, 'formdata')) {
+    $titleDefaultVal            = (! is_null($this->formdata->title))               ?   $this->formdata->title                      : $titleDefaultVal;           
+    $descDefaultVal             = (! is_null($this->formdata->description))         ?   $this->formdata->description                : $descDefaultVal;            
+    $authorDefaultVal           = (! is_null($this->formdata->author))              ?   $this->formdata->author                     : $authorDefaultVal;
+    $copyrightDefaultVal        = (! is_null($this->formdata->copyright))           ?   $this->formdata->copyright                  : $copyrightDefaultVal;       
+    $otherDefaultVal            = (! is_null($this->formdata->other))               ?   $this->formdata->other                      : $otherDefaultVal;           
+    $htmlTextDefaultVal         = (! is_null($this->formdata->htmlText))            ?   $this->formdata->htmlText                   : $htmlTextDefaultVal;
+    $urlDefaultVal              = (! is_null($this->formdata->URL))                 ?   $this->formdata->URL                        : $urlDefaultVal;                
+    $defaultTabSelectVal        = (! is_null($this->formdata->tabSelected) &&
+                                    !empty($this->formdata->tabSelected))           ?   $this->formdata->tabSelected                : $defaultTabSelectVal;       
+}
+?>
+
+<form action="<? echo $this->url();?>" method="post" enctype="multipart/form-data" id="uploadResourceForm">
+<table id="resourceTable" style="min-width:700px;">
+    <tr>
+        <td style="width:150px;">Title: <span id="title" class="red">*</span></td>
+        <td style="min-width:350px;"><?php echo $this->formText(MediabankResourceConstants::$FORM_title, $titleDefaultVal,array('size' => '50','id' => 'tdTitle'))?></td>
+    </tr>
+    <tr>
+        <td>Description:</td>
+        <td><?php echo $this->formText(MediabankResourceConstants::$FORM_description, $descDefaultVal,array('size' => '50'))?></td>
+    </tr>
+    <tr>
+        <td>Copyright: <span id="copyright" class="red">*</span></td>
+        <td>
+            <?php echo $this->formRadio(MediabankResourceConstants::$FORM_copyright, $copyrightDefaultVal,null, MediabankResourceConstants::getCopyrightForm(),'&nbsp;&nbsp;')?>
+            <?php echo $this->formText(MediabankResourceConstants::$FORM_other, $otherDefaultVal, array('size' => '25'))?>
+        </td>
+    </tr>
+    <tr>
+        <td>Written/Prepared By:</td>
+        <td><?php echo $this->formText(MediabankResourceConstants::$FORM_author, $authorDefaultVal,array('size' => '50'))?></td>    
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tabs-1">Text</a></li>
+                    <li><a href="#tabs-2">File</a></li>
+                    <li><a href="#tabs-3">Url</a></li>
+                </ul>
+                <div id="tabs-1">
+                    <p><?php echo $this->formTextarea(MediabankResourceConstants::$FORM_htmlText,$htmlTextDefaultVal,array('cols' => '80', 'rows' => '10', 'class' => 'ckeditor'));?></p>
+                </div>
+                <div id="tabs-2">
+                    <p>
+                    <?php echo $this->formFile(MediabankResourceConstants::$FORM_file,array('size' => '50'));?>
+                    </p>
+                </div>
+                <div id="tabs-3">
+                    <p><?php echo $this->formTextarea(MediabankResourceConstants::$FORM_URL, $urlDefaultVal, array('cols' => ' 80', 'rows' => '10'));?></p>
+                </div>
+            </div>
+        </td>
+    </tr>        
+    <tr>
+        <?php $submitText = ucwords($this->subaction); ?>
+        <td>
+        <?php echo $this->formHidden(MediabankResourceConstants::$FORM_looseResourceReferer, $this->viewData->referer);?>
+        <?php echo $this->formHidden(MediabankResourceConstants::$FORM_actionName,$this->subaction);?>
+        <?php echo $this->formHidden(MediabankResourceConstants::$FORM_tabSelected, $defaultTabSelectVal );?>
+        <?php echo $this->formSubmit('submit',$submitText)?>
+        </td>
+        <td></td>
+    </tr>
+</table>
+</form>
+
+<script type="text/javascript">
+var uploadTypes = new Array('<?php echo implode("','", MediabankResourceConstants::$FORM_uploadTypes)?>');
+
+$(document).ready(function(){
+    var tabsObj = $("#tabs");
+    tabsObj.tabs({
+        selected : <?php echo $defaultTabSelectVal;?>
+    });
+    tabsObj.bind('tabsselect', function(event, ui) {
+        $('#<?php echo MediabankResourceConstants::$FORM_tabSelected;?>').val(ui.index);
+    });
+});
+</script>

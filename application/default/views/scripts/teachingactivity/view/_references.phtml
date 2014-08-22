@@ -1,0 +1,34 @@
+<?php if (UserAcl::isStaffOrAbove()): ?>
+<script type="text/javascript">
+$(function() {
+    $('#tareference > div').hover(
+        function() {
+            $('.tacontentcontrol', this).show();
+            $(this).addClass('selectedtacontent');
+        },
+        function() {
+            $('.tacontentcontrol', this).hide();
+            $(this).removeClass('selectedtacontent');
+        }
+    );
+});
+</script>
+<?php endif; ?>
+
+<?php if(isset($this->resources['references']) && !empty($this->resources['references'])) :?>
+<div id="tareference" style="clear:left">
+    <h2>References</h2><hr/>
+    <?php $allowEditResource = $this->ta->isUserAllowedToEditResource(); ?>
+    <?php $editResourceUrl = Compass::baseUrl().'/resource/edit/type/ta/resourceid/%d/id/%d/resourcetypeid/%d' ;?>
+    <?php foreach($this->resources['references'] as $resource) :?>
+        <div style="position: relative">
+            <?php echo $this->action('taview','resource','default',array('mid' => $resource['resource_id'],'id' => $resource['auto_id']));?>
+            <?php if($allowEditResource === true) :?>
+            <span class="tacontentcontrol">
+                <a href="<?php printf($editResourceUrl, $resource['auto_id'], $resource['type_id'], $resource['resource_type_id']);?>">Edit</a>
+            </span>
+            <?php endif;?>
+        </div> 
+    <?php endforeach;?>
+</div>
+<?php endif;?>

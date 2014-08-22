@@ -1,0 +1,90 @@
+<style type="text/css">
+	#areastoc { line-height : 0.8; }
+	.indentedlink { padding-left : 20px; }
+</style>
+<script type="text/javascript">
+$(function() {
+	$('#areastoc  a').css('text-decoration', 'none');
+	$('a[name]').css('text-decoration', 'none').css('color', 'black');
+	$('#areastoc  a').hover(
+		function() {
+			$(this).css('text-decoration', 'underline');
+		},
+		function() {
+			$(this).css('text-decoration', 'none');
+		}
+	);
+});
+</script>
+<div id="talos" style="clear:left">
+	<?php $url_linklo = $this->url(array("controller"=>"lotalinkage", "action"=>"addlo", "id"=>$this->ta->auto_id), null, true)?>
+	<h2>Learning Objectives</h2><hr/>
+	<?php $lo_count = count($this->released_los); ?>
+	<?php if ($lo_count != 0) : ?>
+		<?php 
+			$curriculumareamap = array();
+			foreach ($this->released_los as $lo) {
+				if (empty($lo['curriculumarea1Name'])) {
+					$curriculumareamap[$lo['discipline1Name']]['Other'][] = $lo;
+				} else {
+					$curriculumareamap[$lo['discipline1Name']][$lo['curriculumarea1Name']][] = $lo;
+				}
+			}
+
+			$toc = array();
+
+			$num_discs = 0; //Total number of disciplines
+			$num_areas = 0; //Total number of curriculum areas
+			$alphabets = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			$order_flag = $lo_count > Zend_Registry::get('config')->lo_number_to_order;
+			$toc[] = "<div id='areastoc'>";
+			foreach ($curriculumareamap as $disc => $areas) {
+				$num_discs++;
+				$toc[] = "<p><a href='#area_{$num_discs}'>Discipline - {$disc}</a></p>";
+				$j = 0;
+				foreach ($areas as $area => $los) {
+					$j++;
+					$toc[] = "<p class='indentedlink'><a href='#area_{$num_discs}_{$j}'>" . substr($alphabets, $j, 1) . ". {$area}</a></p>";
+				}
+				$num_areas += $j;
+			}
+			$toc[] = "</div>";
+
+			if (($num_discs >= 2 || $num_areas >= 2) && $order_flag) {
+				echo join('', $toc);
+			}
+			
+			$i = 0;
+			foreach ($curriculumareamap as $disc => $areas) {
+				$i++;
+				if ($num_discs >= 2 && $order_flag) {
+					echo "<h2><a name='area_{$i}'><i>Discipline</i> - $disc</a></h2>";
+				}
+				$j = 0;
+				foreach ($areas as $area => $los) {
+					$j++;
+					$order_url = "/compass/teachingactivity/orderlo/id/{$this->ta->auto_id}/disc/{$los[0]['discipline1']}/area/{$los[0]['curriculumarea1']}";
+					if ($order_flag) {
+						echo "<h3 class='loheading'><a name='area_{$i}_{$j}'>";
+						echo substr($alphabets, $j, 1), ". $area</a>";
+						echo $this->display_edit_links ? " <span>[<a href=\"{$order_url}\">order</a>]<span>" : '', "</h3>";
+						echo '<ol>';
+						foreach ($los as $lo) {
+							echo '<li>';
+							$this->displayLo($this->ta->auto_id, $lo, $this->display_edit_links);
+							echo '</li>';
+						}
+						echo '</ol>';
+					} else {
+						foreach ($los as $lo) {
+							$this->displayLo($this->ta->auto_id, $lo, $this->display_edit_links);
+						}
+					}
+				}
+			}
+
+		?>
+    <?php else : ?>
+    <p>Learning objective information not available.</p>
+    <?php endif; ?>
+</div>

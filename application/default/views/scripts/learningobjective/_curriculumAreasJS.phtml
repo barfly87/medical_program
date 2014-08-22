@@ -1,0 +1,92 @@
+<?php if(is_array($this->curriculumareas) && count($this->curriculumareas) > 0) :?>
+<script type="text/javascript">
+
+    //Create learning areas already selected
+    var curriculumarea1 = '<?php echo $this->curriculumarea1;?>';
+    var curriculumarea2 = '<?php echo $this->curriculumarea2;?>';
+    var curriculumarea3 = '<?php echo $this->curriculumarea3;?>';
+
+    //Populate all learning areas
+    var curriculumAreas = {
+            "discipline": {
+                <?php $laCount = count($this->curriculumareas);?>
+                <?php $count = 1;?>
+                <?php foreach($this->curriculumareas as $discipline_id => $curriculums):?>
+                    <?php $curriculums = array_map('addslashes',$curriculums); ?>
+                    <?php 
+                        $curriculum = array();
+                        foreach($curriculums as $curriculum_id => $curriculum_name) {
+                            $curriculum[] = '{"curriculum_id": "'.$curriculum_id.'","curriculum_name": "'.$curriculum_name.'"}';
+                        }
+                    ?>
+                    <?php echo $discipline_id;?> : [<?php echo implode(",",$curriculum);?>] <?php if($count != $laCount):?>,<?php endif;?>
+                    <?php $count++?>
+                <?php endforeach;?>
+            }
+        };
+                           
+    $(document).ready(function() {
+        <?php $disciplineIds = array(1,2,3);?>
+        <?php foreach($disciplineIds as $disciplineId):?>
+        
+        /************************************  <?php echo $disciplineId;?>  ***********************************/
+        discipline<?php echo $disciplineId;?>Value = $('#discipline<?php echo $disciplineId;?>').val();
+        if(discipline<?php echo $disciplineId;?>Value != 1) {
+            curriculumareas = curriculumAreas['discipline'][discipline<?php echo $disciplineId;?>Value];
+            populateCurriculumAreas(curriculumareas,curriculumarea<?php echo $disciplineId;?>,<?php echo $disciplineId;?>);
+        }
+        $('#curriculumarea<?php echo $disciplineId;?>').change(function(){
+            curriculumarea<?php echo $disciplineId;?> = $(this).val();
+        });
+        
+        $('#discipline<?php echo $disciplineId;?>').change(function(){
+            var check = checkIfDisciplineSelected($(this).val(), <?php echo $disciplineId;?>);
+            if(check == true) {
+                checkDiscipline(discipline<?php echo $disciplineId;?>Value, <?php echo $disciplineId;?>);
+            } else {
+                discipline<?php echo $disciplineId;?>Value = $(this).val();
+            }
+            curriculumareas = curriculumAreas['discipline'][$(this).val()];
+            populateCurriculumAreas(curriculumareas,curriculumarea<?php echo $disciplineId;?>,<?php echo $disciplineId;?>);
+        });
+        /****************************************************************************/
+            
+        <?php endforeach;?>
+
+        function populateCurriculumAreas(curriculumareas,curriculumarea,id){
+            var options = '<option value="Any">Any</option>';
+            if(typeof curriculumareas != 'undefined') { 
+                for (var i = 0; i < curriculumareas.length; i++) {
+                    selected = '';
+                    if(curriculumarea != '' && curriculumareas[i]['curriculum_id'] == curriculumarea) {
+                          selected = 'selected';
+                    }
+                    options += '<option ' + selected +' value="' + curriculumareas[i]['curriculum_id'] + '">' + curriculumareas[i]['curriculum_name'] + '</option>';
+                }
+            }
+            $("select#curriculumarea"+id).html(options);   
+        }
+        
+        function checkDiscipline(value, disciplineId){
+            $('select#discipline' + disciplineId + ' option')
+              .filter(function(){
+                  return $(this).val() == value;
+              }).attr('selected','selected');
+        }
+        
+        function checkIfDisciplineSelected(optionSelected, discipline){
+            var disciplines = new Array(1,2,3);
+            for(x=0; x<disciplines.length; x++) {
+                if(discipline != disciplines[x]) {
+                    selected = $('select#discipline'+ disciplines[x]).val();
+                    if(selected == optionSelected && selected != 1) {
+                        alert('You have already selected this discipline.');
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    });
+</script>
+<?php endif;?>

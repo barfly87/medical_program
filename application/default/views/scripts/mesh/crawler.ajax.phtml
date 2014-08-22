@@ -1,0 +1,11 @@
+<hr align="left" width="100%"/>
+<?php if (count($this->result) != 0) : ?>
+  <p>Please tick as many as apply to your learning objective.</p>
+  <?php foreach ($this->result as $line) : ?>
+    <input type="checkbox" onclick="javascript:pick('<?php echo $line ?>')" /><?php echo $line, PHP_EOL ?><br/>
+  <?php endforeach; ?>
+<?php else : ?>
+	No matching mesh terms found!
+<?php endif; ?>
+<br />
+<input type="button" value="Close Window" onClick="javascript:window.close();"/>

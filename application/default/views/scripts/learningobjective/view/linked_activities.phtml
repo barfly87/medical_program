@@ -1,0 +1,51 @@
+<div id="linkContainer">
+    <div class="subHeadings">
+    	<span style="float:right">
+    		<?php if (UserAcl::isStaffOrAbove()) : ?>
+    			<a class="sectionLink" href="<?php echo $this->url(array('module'=>'default','controller'=>'lotalinkage', 'action'=>'addta')); ?>">Add</a>
+    			<a class="sectionLink" href="<?php echo $this->url(array('module'=>'default','controller'=>'lotalinkage', 'action'=>'history','type'=>'lo')); ?>">History</a>
+    		<?php endif; ?>
+    	</span>Linked Teaching Activities
+    </div>
+    <div id="linkContent">
+        <?php if (count($this->released_tas)):?>
+            <?php
+                $strength_Finder = new Strengths();
+                $strength_names = $strength_Finder->getAllNames();
+                $blockFinder = new Blocks();
+                $blockNames = $blockFinder->getAllNames();
+                $pblFinder = new Pbls();
+                $pblNames = $pblFinder->getAllNames();
+                $taTypeFinder = new ActivityTypes();
+                $typeNames = $taTypeFinder->getAllNames();
+            ?>
+            <?php foreach ($this->released_tas as $ta) : ?>
+            <div class="linkElement" id="linkElement_<?php echo $ta['auto_id'] ?>">
+                <?php if (!empty($ta['type'])) : ?><span class="linkSubElementHeading"><?php echo $typeNames[$ta['type']];?></span> - <?php endif;?><?php if (!empty($ta['name'])) : ?><?php echo $ta['name'];?><?php endif;?><br/>
+                <?php if (!empty($ta['block'])) : ?>
+                    <span style="font-size:0.9em"><span class="linkSubElementHeading">Block</span>: <?php echo $blockNames[$ta['block']];?></span><br/>
+                <?php endif;?>
+                <?php if (!empty($ta['pbl'])) : ?>
+                    <span style="font-size:0.9em"><span class="linkSubElementHeading">Problem</span>: <?php echo $pblNames[$ta['pbl']];?></span><br/>
+                <?php endif;?>
+                <?php $strength = $strength_names[$ta['linkstrength']]; ?>
+                <?php if (!empty($strength)) : ?>
+                    <span style="font-size:0.9em"><span class="linkSubElementHeading">Strength</span>: <?php echo $strength; ?></span><br/>
+                <?php endif;?>
+                <div class="linkSubElement" id="<?php echo $ta['auto_id'] ?>">
+                	<?php if (UserAcl::isBlockchairOrAbove()) : ?>
+                		<span style="font-size:0.9em; float:left"><span class="linkSubElementHeading">Id</span>: <?php echo $ta['auto_id'] ?></span>
+                	<?php endif; ?>
+                	<a class="resourceButtonHref" href=<?php echo $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'view','id'=>$ta['auto_id']),null,true); ?>>View</a>
+                	<?php if (Utilities::isMyTa($ta['auto_id']) === true) : ?>
+                    	<?php $url = $this->url(array('module'=>'default','controller'=>'lotalinkage', 'action'=>'delete','taid'=>$ta['auto_id'], 'loid'=>$this->lo->auto_id, 'type'=>'lo'), null, true); ?>
+                		<a class="resourceButtonHref" href="<?php echo $url?>">Remove</a>
+                	<?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="dateElem">None Attached</div>
+        <?php endif; ?>
+    </div>
+</div>

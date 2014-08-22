@@ -1,0 +1,24 @@
+# Rewrite rules for Zend Framework
+RewriteEngine on
+
+RewriteRule /open-flash-chart.swf /compass/htdocs/open-flash-chart.swf [L]
+RewriteRule /css/(.*) /compass/htdocs/css/$1 [L]
+RewriteRule /js/(.*) /compass/htdocs/js/$1 [L]
+RewriteRule /img/(.*) /compass/htdocs/img/$1 [L]
+
+#######################################
+# KAMAL SONI .htaccess CONFIGURATION
+#######################################
+# RewriteRule /compass/open-flash-chart.swf /open-flash-chart.swf [L]
+# RewriteRule /compass/css/(.*) /css/$1 [L]
+# RewriteRule /compass/js/(.*) /js/$1 [L]
+# RewriteRule /compass/img/(.*) /img/$1 [L]
+#######################################
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php/$1
+
+# Security: Don't allow browsing of directories
+Options -Indexes
+

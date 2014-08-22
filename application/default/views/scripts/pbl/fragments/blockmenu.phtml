@@ -1,0 +1,88 @@
+<?php 
+
+//All the <li> would be stored in this array. 
+//Since we want resource type 'introduction' to be on the top this array would help us to rearrange
+//<li>'s
+$lis = array();
+$staffOnlyPeopleImage = MediabankResourceConstants::staffOnlyPeopleImage();
+#Links that can be accessed by user group student and above 
+foreach(BlockMenu::Studentlinks() as $key => $link) {
+    if(isset($link['allow']) && $link['allow'] === true) { 
+        $clicked = ($link['page'] == $this->zendAction) ? ' clicked' : '';
+        $url = $this->url(array('module'=>'default','controller'=>'block', 'action' => $link['page']),null,true).'/ref/'.$this->blockId;
+        $lis[] = <<<LI
+<li><a id="{$link['page']}Link" href="{$url}" class="menulink{$clicked}">{$link['desc']}</a></li>
+LI;
+    }
+}                
+
+#Dynamic links for all the ta types and resources attached to this block
+if(isset($this->dynamicMenuLinks) && !empty($this->dynamicMenuLinks)) {
+    
+    //Start of Dynamic TA types
+    if(isset($this->dynamicMenuLinks->taTypes) && !empty($this->dynamicMenuLinks->taTypes)) {
+        $taUrlFormat   = $this->url(array('module'=>'default', 'controller'=>$this->zendController, 'action'=>'fetch'), null, true);
+        $taUrlFormat  .= '/ref/'.$this->pblOrBlockRef.'/tatypeid/%d';
+        foreach($this->dynamicMenuLinks->taTypes as $taTypeId => $taTypeName) {
+            $clicked = (PblBlockConst::urlMatch(sprintf($taUrlFormat, $taTypeId))) ? ' clicked' : '';    
+            $url = sprintf($taUrlFormat, $taTypeId);
+            $lis[] = <<<LI
+<li><a class="menuLink{$clicked}" href="{$url}">{$taTypeName}</a></li>
+LI;
+        }
+    }
+    
+    //Start of Dynamic Resources
+    if(isset($this->dynamicMenuLinks->resources) && !empty($this->dynamicMenuLinks->resources)) {
+        $getMeUrl       = $this->url(array('module'=>'default', 'controller'=>'block', 'action'=>'get'),null,true).'/me/%s';
+        $getMeUrlFormat = $getMeUrl.'/ref/'.$this->blockId;
+        foreach($this->dynamicMenuLinks->resources as $link) { 
+            $clicked = (PblBlockConst::urlMatch(sprintf($getMeUrl, $link['url_name']))) ? ' clicked' : '';
+            $url = sprintf($getMeUrlFormat,$link['url_name']);
+            $staffOnlyImage = (MediabankResourceConstants::isResourceStaffOnly($link['allow']) === true) ? $staffOnlyPeopleImage : '';
+            $lis[] = <<<LI
+<li><a class="menuLink{$clicked}" href="{$url}">{$link['resource_type_name']}</a>{$staffOnlyImage}</li>
+LI;
+            //If this resource was of type 'introduction' then pop it off the array and stick it in the front.
+            if($link['resource_type_id'] == ResourceTypeConstants::$INTRODUCTION_ID) {
+                array_unshift($lis, array_pop($lis));                
+            }
+        }
+    }
+    
+}
+       
+#Links that can only be accessed by user group staff and above
+foreach(BlockMenu::StaffLinks() as $key => $link) {
+    if(isset($link['allow']) && $link['allow'] === true) { 
+        $clicked = ($link['page'] == $this->zendAction) ? ' clicked' : '';
+        $url = $this->url(array('module'=>'default','controller'=>'block', 'action' => $link['page']),null,true).'/ref/'.$this->blockId;
+        $lis[] = <<<LI
+<li><a id="{$link['page']}Link" href="{$url}" class="menulink{$clicked}">{$link['desc']}</a>{$staffOnlyPeopleImage}</li>
+LI;
+    }                
+}
+
+?>
+
+<?php 
+######################
+##      DISPLAY 
+######################
+?>
+
+<?php #Display problem details?>
+<span id="pblHeading">
+<?php 
+    echo $this->blockName; 
+?>
+</span>
+<br /><br />
+<?php # Display Menu?>
+<span id="pblMenu">
+    <ul>
+    <?php foreach($lis as $li) :?>
+        <?php print $li;?>
+    <?php endforeach;?>         
+    </ul>
+</span>

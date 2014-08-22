@@ -1,0 +1,32 @@
+<link href="<?php echo $this->baseUrl;?>/css/lotaview.css"  media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/form.css"  media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->baseUrl;?>/css/recordings.css"  media="screen" rel="stylesheet" type="text/css" />
+<?php include_once('../application/common/views/_prettyPhotoJsAndCss.phtml'); ?>
+<?php include_once('../application/common/views/_tooltip.phtml'); ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#metadata th").attr("nowrap", "nowrap");
+        $('#datetable').hide();
+        $('a#showhidelink').click(function() {
+            $('#datetable').slideToggle('slow');
+            $('#showhidelink').text($('#showhidelink').text()=='Show dates'?'Hide dates':'Show dates');
+            return false;
+        });
+        $("#metadata tr, #datetable tr, #edittable tr:gt(0)").hover(
+            function() {
+                $(this).css('background-color', '#ffe0af');
+            },
+            function() {
+                $(this).css('background-color', '#fff9ef');
+            }
+        );
+        $(".tooltip-class").tooltip({
+            track: true,
+            delay: 0,
+            showURL: false,
+            opacity: 1,
+            showBody: " - ",
+            left: 0
+        });
+    });
+</script>

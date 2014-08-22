@@ -1,0 +1,45 @@
+<?php include_once('_DisciplineJsAndCss.phtml'); ?>
+<?php include_once('../application/common/views/_listOfDisciplinesJsAndCss.phtml'); ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        listOfDisciplines(new Array('compass_1', 'compass_2', 'compass_3','org'));
+    });
+</script>
+
+
+<h2>Welcome, <?php echo $this->username?></h2>
+
+<form method="post" action="">
+<table>
+  <tr>
+    <td>Educational Discipline (1):</td>
+    <td>
+        <?php echo $this->formSelect('compass_1', $this->user_disc['compass_1'], array('style' => 'width: auto'), $this->disciplines['compass']) ; ?>
+    </td>
+  </tr>
+  <tr>
+    <td>Educational Discipline (2):</td>
+    <td>
+        <?php echo $this->formSelect('compass_2', $this->user_disc['compass_2'], array('style' => 'width: auto'), $this->disciplines['compass']) ; ?>
+    </td>
+  </tr>
+  <tr>
+    <td>Educational Discipline (3):</td>
+    <td>
+        <?php echo $this->formSelect('compass_3', $this->user_disc['compass_3'], array('style' => 'width: auto'), $this->disciplines['compass']) ; ?>
+    </td>
+  </tr>
+  <tr>
+    <td>Organizational Discipline:</td>
+    <td>
+        <?php echo $this->formSelect('org', $this->user_disc['org'], array('style' => 'width: auto'), $this->disciplines['org']) ; ?>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>
+      <?php echo $this->formSubmit('submit', 'Submit', array('style'=>'margin-top: 10px','accesskey'=>'S')) ?>
+    </td>
+  </tr>
+</table>
+</form>

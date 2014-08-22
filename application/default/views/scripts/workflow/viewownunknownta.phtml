@@ -1,0 +1,46 @@
+<script type="text/javascript">
+$(function() {
+	$("table thead tr:nth-child(odd)").css('background-color', '#ffe0af');
+	$("table tbody tr:nth-child(even)").css('background-color', '#ffe0af');
+	$("table tr td a").css("text-decoration", "none");
+});
+</script>
+<div>
+<h2>In development queue with no teaching activity attached</h2>
+<table width="100%">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Edit</th>
+      <th>Delete</th>
+      <th>Type</th>
+      <th width="40%">Learning Objective Description</th>
+      <th width="40%">Teaching Activity Description</th></tr>
+  </thead>
+  <tbody>
+  <?php foreach ($this->result as $v) : ?>
+  	<?php
+  		if ($v['doctype'] == 'TA') {
+  			$type = "TA";
+  		} else if ($v['doctype'] == 'LO') {
+  			$type = "LO";
+  		} else if ($v['doctype'] == 'TL') {
+  			$type = "TA&nbsp;+&nbsp;LO";
+  		} else if ($v['doctype'] == 'LK') {
+  			$type = "Linkage";
+  		} else {
+  			$type = "Unknown";
+  		}
+  	?>
+    <?php $url = $this->url(array('module'=>'default','controller'=>'submission', 'action'=>'editloandta','id' => $v['id']),null,true); ?>
+    <?php $delurl = $this->url(array('module'=>'default','controller'=>'submission', 'action'=>'deleteloandta','id' => $v['id']),null,true); ?>
+    <td align="center"><?php echo $this->displayDate($v['date_submitted'])?></td>
+    <td align="center"><a href="<?php echo $url ?>"><img src="<?php echo $this->baseUrl?>/img/edit.gif" border="0"></img></a></td>
+    <td align="center"><a href="<?php echo $delurl ?>"><img src="<?php echo $this->baseUrl?>/img/delete.gif" border="0"></img></a></td>
+    <td align="center"><?php echo $type?></td>
+    <td><?php echo $v['lo_text']?></td>
+    <td><?php echo $v['ta_title']?></td></tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
+</div>

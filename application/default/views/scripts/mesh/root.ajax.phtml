@@ -1,0 +1,9 @@
+<b><?php echo MeshService::$rootCategories[$this->letter] ?> [<?php echo $this->letter?>] &gt;&gt;</b>
+<div style="padding-left: 24px">
+  <?php foreach ($this->results as $nextLine):?>
+  <div id="heading<?php echo $nextLine['uid'] ?>">
+    [<a href="javascript:expandTree('<?php echo $nextLine['treenumbers'] ?>', '<?php echo $nextLine['uid'] ?>')">+</a>] 
+     <a href="javascript:pick('<?php echo $nextLine['headingtext'] ?>');"><?php echo $nextLine['headingtext'] ?> [<?php echo $nextLine['treenumbers'] ?>]</a>
+  </div>
+ <?php endforeach;?>
+</div>

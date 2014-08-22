@@ -1,0 +1,45 @@
+<div id="linkContainer">
+    <div class="subHeadings">
+    	<span style="float:right">
+    		<?php if ($this->isMyTa === true) : ?>
+    			<a class="sectionLink" href="<?php echo $this->url(array('module'=>'default','controller'=>'lotalinkage', 'action'=>'addlo')); ?>">Add</a>
+    		<?php endif; ?>
+    		<?php if (UserAcl::isStaffOrAbove()) : ?>
+    			<a class="sectionLink" href="<?php echo $this->url(array('module'=>'default','controller'=>'lotalinkage', 'action'=>'history','type'=>'ta')); ?>">History</a>
+    		<?php endif; ?>
+    	</span>Linked Learning Objectives
+    </div>
+    <div id="linkContent">
+        <?php if (count($this->released_los)):?>
+            <?php
+                $strength_Finder = new Strengths();
+                $strength_names = $strength_Finder->getAllNames();
+            ?>
+            <?php foreach ($this->released_los as $lo) : ?>
+            <div class="linkElement" id="linkElement_<?php echo $lo['auto_id'] ?>">               
+                <?php if (!empty($lo['lo'])) : ?>
+                    <?php echo$lo['lo']; ?>
+                <?php endif;?>
+                
+                <?php $strength = $strength_names[$lo['linkstrength']]; ?>
+                <?php if (!empty($strength)) : ?>
+                    <span class="linkSubElementHeading">Strength</span>: <?php echo $strength; ?><br/>
+                <?php endif;?>
+                
+                <div class="linkSubElement" id="<?php echo $lo['auto_id'] ?>">
+                	<?php if (UserAcl::isBlockchairOrAbove()) : ?>
+                		<span style="font-size:0.9em; float:left"><span class="linkSubElementHeading">Id</span>: <?php echo $lo['auto_id'] ?></span>
+                	<?php endif; ?>
+                	<a class="resourceButtonHref" href=<?php echo $this->url(array('module'=>'default','controller'=>'learningobjective', 'action'=>'view','id'=>$lo['auto_id']),null,true); ?>>View</a>
+                	<?php if ($this->isMyTa === true) : ?>
+                    	<?php $url = $this->url(array('module'=>'default','controller'=>'lotalinkage', 'action'=>'delete','taid'=>$this->ta->auto_id, 'loid'=>$lo['auto_id'], 'type'=>'ta'), null, true); ?>
+           	    		<a class="resourceButtonHref" href="<?php echo $url?>">Remove</a>
+           	    	<?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="dateElem">None Attached</div>
+        <?php endif; ?>
+    </div>
+</div>

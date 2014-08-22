@@ -1,0 +1,10 @@
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/prototype.js"></script>
+<script type="text/javascript">
+    window.onload = function() {
+    url = BASE_URL + '/search/status';
+    options = {method : 'get', frequency : 1,decay : 2};
+    new Ajax.PeriodicalUpdater('statusstr',url,options);
+};
+</script>
+<p><?php echo $this->total?> documents need to be indexed.</p>
+<div id="statusstr">Fetching status...</div>

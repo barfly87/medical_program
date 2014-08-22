@@ -1,0 +1,186 @@
+<link href="<?php echo $this->baseUrl;?>/css/form.css" media="screen" rel="stylesheet" type="text/css" />
+<style type="text/css">
+  a.ltheading:hover {text-decoration: inherit; color: inherit; background: inherit} 
+  .ltheading {font-weight:bold; text-decoration: none; color: black}
+  th {background-color: #fdf5db; padding: 5px}
+  td {padding: 3px}
+#hbcontainer {
+    width: 20cm;
+    height: 24cm;
+    position: relative;
+}
+
+#hbheader, #headercolordiv {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#hbfooter, #footercolordiv {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+#hbheader {
+	text-align: right;
+}
+
+#headercolordiv, #footercolordiv{
+	text-align: center;
+}
+
+#headercolordiv, #footercolordiv{
+    z-index: -10;
+    margin-bottom: 5px;
+}
+
+#hbheader p {
+	padding-right: 1cm;	
+}
+
+#level1title {
+	color: #FFFFFF;
+	font: normal 48px helvetica, serif;
+	line-height: 20%;
+	margin-top: 3cm;
+	letter-spacing: 0.1em;
+}
+
+#level2title {
+	color: #3385AD;
+	font: normal 42px helvetica, serif;
+	margin-top: 2cm;
+}
+
+#level3title {
+	color: #3385AD;
+	font: normal 32px helvetica, serif;
+	margin-top: -0.5cm;
+}
+
+.footerleft {
+	color: #FFFFFF;
+	width: 10cm;
+	margin-left: 0.35cm;
+}
+
+.footerright {
+	color: #FFFFFF;
+	float: right;
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 12px;
+	padding: 0.2cm 0.6cm 0 0;
+}
+
+.logo {
+	float: left;
+	padding: 10px 8px 6px 10px;
+}
+
+.logotext {
+	padding-top: 0.4cm;
+	margin-top: 0;
+	font-weight: bold;
+	font-size: 18px;
+}
+</style>
+
+
+<?php if (count($this->ptdr_tas) > 0) : ?>
+    <div id="hbcontainer">
+    	<div id="hbheader">
+    	<div id="level1title">
+    		<p>Patient Doctor</p>
+    		<p>Block <?php echo 10 ?></p>
+    	</div>
+    	<p id="level2title">Handbook <?php echo date('Y') ?></p>
+    	<p id="level3title">Neurosciences</p>
+    	</div>
+   		<div id="headercolordiv"><img src="/compass/img/headerbg.png"></div>
+   	 	<div id="hbfooter">
+			<div class="footerleft">
+			<img class="logo" src="/compass/img/coat_of_arms.jpg" width="18%" />
+			<p class="logotext">The University of Sydney<br />
+			Sydney Medical School
+			</p></div>
+			<p class="footerright">@<?php echo date('Y') ?> Sydney Medical School, University of Sydney</p>
+    	</div>
+   		 <div id="footercolordiv"><img src="/compass/img/footerbg.png"></div>
+    </div>
+      <h2 style="min-width:600px; page-break-before:always;">Table of contents</h2>
+    <ul>
+    <?php 
+    $i = 1;
+    foreach ($this->ptdr_tas as $pd_tutorial) {
+    	echo "<li><a href=\"#section-$i\">{$pd_tutorial->name}</a></li>";
+    	$i++;
+    }
+    ?>
+    </ul>
+  
+  <?php
+    $resourceFinder = new MediabankResource();
+    $i = 1;
+    foreach ($this->ptdr_tas as $pd_tutorial) {
+        echo "<p style=\"page-break-before: always;\">Procedural Skills - ";
+        $pd_url = $this->url(array('module'=>'default','controller'=>'teachingactivity', 'action'=>'view', 'id'=>$pd_tutorial->auto_id), null, true);
+        echo "<a name=\"section-$i\" class=\"ltheading\">{$pd_tutorial->name}</a> <span class=\"hidefromprint\">(<a href=\"{$pd_url}\">View Teaching Activity</a>)</span></p>\n";
+        echo "<hr />\n";
+        echo '<div style="padding: 5px">';
+		$released_los = $pd_tutorial->getLinkedLearningObjectiveWithStatus(Status::$RELEASED);
+		echo "<h3>Learning Objectives:</h3>";
+		foreach ($released_los as $lo) {
+			echo "<div>{$lo['lo']}</div>";
+		}
+        
+		echo "<h3>Content:</h3>";
+        $contents = $pd_tutorial->getResourcesContentByType(8);
+        if(!empty($contents)) {
+            foreach($contents as $content) {
+                echo $this->partial('resource/_resourceTaPartial.phtml', array('row' => $content));
+            }
+        }
+        $pd_resource = new ProceduralSkillsResource($pd_tutorial->auto_id);
+        $general_resources = $pd_resource->getResources();
+        if (count($general_resources) > 0) {
+        	echo "<h3>Resources:</h3>";
+        	echo "<ol>";
+        	foreach ($general_resources as $resource)  {
+        		if (isset($resource['customViewUrl'])) {
+        			if ($resource['customViewUrl'] == '#') { //rich media
+        				echo "<li><a href=\"{$resource['customViewUrl']}\" onClick=\"{$resource['customOnclick']}\">{$resource['title']}</a></li>";
+        			} else { //CMS document
+        				echo "<li><a href=\"{$resource['customViewUrl']}\">{$resource['title']}</a></li>";
+        			}
+        		} else {
+        			echo "<li><a href=\"{$this->baseUrl}/resource/view/type/ta/resourceid/{$resource['auto_id']}/id/{$pd_tutorial->auto_id}/resourcetypeid/{$resource['resource_type_id']}?mid={$resource['mid']}\">{$resource['title']}</a></li>";
+        		}
+        	}
+        	echo "</ol>";
+        }
+        $references = $pd_tutorial->getResourcesContentByType(9);
+        if(!empty($references)) {
+        	echo "<h3>References:</h3>";
+            foreach($references as $reference) {
+                echo $this->partial('resource/_resourceTaPartial.phtml', array('row' => $reference));
+            }
+        }
+        echo '</div>';
+        $p_teachers = $pd_tutorial->principal_teacher_uid_arr;
+        if (count($p_teachers) > 0) {
+            foreach ($p_teachers as $teacher) {
+                echo "<p><b>Author:</b> ".UserService::getUidFullNameAndOrg($teacher)."</p>";
+            }
+        }
+        echo "<hr />\n";
+        $i++;
+    }
+  ?>
+<?php else : ?>
+    <h2 style="padding-top:10px">Patient doctor handbook not found.</h2>
+<?php endif; ?>

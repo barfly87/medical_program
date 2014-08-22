@@ -1,0 +1,14 @@
+<div class="pblSingleElem">
+    <?php echo $this->action(
+                    'view',
+                    'teachingactivity',
+                    'default',
+                    array(
+                          'id'               =>    $this->req['typeId'],
+                          'layout'           =>    'pblview',
+                          'pblTaTypePrev'    =>    $navigate['prev'], //$navigate defined in pbl/ta_default.phtml
+                          'pblTaTypeNext'    =>    $navigate['next']
+                         )  
+                   );?>
+</div>
+

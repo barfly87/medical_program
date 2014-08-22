@@ -1,0 +1,39 @@
+<?php
+if ($this->fp->hasError()) {
+    echo '<ul>';
+    $errors = $this->fp->getErrors();
+    foreach ($errors as $k => $v) {
+        echo "<li class=\"error\">$v</li>";
+    }
+    echo '</ul>';
+}
+
+$params = array();
+$params['lo_auto_id']      = $this->fp->lo_auto_id;
+$params['disc1']           = $this->fp->discipline1;
+$params['curriculumarea1'] = $this->fp->curriculumarea1;
+$params['disc2']           = $this->fp->discipline2;
+$params['curriculumarea2'] = $this->fp->curriculumarea2;
+$params['disc3']           = $this->fp->discipline3;
+$params['curriculumarea3'] = $this->fp->curriculumarea3;
+$params['theme1']          = $this->fp->theme1;
+$params['theme2']          = $this->fp->theme2;
+$params['theme3']          = $this->fp->theme3;
+$params['skill']           = $this->fp->skill;
+$params['system']          = $this->fp->system;
+$params['activity']        = $this->fp->activity;
+$params['ability']         = $this->fp->ability;
+$params['lo']              = $this->fp->lotext;
+$params['checked']         = $this->fp->checked;
+$params['review']          = count($this->fp->reviewArr) == 0 ? '' : join(', ', $this->fp->reviewArr);
+$params['keywords']        = count($this->fp->keywords) == 0? '' : join('|', $this->fp->keywords);
+$params['assesstype']      = count($this->fp->assesstypeArr) == 0 ? '' : join(', ', $this->fp->assesstypeArr);
+$params['achievement']     = $this->fp->achievement;
+$params['jmo']             = $this->fp->jmo;
+$params['gradattrib']      = $this->fp->gradattrib;
+$params['notes']           = $this->fp->notes;
+$params['linked_tas_old']    = count($this->fp->linked_tas_arr_old) == 0 ? '' : join(', ', $this->fp->linked_tas_arr_old);
+$params['linked_tas_new']    = count($this->fp->linked_tas_arr_new) == 0 ? '' : join(', ', $this->fp->linked_tas_arr_new);
+
+echo $this->action('loform', 'learningobjective', null, $params);
+?>

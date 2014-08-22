@@ -1,0 +1,26 @@
+.quickQuery{
+    /*border-bottom: 1px solid #FFE5BF;*/
+	color: #2F1D03;
+	padding: 4px;
+	margin:2px;
+	white-space: nowrap;
+}
+.quickQueriesCount {
+	padding:2px 5px;
+    background-color: #2F1D03;
+    color: #FFF1DF;
+    font-weight: bold;
+}
+.qqDisciplinesTd {
+    padding:0px;
+}
+.quickQueriesPara {
+    display:inline;
+}
+.quickQueriesSubmit{
+    font-weight : bold;
+}
+a.quickQueriesSubmit:hover {
+	text-decoration: none;
+	color: #306FDF;
+}

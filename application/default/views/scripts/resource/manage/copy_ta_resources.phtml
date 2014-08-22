@@ -1,0 +1,48 @@
+<script type="text/javascript">
+$(document).ready(function() {
+   
+	var SPAN_ERROR_MSG = $('span#copy-ta-id-error-message');
+    var TA_ID          = $('#copy-ta-id');    
+	
+    $('#copy-ta-id-submit').click(function() {
+    	SPAN_ERROR_MSG.html('<img style="margin-left:20px;" src="' + BASE_URL + '/img/loading.gif" /><br />');
+        var taId = jQuery.trim(TA_ID.val());
+        if(taId.length > 0) {
+        	SPAN_ERROR_MSG.attr('class','');            
+            $.ajax({
+                url: '/compass/resource/copy/from_type/ta/from_type_id/' + taId + '/to_type/<?php echo $this->pageType?>/to_type_id/<?php echo $this->pageTypeId?>',
+                dataType: 'json',
+                async: false,
+                type: "POST",
+                success: function(data) {
+                	var items = [];
+                	var messages;
+                	if(data.error == 'no') {
+                		SPAN_ERROR_MSG.attr('class','');
+                	    messages = data.msgs; 		   
+                    } else {
+                    	SPAN_ERROR_MSG.attr('class','error');
+                        messages = data.errorMsgs;
+                    }
+                    $.each(messages, function(key, val) {                        
+                        items.push('&nbsp;&nbsp;&nbsp;'+ val);
+                    });                    
+                	SPAN_ERROR_MSG.html('<b>Result</b><br />' + items.join('<br />') + '<br /><br />');
+                }
+            });     
+        } else {
+        	SPAN_ERROR_MSG.attr('class','error');
+        	SPAN_ERROR_MSG.html('Teaching Activity Id from where the resources needs to be copied is empty.<br />');
+        }        
+    });
+});
+</script>
+
+<h3><span class="boldText">Copy Resources</span></h3>
+<div>
+    <span id="copy-ta-id-error-message"></span>
+    Copy resources from Teaching Activity <input type="text" id="copy-ta-id" style="width:80px;" name="copy-ta-id" value="" /> to current Teaching Activity(<b><?php echo $this->pageTypeId?></b>)<br />
+    <input type="button" id="copy-ta-id-submit" name="copy-ta-id-submit" class="actionLink" value="Copy" />
+    <input type="button" id="copy-ta-id-reload" name="copy-ta-id-reload" onclick="javascript: window.location.reload();" class="actionLink" value="Reload" />
+</div>
+<br />

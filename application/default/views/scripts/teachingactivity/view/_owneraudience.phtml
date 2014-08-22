@@ -1,0 +1,30 @@
+<script type="text/javascript" src="<?php echo $this->baseUrl;?>/js/audience.js"></script>
+<div id="owneraudience" class="rhsbox">
+	<h3 class="rhsheading">Owner and Audience</h3>
+	<div class="mcontent">
+		<table width="100%">
+			<tr><th width="100px">Owner:</th>		<td><?php echo $this->ta->owner; ?></td></tr>
+			<tr><th valign="top">Audience:</th>
+				<td><form>
+				<?php
+					$identity = Zend_Auth::getInstance()->getIdentity();
+					$owner = $this->ta->owner;
+					$currAudience = $this->ta->audience_arr;
+					$domainFinder = new Domains();
+					$allAudience = $domainFinder->getAllNames('auto_id ASC');
+					foreach ($allAudience as $k => $audience) {
+						$checked = (in_array($audience, $currAudience)) ? ' checked="checked"' : '';
+						if ($owner === $audience) {
+							echo "<input type=\"checkbox\" disabled=\"disabled\"{$checked}>{$audience}<br />";
+						} else if ($audience === $identity->domain) {
+							echo "<input type=\"checkbox\"{$checked} id=\"domaindamincheckbox\" onclick=\"addremoveaudience('ta', {$this->ta->auto_id}, $k, '{$audience}');\">{$audience}<br />";
+						} else {
+							echo "<input type=\"checkbox\" disabled=\"disabled\"{$checked}>{$audience}<br />";
+						}
+					}
+				?>
+				</form></td>
+			</tr>
+		</table>
+	</div>
+</div>

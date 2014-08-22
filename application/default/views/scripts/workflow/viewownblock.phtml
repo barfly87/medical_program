@@ -1,0 +1,86 @@
+<script type="text/javascript">
+$(function() {
+	$("table thead tr:nth-child(odd)").css('background-color', '#ffe0af');
+	$("table tbody tr:nth-child(even)").css('background-color', '#ffe0af');
+	$("table tr td a").css("text-decoration", "none");
+});
+</script>
+<div>
+<h2><?php echo $this->status_name ?> queue for block "<?php echo $this->block_name?>"</h2>
+<table width="100%">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <?php if ($this->status_name == Status::$IN_DEVELOPMENT): ?>
+      <th>Edit</th>
+      <th>Delete</th>
+      <?php endif; ?>
+      <th>Type</th>
+      <th width="42%">Learning Objective Description</th>
+      <th width="42%">Teaching Activity Description</th></tr>
+  </thead>
+  <tbody>
+  <?php foreach ($this->result as $v) : ?>
+    <?php
+      if ($v['doctype'] == 'TA') {
+      	  if ($this->status_name == Status::$IN_DEVELOPMENT) {
+              $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'editloandta','id'=> $v['id']),null,true);
+              $delurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'deleteloandta','id'=> $v['id']),null,true);
+      	  } else if ($this->status_name == Status::$AWAITING_APPROVAL) {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  } else {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'view','id'=> $v['id']),null,true);
+      	  }
+          $type = "TA";
+      } else if ($v['doctype'] == 'LO') {
+      	  if ($this->status_name == Status::$IN_DEVELOPMENT) {
+      		  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'editloandta','id'=> $v['id']),null,true);
+      		  $delurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'deleteloandta','id'=> $v['id']),null,true);
+      	  } else if ($this->status_name == Status::$AWAITING_APPROVAL) {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  } else {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'learningobjective','action'=>'view','id'=> $v['id']),null,true);
+      	  }
+          $type = "LO";
+      } else if ($v['doctype'] == 'TL') {
+      	  if ($this->status_name == Status::$IN_DEVELOPMENT) {
+      		  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'editloandta','id'=> $v['id']),null,true);
+      		  $delurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'deleteloandta','id'=> $v['id']),null,true);
+      	  } else {
+              $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  }
+          $type = "TA&nbsp;+&nbsp;LO";
+      } else if ($v['doctype'] == 'LK') {
+      	  if ($this->status_name == Status::$IN_DEVELOPMENT) {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'editloandta','id'=> $v['id']),null,true);
+      	  	  $delurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'deleteloandta','id'=> $v['id']),null,true);
+      	  } else if ($this->status_name == Status::$AWAITING_APPROVAL) {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  } else {
+              $url = $this->url(array('module'=>'default','controller'=>'teachingactivity','action'=>'view','id'=> $v['taid']),null,true);
+      	  }
+      	  $type = "Linkage";
+      } else {
+          if ($this->status_name == Status::$IN_DEVELOPMENT) {
+      	  	  $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'editloandta','id'=> $v['id']),null,true);
+      	  	  $delurl = $this->url(array('module'=>'default','controller'=>'submission','action'=>'deleteloandta','id'=> $v['id']),null,true);
+      	  } else {
+              $url = $this->url(array('module'=>'default','controller'=>'submission','action'=>'viewloandta','id'=> $v['id']),null,true);
+      	  }
+      	  $type = "Unknown";
+      }
+    ?>
+    <tr>
+    <td align="center"><?php echo $this->displayDate($v['date_submitted'])?></td>
+    <?php if ($this->status_name == Status::$IN_DEVELOPMENT): ?>
+    <td align="center"><a href="<?php echo $url ?>"><img src="<?php echo $this->baseUrl?>/img/edit.gif" border="0"></img></a></td>
+    <td align="center"><a href="<?php echo $delurl ?>"><img src="<?php echo $this->baseUrl?>/img/delete.gif" border="0"></img></a></td>
+    <?php endif; ?>
+    <td align="center"><?php echo $type?></td>
+    <td><?php echo $v['lo_text']?></td>
+    <td><?php echo $v['ta_title']?></td>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
+</div>

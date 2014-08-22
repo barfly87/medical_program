@@ -1,0 +1,171 @@
+<?php if($this->studyconsent): ?>
+
+<?php
+	$showfile = !((strpos($_SERVER['HTTP_USER_AGENT'], 'Mobile/')!== false) && (strpos($_SERVER['HTTP_USER_AGENT'], 'Safari/')!== false));
+	if(!isset($loid))
+		$loid = $this->loid;
+?>
+<script src="<?php echo $this->baseUrl;?>/js/jquery/jquery.validate.min.js" type="text/javascript"></script>
+   <script>
+  $(document).ready(function(){
+    $("#studentresourceuploadform").validate();
+    // ensure ckeditor textarea gets updated before validation occurs
+    $("#resourcesubmit").click(function(){
+	     for (var i in CKEDITOR.instances) {
+	        CKEDITOR.instances[i].updateElement(); // update the textarea
+	     }
+ 	});
+  });
+  function setcategory(category, id)
+  {
+	  if(category==='6') {
+	  	activedownload('text', id);
+	  	$('#resource<?php echo $loid; ?>type_text').attr('checked','checked');
+	  	$('#collaborative').attr('checked',true);
+	  	$('#private').attr('checked',false);
+	  	$('#resource'+id+'typerow').hide();
+	  	$('#collaborativerow'+id).hide();
+	  	$('#privaterow'+id).hide();
+	  
+	  } else {
+			$('#resource'+id+'typerow').show();
+			$('#collaborativerow'+id).show();
+		  	$('#privaterow'+id).show();
+			  
+	  }
+  }
+  function activedownload(resourcetype, id)
+  {
+	  var resourcetypes = new Array();
+	  resourcetypes[0]='file';
+	  resourcetypes[1]='url';
+	  resourcetypes[2]='text';
+	  resourcetypes[3]='question';
+	  for(var tind in resourcetypes) {
+		  t = resourcetypes[tind];
+		  if(t == resourcetype) {			  
+		  	$('#resource'+id+t+'row').show();
+		  	$('#resource'+id+t).addClass('required');
+		  } else {			  
+		  	$('#resource'+id+t+'row').hide();
+		  	$('#resource'+id+t).removeClass('required');
+		  }
+	  }
+	  if(resourcetype=='url') {
+		$('#copyrightrow'+id).hide();
+	  } else {
+		  $('#copyrightrow'+id).show();
+	  }
+  }
+  </script>
+<style>
+.error {
+	display:block;
+}
+div#tacontent div#studentResourceUploadPanel {
+	padding-bottom: 0px;
+}
+</style>
+<a class="resourceButtonHref" href="javascript:void(0);" onclick="$('#resourceform<?php echo $loid; ?>').toggle();">Add a resource</a>
+<div id="studentResourceUploadPanel">
+<form method="post" id="studentresourceuploadform" enctype="multipart/form-data" action="<?php echo $this->url(array('module'=>'default','controller'=>'studentresource', 'action'=>'upload'),'default',true); ?>">
+<table id="resourceform<?php echo $loid; ?>" style="display:none">
+<input type="hidden" name="loid" value="<?php echo $loid; ?>">
+<tr id="resource<?php echo $loid; ?>typerow">
+	<td colspan="2" >
+		Type:<?php if($showfile):?>
+		<input type="radio" name="resourcetype" id="resource<?php echo $loid; ?>type_file" value="file" checked onclick="activedownload('file',<?php echo $loid; ?>);"> <label for="resourcetype_file">File</label>
+		<?php endif; ?>
+		<input type="radio" name="resourcetype" id="resource<?php echo $loid; ?>type_url" value="url" <?php if(!$showfile) echo "checked";?> onclick="activedownload('url',<?php echo $loid; ?>);$('#resource<?php echo $loid; ?>urlrow').show();$('#resource<?php echo $loid; ?>textrow').hide();$('#resource<?php echo $loid; ?>filerow').hide();$('#copyrightrow<?php echo $loid; ?>').hide();"><label for="resource<?php echo $loid; ?>type_url">Web Link</label>
+		<input type="radio" name="resourcetype" id="resource<?php echo $loid; ?>type_text" value="text" onclick="activedownload('text',<?php echo $loid; ?>);"><label for="resourcetype_text">Text</label>
+		<input type="radio" name="resourcetype" id="resource<?php echo $loid; ?>type_question" value="question" onclick="activedownload('question',<?php echo $loid; ?>);"><label for="resourcetype_question">Question</label>
+	</td>
+</tr>
+<?php if($showfile):?>
+<tr id="resource<?php echo $loid; ?>filerow">
+	<td><label for="resourcefile">Browse file *:</label></td>
+	<td><input type="file" name="resourcefile" id="resource<?php echo $loid; ?>file" class="required"> &nbsp;&nbsp;<small>(max size: <?php echo min(str_replace("M","",ini_get("upload_max_filesize")),str_replace("M","",ini_get("post_max_size")),15);?>Mb)</small></td>
+</tr>
+<?php endif; ?>
+<tr id="resource<?php echo $loid; ?>urlrow" style="<?php if($showfile) echo "display:none;";?>">
+	<td><label for="resourceurl">URL *:</label></td>
+	<td><input name="resourceurl" id="resource<?php echo $loid; ?>url" class="url"></td>
+</tr>
+<tr id="resource<?php echo $loid; ?>textrow" style="display:none;">
+	<td><label for="resourcetext">Text*:</label></td>
+	<td><textarea name="resourcetext" class="ckeditor" id="resource<?php echo $loid; ?>text" rows="6" cols="55"></textarea></td>
+</tr>
+<tr id="resource<?php echo $loid; ?>questionrow" style="display:none;">
+	<td valign="top"><label for="resourcequestion">Question*:</label></td>
+	<td><table><tr><td>Stem*:</td><td><textarea name="resourcequestion" class="ckeditor" id="resource<?php echo $loid; ?>question" rows="4" cols="55"></textarea></td></tr>
+	<tr><td>Option 1*:</td><td><input name="resourcequestionoption1" size="100"></td></tr>
+	<tr><td>Option 2*:</td><td><input name="resourcequestionoption2" size="100"></td></tr>
+	<tr><td>Option 3*:</td><td><input name="resourcequestionoption3" size="100"></td></tr>
+	<tr><td>Option 4*:</td><td><input name="resourcequestionoption4" size="100"></td></tr>
+	<tr><td>Option 5*:</td><td><input name="resourcequestionoption5" size="100"></td></tr>
+	<tr><td colspan="2">Correct option:
+		<input type="radio" name="resourcequestioncorrect" value="1"> 1
+		<input type="radio" name="resourcequestioncorrect" value="2"> 2
+		<input type="radio" name="resourcequestioncorrect" value="3"> 3
+		<input type="radio" name="resourcequestioncorrect" value="4"> 4
+		<input type="radio" name="resourcequestioncorrect" value="5"> 5</td></tr>
+	<tr><td>Explanation:</td><td>
+	<textarea name="resourcequestionexplanation" class="ckeditor" id="resource<?php echo $loid; ?>questionexplanation" rows="4" cols="55"></textarea></td></tr>
+	</table>
+	</td>
+</tr>
+
+<tr id="description<?php echo $loid; ?>row">
+	<td><label for="description">Description*:</label></td>
+	<td><textarea name="description" rows="3" cols="55" class="required"></textarea><br>
+	<label for="description" class="error" generated="true"></label></td>
+</tr>
+<tr id="resourcecategory<?php echo $loid; ?>row">
+	<td>
+	<label for="resourcecategory">Category:</label></td>
+	<td><select id="resourcecategory<?php echo $loid; ?>" name="resourcecategory" onchange="setcategory($('#resourcecategory<?php echo $loid; ?>').val(),<?php echo $loid; ?>);">
+		<?php foreach($this->studentResourceCategories as $ind => $cat): ?>
+		<option value="<?php echo($ind)?>"><?php echo($cat)?></option>
+		<?php endforeach;?>
+	</select>
+	</td>
+</tr>
+<tr id="copyrightrow<?php echo $loid; ?>">
+	<td colspan="2"><label for="copyright">The copyright on this is</label>
+		<input type="radio" name="copyright" id="copyright_mine" value="mine" checked onclick="$('#copyrightownerrow<?php echo $loid; ?>').hide();$('#copyrightowner').removeClass('required');"> <label for="copyright_mine">mine</label>
+		<input type="radio" name="copyright" id="copyright_notmine" value="notmine" onclick="$('#copyrightownerrow<?php echo $loid; ?>').show();$('#copyrightowner').addClass('required');"> <label for="copyright_notmine">someone else's</label>
+	</td>
+</tr>
+<tr id="copyrightownerrow<?php echo $loid; ?>" style="display:none;">
+	<td><label for="copyrightowner">Copyright<br>owner *:</label></td>
+	<td><input name="copyrightowner" id="copyrightowner" size="60"></td>
+</tr>
+<tr id="collaborativerow<?php echo $loid; ?>">
+	<td colspan="2"><label for="collaborative">Make this post editable by anyone</label>
+		<input type="checkbox" name="collaborative" id="collaborative">
+	</td>
+</tr>
+<tr id="privaterow<?php echo $loid; ?>">
+	<td colspan="2"><label for="private">Make this post private, viewable only by me</label>
+		<input type="checkbox" name="private" id="private">
+	</td>
+</tr>
+
+<tr id="submitrow">
+	<td colspan="2"><input id="resourcesubmit" type="submit" value="upload"></td>
+</tr>
+
+</table>
+</form>
+
+</div>
+<?php endif; //studyconsent?>
+<?php include('../application/common/views/_ckeditorJsAndCss.phtml');?>
+<script>
+//CKEditor is failing to load on the first try; destroy and recreate it
+if (CKEDITOR.instances['resourcetext']) {
+CKEDITOR.instances['resourcetext'].destroy();
+}
+CKEDITOR.replace('resourcetext');
+</script>
+

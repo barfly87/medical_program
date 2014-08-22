@@ -1,0 +1,93 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/evaluateLectureStats.css" media="all"  />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl;?>/css/form.css" />
+<?php include('../application/common/views/_jquery142UI.phtml');?>
+<?php $uidsDefaultJSValue = str_replace(PHP_EOL,'\n',EvaluateCompletionReportConst::getUidsDefaultValue());?>
+<script type="text/javascript">
+$(document).ready(function() {
+try {
+    $('input#<?php echo EvaluateCompletionReportConst::START_DATE; ?>').datepicker({
+            dateFormat: 'dd-mm-yy',
+            onClose: function (dateText, inst) {
+                var startDate = $.datepicker.parseDate('dd-mm-yy' ,dateText);
+                startDate.setDate(startDate.getDate() + 13);
+                $('input#<?php echo EvaluateCompletionReportConst::END_DATE;?>').datepicker('setDate', startDate);
+            }
+    }).click(function() {
+        $(this).val('');
+    });
+    $('input#<?php echo EvaluateCompletionReportConst::END_DATE;?>').datepicker({
+        dateFormat: 'dd-mm-yy'
+    }).click(function() {
+        $(this).val('');
+    });
+    
+    $('textarea[id=<?php echo EvaluateCompletionReportConst::UIDS; ?>]').focus(function() {
+        var uidsVal = jQuery.trim($(this).val());
+        if(uidsVal == '<?php echo $uidsDefaultJSValue;?>') {
+            $(this).val('');
+        }
+        return true;
+    }).blur(function() {
+        var uidsVal = jQuery.trim($(this).val());
+        if(uidsVal == '') {
+            $(this).val('<?php echo $uidsDefaultJSValue;?>');
+        }
+        return true;
+    });
+    
+    $('form#lectureStats').submit(function() {
+        var uidsObj = $('textarea[id=<?php echo EvaluateCompletionReportConst::UIDS; ?>]');
+        var uidsVal = jQuery.trim(uidsObj.val());
+        if(uidsVal == '<?php echo $uidsDefaultJSValue;?>') {
+            uidsObj.val('');
+        }
+    });
+} catch(e) {
+}//End of try catch
+});//End of document.ready
+</script>
+
+<h2>TA Evaluation - Completion Report</h2>
+<form method="post" id="lectureStats" action="<?php echo $this->url( array( 'module'=>'default', 'controller'=>'evaluate', 'action'=>'completionreport'), null, true);?>">
+<table id="tableLectureStats">
+    <tbody>
+        <tr>
+            <td id="tdDate">Date</td>
+            <td class="tdDates">
+                <table style="border-collapse: collapse;">
+                    <tr>
+                        <td class="dateFormat"><i>dd-mm-yyyy</i></td>
+                        <td></td>
+                        <td class="dateFormat"><i>dd-mm-yyyy</i></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->form->getElement(EvaluateCompletionReportConst::START_DATE);?></td>
+                        <td>&nbsp;-&nbsp;</td>
+                        <td><?php echo $this->form->getElement(EvaluateCompletionReportConst::END_DATE);?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align:top;">UIDs</td>
+            <td class="tdUids"><?php echo $this->form->getElement(EvaluateCompletionReportConst::UIDS);?></td>
+        </tr>
+        <tr>
+            <td style="vertical-align:top;">Stage</td>
+            <td class=""><?php echo $this->form->getElement(EvaluateCompletionReportConst::STAGES);?></td>
+        </tr>
+        <tr>
+            <td style="vertical-align:top;">Ta Types</td>
+            <td class=""><?php echo $this->form->getElement(EvaluateCompletionReportConst::TA_TYPE_ID);?></td>
+        </tr>
+        <tr>
+            <td style="vertical-align:top;">CSV</td>
+            <td class=""><?php echo $this->form->getElement(EvaluateCompletionReportConst::CSV);?><label for="<?php echo EvaluateCompletionReportConst::CSV;?>">Download as a CSV</label></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><?php echo $this->form->submit;?></td>
+        </tr>
+    </tbody>
+</table>
+</form>

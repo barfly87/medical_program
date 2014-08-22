@@ -1,0 +1,240 @@
+<?php //Check if there is something to display?>
+<?php if(isset($this->results) && !empty($this->results) && is_array($this->results)) :?>
+<h3><span class="boldText">Manage Resources 
+<?php if($this->manageResourceData->display === true):?>
+    : <a href="<?php echo $this->manageResourceData->url; ?>">
+    <?php echo $this->manageResourceData->title; ?>
+    </a>
+<?php endif;?>    
+    </span></h3>
+<form method="post" action="<?php echo $this->url(array('module'=>'default','controller'=>'resource','action'=>'manage'),null,true);?>">
+<table>
+<?php //Loop through each Resource Type 
+      //$data contains key 'resourceTypeTableRow' which has lk_resourcetype row stored for the resource_type_id
+      //and it also contains key 'resources' which contains all the resources attached to this resource_type_id ?>
+<?php
+$resourceUnlinkUrlFmt = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'remove'), null, true);
+$resourceUnlinkUrlFmt .= '/id/%d/type/%s/mid/%s';
+
+$uploadUrlFmt = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'upload'), null, true);
+$uploadUrlFmt .= '/id/'.$this->pageTypeId.'/type/'.$this->pageType.'/resourcetypeid/%d';
+
+$linkUrlFmt = $this->url(array('module'=>'default','controller'=>'resource','action'=>'link'), null, true);
+$linkUrlFmt .= '/id/'.$this->pageTypeId.'/type/'.$this->pageType.'/resourcetypeid/%d';
+
+$resourceUrlFmt = $this->url(array('module'=>'default','controller'=>'resource','action'=>'view'), null, true);
+$resourceUrlFmt .= '/id/'.$this->pageTypeId.'/type/'.$this->pageType.'/resourceid/%d/resourcetypeid/%d?mid=%s';
+
+$isDevTeam = false;
+$configDevTeamUids = Compass::getConfig('devteam.uids');
+if(! empty($configDevTeamUids)) {
+    $devTeamUids = Compass::csvToArray($configDevTeamUids);
+    $isDevTeam = (in_array(UserAcl::getUid(), $devTeamUids));
+}
+$mediabankViewResourceCurlBaseUrl = $this->url( array( 'module'=>'default', 'controller'=>'resource', 'action'=>'viewmediabankhtml'), null, true).'/url/';
+$resourceRepairBaseUrl = $this->url( array( 'module'=>'default', 'controller'=>'resource', 'action'=>'repair'), null, true).'/mid/';
+
+?>
+
+<?php $sortableIds = array(); ?>
+<?php foreach($this->results as $resourceTypeId => $data) :?>
+<?php $resourceTypeName = $data['resourceTypeTableRow']['resource_type']; ?>
+<?php //Display Resource Type Name?>
+    <tr>
+        <td class="resourceTypeHeading">
+            <?php 
+            $resourceStaffOnly = MediabankResourceConstants::isResourceStaffOnly($data['resourceTypeTableRow']['allow']);
+            $resourceStaffOnlyHtml = ($resourceStaffOnly === true) ? MediabankResourceConstants::staffOnlyPeopleImage() : '';
+            ?>
+            <div><?php echo $resourceTypeName; ?></div>
+        </td>
+        <td class="resourceActionHeading">
+            <span><?php echo $resourceStaffOnlyHtml;?></span>
+            <div class="resourceAction"><a href="<?php printf($uploadUrlFmt, $data['resourceTypeTableRow']['auto_id']); ?>">Upload</a></div>
+            <div class="resourceAction"><a href="<?php printf($linkUrlFmt,   $data['resourceTypeTableRow']['auto_id']); ?>">Link</a></div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" class="resourceContainer">           
+        <?php //If resources are attached to a resource type loop through them 
+              //And allow user to click on the resource title to edit the resource. ?>
+        <?php if(isset($data['resources']) && !empty($data['resources'])) :?>
+            <?php $count = 1 ;?>
+            <?php 
+            $sortableId = 'sortable-' . $resourceTypeId; 
+            $sortableIds[] = $sortableId;
+            ?>
+            
+            <ol id="<?php echo $sortableId;?>">
+            <?php foreach($data['resources'] as $resource) :?>
+                <?php
+                $uniqueId = preg_replace('/[^A-Za-z1-9]/','',$resourceTypeName);
+                $uniqueId = strtolower($uniqueId).'-'.$count;
+                //Create edit url 
+                $editUrl =  MediabankResourceConstants::createResourceEditUrl(
+                                $resource['type'], $resource['type_id'], $resource['auto_id'], $data['resourceTypeTableRow']['auto_id']
+                            );
+                //If title was not found in mediabank then display title as  
+                //'Resource Type Name - Resource Count No'
+                if(! empty($resource['resource_title'])) {
+                    $title = $resource['resource_title'] ;
+                } else {
+                    $title = $resourceTypeName;
+                    $title .= ($count > 1) ? $count : '';
+                }                              
+                ?>
+                <li class="resourceLi" id="li-<?php echo $uniqueId;?>" rel="<?php echo $resource['auto_id'] ;?>">
+                    <img src="<?php echo $this->baseUrl;?>/img/sort_arrow.gif" style="cursor: move;" alt="move"  height="16" class="handle" title="Drag up or down to sort resources display order"/>
+                    <input type="checkbox" id="input-<?php echo $uniqueId;?>" class="resourceIdCheckbox" name="resource_id[]" value="<?php echo $resource['auto_id'];?>" />
+                    <?php if($resource['allow_edit'] === true) :?>
+                        <a href="<?php echo $editUrl;?>" class="hrefSibling">
+                            <?php echo $title; ?>
+                        </a>
+                    <?php else:?>
+                        <span class="hrefSibling"><?php echo $title; ?></span>
+                    <?php endif;?>
+                    <span class="hide resourceUnlinkUrlSibling">
+                        <?php $mid = MediabankResourceConstants::encode($resource['resource_id']);?>
+                        <?php echo sprintf($resourceUnlinkUrlFmt, $resource['type_id'],$resource['type'], $mid);?>
+                    </span>
+                    &nbsp;<a href="<?php printf($resourceUrlFmt,$resource['auto_id'],$data['resourceTypeTableRow']['auto_id'],$mid);?>" class="resource-info-link" title="<?php echo($resource['resource_id']);?>">info</a>
+                    
+                    <?php
+                    $collectionInfo = array();
+                    $collection = MediabankResourceConstants::getCollection($mid);
+                    $resourceDetails = array();
+                    $mediabankViewResourceUrl = MediabankConstants::getMediabankBasePath().'view.jsp?mid='.$resource['resource_id'];
+                    $mediabankViewResourceCurlUrl = $mediabankViewResourceCurlBaseUrl . base64_encode($mediabankViewResourceUrl);
+                    if($collection != '') {
+                        if($isDevTeam) {
+                            $resourceDetails[] = array(
+                                                'title' => 'Mediabank - View',
+                                                'content' => 'View in Mediabank',
+                                                'contentUrl' => $mediabankViewResourceUrl
+                                            );
+                            $resourceDetails[] = array(
+                                                'title' => 'Mediabank - cURL',
+                                                'content' => 'View in Mediabank using cURL',
+                                                'contentUrl' => $mediabankViewResourceCurlUrl
+                                            );
+                        }
+                        switch($collection) {
+                            case MediabankResourceConstants::$COLLECTION_echo360:
+                                $presentationId = MediabankResourceConstants::getEcho360PresentationId($mid);
+                                $resourceDetails[] = array(
+                                                    'title' => 'Echo360 - View',
+                                                    'content' => 'View in Echo360',
+                                                    'contentUrl' => MediabankResourceConstants::createEcho360Url($presentationId)
+                                                );
+                                $resourceDetails[] = array(
+                                                    'title' => 'Echo360 - Date & Time ',
+                                                    'content' => MediabankResourceConstants::getCreationDateForEcho360Recording($mid)
+                                                );
+                                $resourceDetails[] = array(
+                                                    'title' => 'Echo360 - Presentation ID ',
+                                                    'content' => $presentationId
+                                                );
+                            break;
+                        }
+                        $resourceDetails[] = array(
+                                            'title' => 'Mediabank - Mid',
+                                            'content' => $resource['resource_id']
+                                        );
+                    }
+                    if(isset($resource['history']) && !empty($resource['history'])) {
+                        foreach($resource['history'] as $history) {
+                            $dateTime = explode(' ', $history['timestamp']);
+                            $timeStamp = $dateTime[0].'&nbsp;<i>'.$dateTime[1].'</i>&nbsp;';
+                            $action = ucfirst($history['action']);
+                            $uid = Compass::userInfoHtml($history['uid']);
+                            $resourceDetails[] = array(
+                                            'title' => 'History - '. $action,
+                                            'content' => $uid. ' ' . $timeStamp
+                            );
+                            
+                        }
+                    }
+                    ?>
+                    <?php if(!empty($resourceDetails)) :?>
+                        <a href="javascript:void(0);" class="resource-collection-link" onclick="$('div#resource-details-<?php echo $uniqueId; ?>').toggle();"><?php echo $collection;?></a>
+                    <?php else:?>
+                        <span class="resource-collection-link"><?php echo $collection;?></span>
+                    <?php endif;?>
+                    <div id="resource-details-<?php echo $uniqueId; ?>" class="resource-details">
+                    <?php if(!empty($resourceDetails)):?>
+                        <table class="collectionInfo">
+                        <?php foreach($resourceDetails as $detail):?>
+                            <tr>
+                                <th><?php echo $detail['title'];?></th>
+                                <td>
+                                    <?php if(isset($detail['contentUrl'])):?>
+                                        <a href="<?php echo $detail['contentUrl']?>" target="_blank"><?php echo $detail['content']?></a>
+                                    <?php else:?>
+                                        <?php echo $detail['content']?>
+                                    <?php endif;?>
+                                </td>
+                            </tr>
+                        <?php endforeach;?>
+                            <tr>
+                                <th>Repair</th>
+                                <td><a href="javascript:void(0);" onclick="repairResource('<?php echo $resourceRepairBaseUrl.$mid?>')">Click to repair</a></td>
+                            </tr>
+                        </table>
+                    <?php endif;?>
+                    </div>
+                </li>
+                <?php $count++ ;?>
+                
+            <?php endforeach; ?>
+            </ol>
+        <?php else:?>
+            <ol style="padding-left:0px;"><li class="resourceLiEmpty">None Found</li></ol>     
+        <?php endif;?>
+        </td>
+    </tr>
+    <?php endforeach;?>
+    <tr>
+        <td colspan="2">
+            <input class="actionLink" id="unlinkResources"      type="button" value="Unlink" />
+            <input class="actionLink" id="selectAllResources"   type="button" value="Select All" />
+            <input class="actionLink" id="unselectAllResources" type="button" value="UnSelect All" />
+        </td>
+    </tr>
+</table> 
+</form>               
+<?php else:?>
+<span class="red">No resource types are attached to this type of page.</span>
+<?php endif;?>
+<br />
+<script type="text/javascript">
+$(document).ready(function() {
+    try {
+    <?php if(!empty($sortableIds)) :?>
+        <?php foreach($sortableIds as $sortableId) :?>
+        $("#<?php echo $sortableId;?>").sortable({ 
+            handle : '.handle',
+            update : function (event, ui) {
+                var order = new Array();
+                var olObj = $('#<?php echo $sortableId;?> li');
+                
+                olObj.each(function(i, elem) {
+                    order.push(++i + '_' + $(this).attr('rel'));
+                });
+                var reOrderUrl = BASE_URL + '/resource/sort?' +  $.param({data : order});
+                $.ajax({
+                    url: reOrderUrl,
+                    async: false,
+                    type: "GET",
+                    success: function(result) {
+                        /* DON'T DO ANYTHING */
+                    }
+                });     
+            }
+        });
+        <?php endforeach;?>
+    <?php endif;?>
+    } catch (err){
+           
+    }
+});
+</script>
