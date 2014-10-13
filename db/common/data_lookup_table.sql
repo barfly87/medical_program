@@ -327,20 +327,19 @@ INSERT INTO lk_ratingcategories VALUES(DEFAULT, 'tl;dr', -1,'Too long; didn''t r
 
 
 -- Staff Type
-COPY lk_stafftype (auto_id, name) FROM stdin;
-1	Theme Chairs
-2	Honours
-3	Admissions
-4	Electives
-5	Independent Learning Activity
-6	Core Blocks
-7	Specialty Blocks
-8	Pre-Internship
-9	Executive Officers
-10	Medical Education Academics
-11	Sub Deans
-12	Developers
-\.
+INSERT INTO lk_stafftype VALUES (1, 'Theme Chairs');
+INSERT INTO lk_stafftype VALUES (2, 'Honours');
+INSERT INTO lk_stafftype VALUES (3, 'Admissions Staff');
+INSERT INTO lk_stafftype VALUES (4, 'Electives');
+INSERT INTO lk_stafftype VALUES (5, 'Independent Learning Activity');
+INSERT INTO lk_stafftype VALUES (6, 'Core Blocks');
+INSERT INTO lk_stafftype VALUES (7, 'Specialty Blocks');
+INSERT INTO lk_stafftype VALUES (9, 'Executive Officers');
+INSERT INTO lk_stafftype VALUES (10, 'Medical Education Academics');
+INSERT INTO lk_stafftype VALUES (11, 'Sub Deans');
+INSERT INTO lk_stafftype VALUES (12, 'Developers');
+INSERT INTO lk_stafftype VALUES (14, 'Curriculum Staff');
+INSERT INTO lk_stafftype VALUES (8, 'Pre-Internship');
 
 INSERT INTO lk_year VALUES (DEFAULT, NULL);
 INSERT INTO lk_year VALUES (DEFAULT, 2);
