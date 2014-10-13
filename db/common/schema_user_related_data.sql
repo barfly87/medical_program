@@ -160,12 +160,6 @@ CREATE TABLE staff (
 );
 
 
-CREATE TABLE lk_staffpage (
-  auto_id SERIAL,
-  name varchar(64),
-  PRIMARY KEY (auto_id)
-);
-
 CREATE TABLE studyconsent (
   auto_id SERIAL,
   uid VARCHAR(32),
