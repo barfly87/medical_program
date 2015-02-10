@@ -106,23 +106,25 @@ table#contacts-table .uid-container {
   <tr class="header">
     <td><?php echo Zend_Registry::get('Zend_Translate')->_('Block') ?></td>
     <td align="center">#</td>
-    <td style="padding-left: 2px;">Common name</td>
-    <td style="padding-left: 2px;">Clinical name</td>
+    <td style="padding-left: 2px;">Week number</td>
+    <td style="padding-left: 2px;">Name</td>
     <td style="padding-left: 2px;">Resources</td>    
   </tr>
  <?php
  	$sbs = new StageBlockSeqs();
- 	$stage_1_last_blok = $sbs->getLastBlockNoForStage("1");
- 	$stage_2_last_blok = $sbs->getLastBlockNoForStage("2");
-    $num_blocks = count($this->releasedPbls) - 1;
+        $stage_1_last_blok = $sbs->getLastBlockNoForStage("1");
+        $stage_2_last_blok = $sbs->getLastBlockNoForStage("2");	
+        $num_blocks = count($this->releasedPbls);
 
     $resourceViewOrDownloadUrl = $this->url(array('module'=>'default','controller'=>'resource', 'action'=>'viewordownload','type'=>'block'), null, true).'/id/%d/mid/%s/fn/%s';
     foreach($this->releasedPbls as $block => $value) {
     	if (UserAcl::isStaffOrAbove()) {
     		if ($stage_1_last_blok == $num_blocks) {
-    			echo "<tr class='stagecontent'><td class='stagetitle'>".Zend_Registry::get('Zend_Translate')->_('Stage')." 1</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class='stagersc'><a href=\"{$this->baseUrl}/guide/proceduralskills/stage/1\">Procedural Skills Handbook</a></td></tr>";
+    			echo "<tr class='stagecontent'><td class='stagetitle'>".Zend_Registry::get('Zend_Translate')->_('Semester')." 1</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class='stagersc'><a href=\"{$this->baseUrl}/guide/proceduralskills/stage/1\">Procedural Skills Handbook</a></td></tr>";
     		} else if ($stage_2_last_blok == $num_blocks) {
-    			echo "<tr class='stagecontent'><td class='stagetitle'>".Zend_Registry::get('Zend_Translate')->_('Stage')." 2</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class='stagersc'><a href=\"{$this->baseUrl}/guide/proceduralskills/stage/2\">Procedural Skills Handbook</a></td></tr>";
+    			echo "<tr class='stagecontent'><td class='stagetitle'>".Zend_Registry::get('Zend_Translate')->_('Semester')." 2</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class='stagersc'><a href=\"{$this->baseUrl}/guide/proceduralskills/stage/2\">Procedural Skills Handbook</a></td></tr>";
+    		} else if ($stage_3_last_blok == $num_blocks) {
+    			echo "<tr class='stagecontent'><td class='stagetitle'>".Zend_Registry::get('Zend_Translate')->_('Semester')." 3</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class='stagersc'><a href=\"{$this->baseUrl}/guide/proceduralskills/stage/2\">Procedural Skills Handbook</a></td></tr>";
     		}
     	}
     	$pblsCount = count($value['pbls']);

@@ -10,10 +10,10 @@
         [<a href="#content" accesskey="s">Skip to main content</a>]
     </div>
     <div id="header">
-    	<img src="<?php echo $this->baseUrl;?>/img/compass_logo_set.jpg" title="" alt="" align="left"/>
-        <img class="right" src="<?php echo $this->baseUrl;?>/img/1_new.jpg" title="" alt=""/>
-        <img class="right" src="<?php echo $this->baseUrl;?>/img/2_new.jpg" title="" alt=""/>
-        <img class="right" src="<?php echo $this->baseUrl;?>/img/3_new.jpg" title="" alt=""/>
+        <img style="float: left; margin: 10px 10px 10px 10px;" src="<?php echo $this->baseUrl;?>/img/compass_logo_set.png" title="" alt=""/>
+        <!--<img class="right" src="<?php echo $this->baseUrl;?>/img/4.jpg" title="" alt=""/>-->
+        <!--<img class="right" src="<?php echo $this->baseUrl;?>/img/2_new.jpg" title="" alt=""/>-->
+        <!--<img class="right" src="<?php echo $this->baseUrl;?>/img/3_new.jpg" title="" alt=""/>-->
     </div>
 <?php 
     $mainMenuId         = 'id="main-menu-selected"';
@@ -131,18 +131,11 @@
         <?php if (!in_array('stage1_2', $topnav_hidden_links)): ?>
         <li>
             <a href="<?php echo $this->url(array('module'=>'default','controller'=>'pbl', 'action'=>'top'),'default',true); ?>" <?php echo $mainMenuTop;?> accesskey="1">
-            <?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?> <span class="underlineText">1</span> &amp; 2</a>
+            <?php echo Zend_Registry::get('Zend_Translate')->_('Program courses') ?></a>
         </li>
         <?php endif;?>
         
-        <?php if (!in_array('stage3', $topnav_hidden_links)): ?>
-        	<?php if($isStaff || $isStage3) :?>
-        <li>
-            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'block', 'action'=>'list'),'default',true); ?>" <?php echo $mainMenuBlock;?> accesskey="3">
-            <?php echo Zend_Registry::get('Zend_Translate')->_('Stage') ?> <span class="underlineText">3</span></a>
-        </li>
-        	<?php endif;?>
-        <?php endif;?>
+        
         
         <?php if (!in_array('phase2', $topnav_hidden_links)): ?>
         <li>
@@ -156,7 +149,7 @@
             <a href="<?php echo $this->url(array('module'=>'default','controller'=>'phase', 'action'=>'index', 'name'=>'III'),'default',true); ?>" <?php echo $mainMenuPhaseIII;?> accesskey="3">
             Phase <span class="underlineText">3</span></a>
         </li>
-        <?php endif;?>
+        <?php endif;?> 
         
         <?php if($isStaff) :?>
         <li>
