@@ -187,7 +187,7 @@ td,div,body {
 
 #header {
     padding: 0;
-    background: #ffff00 url(http://smp.sydney.edu.au/compass/img/compass_banner_back.jpg) repeat-x;
+    background: #870052; /*#ffff00 url(http://smp.sydney.edu.au/compass/img/compass_banner_back.jpg) repeat-x;*/
     height: 77px;
     text-align: right;
 }
@@ -249,8 +249,8 @@ a:hover {
 }
 
 #menu {
-    border-top:4px solid #FA9300;
-    background-color: #FA9300;
+    border-top:2px solid #ffffff; /*#FA9300;*/
+    background-color: #870052; /*#FA9300;*/
     width: 100%;
     text-align: right;
     float: left;

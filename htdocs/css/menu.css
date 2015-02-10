@@ -7,7 +7,7 @@
 }
 
 #main-menu, #login-menu {
-    background-color: #FA9300 /*#c92f25*/;
+    background-color: #870052 /* Christos #FA9300 #c92f25*/;
     padding:0;
     margin:0;
     font-size:0.9em;
@@ -23,7 +23,7 @@
 }
 
 #main-menu li, #login-menu li {
-    background-color: #FA9300 /*#c92f25*/;
+    background-color: #870052 /* Christos FA9300 #c92f25*/;
     list-style:none
 }
 
@@ -36,7 +36,7 @@
     text-decoration:none;
     color:#fff;
     padding:0.4em 1em 0.4em 1em;
-    background-color: #FA9300 /*#c92f25*/;
+    background-color: #870052 /* Christos #FA9300 #c92f25*/;
     border-right:1px solid #DFAE6F;
 }
 
@@ -44,7 +44,7 @@
 	text-decoration:none;
 	color:#fff;
 	padding:0.4em;
-	background-color: #FA9300;
+	background-color: #870052; /* Christos #FA9300;*/
 }
 
 #login-menu a:hover {
@@ -52,17 +52,17 @@
 }
 
 #main-menu #main-menu-selected {
-    color: #473212;
+    color: #CCCC99; /*#473212;*/
 }
 
 #main-menu a:visited {
     text-decoration:none;
     color:#fff;
-    background-color:#FA9300 /*#c92f25*/;
+    background-color:#870052; /* Christos#FA9300 /*#c92f25*/;
 }
 
 #main-menu a:hover, #main-menu a:focus {
-    color:#2F1D03;
+    color:#CCCC99; /* Christos #2F1D03;*/
 }
 
 #main-menu a.active_link {
@@ -95,7 +95,7 @@
 }	
 	
 #submenu li a:link, #submenu li a:visited {
-	color: #888;
+	color: #E6E6DC; /* Christos #888;*/
 	display: block;
 	background: url(/compass/img/menu3.gif);
 	padding: 8px 0 0 30px;
