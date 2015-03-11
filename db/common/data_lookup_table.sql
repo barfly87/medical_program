@@ -1,4 +1,4 @@
--- Assessment Type
+---- Assessment Type
 INSERT INTO lk_assesstype VALUES (DEFAULT, 'SBA');
 INSERT INTO lk_assesstype VALUES (DEFAULT, 'Spot test');
 INSERT INTO lk_assesstype VALUES (DEFAULT, 'OSCE');
