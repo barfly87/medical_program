@@ -1,10 +1,13 @@
 -- Assessment Type
-INSERT INTO lk_assesstype VALUES (DEFAULT, 'Log book');
-INSERT INTO lk_assesstype VALUES (DEFAULT, 'Supervisor feedback');
-INSERT INTO lk_assesstype VALUES (DEFAULT, 'Written individual assignment');
-INSERT INTO lk_assesstype VALUES (DEFAULT, 'Written group assignment');
+--INSERT INTO lk_assesstype VALUES (DEFAULT, 'Log book');
+--INSERT INTO lk_assesstype VALUES (DEFAULT, 'Supervisor feedback');
+--INSERT INTO lk_assesstype VALUES (DEFAULT, 'Written individual assignment');
+INSERT INTO lk_assesstype VALUES (DEFAULT, 'Written assignment');
+--INSERT INTO lk_assesstype VALUES (DEFAULT, 'Written group assignment');
 INSERT INTO lk_assesstype VALUES (DEFAULT, 'Written exam');
-INSERT INTO lk_assesstype VALUES (DEFAULT, 'Written essay');
+INSERT INTO lk_assesstype VALUES (DEFAULT, 'Examination on the job');
+INSERT INTO lk_assesstype VALUES (DEFAULT, 'Structured practical examination');
+--INSERT INTO lk_assesstype VALUES (DEFAULT, 'Written essay');
 SELECT nextval('lk_assesstype_auto_id_seq');
 INSERT INTO lk_assesstype VALUES (DEFAULT, 'Oral presentation');
 INSERT INTO lk_assesstype VALUES (DEFAULT, 'Not assessed');
