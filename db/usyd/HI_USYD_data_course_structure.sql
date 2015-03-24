@@ -3,31 +3,33 @@ INSERT INTO lk_stage VALUES (DEFAULT, '');
 INSERT INTO lk_stage VALUES (DEFAULT, '1');
 INSERT INTO lk_stage VALUES (DEFAULT, '2');
 INSERT INTO lk_stage VALUES (DEFAULT, '3');
-INSERT INTO lk_stage VALUES (DEFAULT, '3 (Year 4)');
+INSERT INTO lk_stage VALUES (DEFAULT, '4');
+INSERT INTO lk_stage VALUES (DEFAULT, '5');
+INSERT INTO lk_stage VALUES (DEFAULT, '6');
+INSERT INTO lk_stage VALUES (DEFAULT, '7');
+INSERT INTO lk_stage VALUES (DEFAULT, '8');
+INSERT INTO lk_stage VALUES (DEFAULT, '9');
 
 -- BLOCK (lk_block)
 INSERT INTO lk_block VALUES(DEFAULT, '');
-INSERT INTO lk_block VALUES(DEFAULT, 'Health Informatics - Needs, Objectives and Limitations (5HI000)');
-INSERT INTO lk_block VALUES(DEFAULT, 'Basic Medical Science');
-INSERT INTO lk_block VALUES(DEFAULT, 'Health Care Organization and Management ');
-INSERT INTO lk_block VALUES(DEFAULT, 'Computer Applications in Health Care and Biomedicine');
-INSERT INTO lk_block VALUES(DEFAULT, 'User Needs and Requirements Engineering');
-INSERT INTO lk_block VALUES(DEFAULT, 'Evaluation Methods for Health Informatics');
-INSERT INTO lk_block VALUES(DEFAULT, 'Standardisation within health informatics');
-INSERT INTO lk_block VALUES(DEFAULT, 'Projects in Health Informatics 1 – from Idea to Specification');
-INSERT INTO lk_block VALUES(DEFAULT, 'Projects in Health Informatics 2 - project and information management');
-INSERT INTO lk_block VALUES(DEFAULT, 'Case Studies in Health Informatics');
-INSERT INTO lk_block VALUES(DEFAULT, 'Clinical Decision Support');
-INSERT INTO lk_block VALUES(DEFAULT, 'Modelling, Simulation and Visualisation in Health Informatics');
-INSERT INTO lk_block VALUES(DEFAULT, 'Data Mining in Computer and System Sciences');
-INSERT INTO lk_block VALUES(DEFAULT, 'Principles of Computer Security');
-INSERT INTO lk_block VALUES(DEFAULT, 'Scientific Communication and Research Methodology');
-INSERT INTO lk_block VALUES(DEFAULT, 'Project Management');
-INSERT INTO lk_block VALUES(DEFAULT, 'From Idea to Service Business');
-INSERT INTO lk_block VALUES(DEFAULT, 'Scientific Research Methods');
-INSERT INTO lk_block VALUES(DEFAULT, 'Informatics and improvement work in healthcare organisations');
-INSERT INTO lk_block VALUES(DEFAULT, 'Advanced course in Health and Medical Care Management');
-INSERT INTO lk_block VALUES(DEFAULT, 'Degree project in Health Informatics');
+INSERT INTO lk_block VALUES(DEFAULT, 'T1: Upptakten - introduktion till läkaryrket');
+INSERT INTO lk_block VALUES(DEFAULT, 'T1: Den friska människan I');
+INSERT INTO lk_block VALUES(DEFAULT, 'T2: Den friska människan II');
+INSERT INTO lk_block VALUES(DEFAULT, 'T3: Den friska människan III');
+INSERT INTO lk_block VALUES(DEFAULT, 'T3: Den sjuka människan 1 - basvetenskaplig grund ');
+INSERT INTO lk_block VALUES(DEFAULT, 'T4: Den sjuka människan II');
+INSERT INTO lk_block VALUES(DEFAULT, 'T4: Integrerad deltentamen (IDT)');
+INSERT INTO lk_block VALUES(DEFAULT, 'T5: Klinisk medicin Termin 5');
+INSERT INTO lk_block VALUES(DEFAULT, 'T6: Klinisk medicin Termin 6');
+INSERT INTO lk_block VALUES(DEFAULT, 'T7: Klinisk medicin - inriktning kirurgi');
+INSERT INTO lk_block VALUES(DEFAULT, 'T8: Examensarbetet i medicin');
+INSERT INTO lk_block VALUES(DEFAULT, 'T9: Klinisk medicin - inriktning neuro, sinnen, psyke (30hp)');
+INSERT INTO lk_block VALUES(DEFAULT, 'T10: Klinisk medicin - inriktning reproduktion och utveckling (22,5 hp)');
+INSERT INTO lk_block VALUES(DEFAULT, 'T10: SVK (7,5hp)');
+INSERT INTO lk_block VALUES(DEFAULT, 'T11: Hälsa i samhälle och miljö');
+INSERT INTO lk_block VALUES(DEFAULT, 'T11: Integrerad sluttentamen');
+INSERT INTO lk_block VALUES(DEFAULT, 'SVK (7,5hp + 7,5hp)');
+
 
 
 -- STAGE_BLOCK_SEQ (stage_block_seq)
@@ -38,23 +40,29 @@ INSERT INTO stage_block_seq VALUES (DEFAULT, 2, 4, 5, 1);
 
 INSERT INTO stage_block_seq VALUES (DEFAULT, 3, 5, 6, 1);
 INSERT INTO stage_block_seq VALUES (DEFAULT, 3, 6, 7, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 3, 7, 8, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 3, 8, 9, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 3, 9, 10, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 3, 10, 11, 1);
 
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 25, 12, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 26, 13, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 24, 14, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 21, 15, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 22, 16, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 27, 17, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 30, 18, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 23, 19, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 28, 20, 1);
-INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 31, 21, 1);
+INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 7, 8, 1);
 
-INSERT INTO stage_block_seq VALUES (DEFAULT, 5, 25, 12, 1);
+INSERT INTO stage_block_seq VALUES (DEFAULT, 5, 8, 9, 1);
+INSERT INTO stage_block_seq VALUES (DEFAULT, 5, 9, 10, 1);
+
+INSERT INTO stage_block_seq VALUES (DEFAULT, 6, 10, 11, 1);
+
+INSERT INTO stage_block_seq VALUES (DEFAULT, 7, 11, 12, 1);
+
+INSERT INTO stage_block_seq VALUES (DEFAULT, 8, 12, 13, 1);
+
+INSERT INTO stage_block_seq VALUES (DEFAULT, 9, 13, 14, 1);
+INSERT INTO stage_block_seq VALUES (DEFAULT, 9, 14, 15, 1);
+
+INSERT INTO stage_block_seq VALUES (DEFAULT, 10, 15, 16, 1);
+INSERT INTO stage_block_seq VALUES (DEFAULT, 10, 16, 17, 1);
+INSERT INTO stage_block_seq VALUES (DEFAULT, 10, 17, 18, 1);
+
+-- INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 18, 19, 1);
+-- INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 19, 20, 1);
+-- INSERT INTO stage_block_seq VALUES (DEFAULT, 4, 20, 21, 1);
+-- INSERT INTO stage_block_seq VALUES (DEFAULT, 5, 25, 12, 1);
 
 
 
@@ -101,7 +109,10 @@ INSERT INTO lk_blockweek VALUES (DEFAULT, 28);
 INSERT INTO lk_blockweek VALUES (DEFAULT, 29);
 INSERT INTO lk_blockweek VALUES (DEFAULT, 30);
 
--- BLOCK_PBL_SEQ (block_pbl_seq)
+-- BLOCK_PBL_SEQ (block_pbl_seq) to build the number and names of each week in the course
+-- First row corresponds to block
+-- Second row corresponds to number of weeks
+-- Third row row corresponds to name of the week from table lk_pbl above
 INSERT INTO block_pbl_seq VALUES (DEFAULT, 1, 2, 2);
 INSERT INTO block_pbl_seq VALUES (DEFAULT, 1, 3, 3);
 INSERT INTO block_pbl_seq VALUES (DEFAULT, 1, 4, 4);
@@ -167,12 +178,47 @@ INSERT INTO block_pbl_seq VALUES (DEFAULT, 11, 4, 4);
 INSERT INTO block_pbl_seq VALUES (DEFAULT, 11, 5, 5);
 INSERT INTO block_pbl_seq VALUES (DEFAULT, 11, 6, 6);
 
-INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 2, 1);
-INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 3, 2);
-INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 4, 3);
-INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 5, 4);
-INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 6, 5);
-INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 7, 6);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 12, 2, 2);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 12, 3, 3);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 12, 4, 4);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 12, 5, 5);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 12, 6, 6);
 
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 13, 2, 2);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 13, 3, 3);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 13, 4, 4);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 13, 5, 5);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 13, 6, 6);
 
-INSERT INTO block_pbl_seq VALUES (DEFAULT, 33, 2, 2);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 14, 2, 2);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 14, 3, 3);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 14, 4, 4);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 14, 5, 5);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 14, 6, 6);
+
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 15, 2, 2);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 15, 3, 3);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 15, 4, 4);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 15, 5, 5);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 15, 6, 6);
+
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 16, 2, 2);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 16, 3, 3);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 16, 4, 4);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 16, 5, 5);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 16, 6, 6);
+
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 17, 2, 2);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 17, 3, 3);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 17, 4, 4);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 17, 5, 5);
+INSERT INTO block_pbl_seq VALUES (DEFAULT, 17, 6, 6);
+
+-- INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 2, 1);
+-- INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 3, 2);
+-- INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 4, 3);
+-- INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 5, 4);
+--INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 6, 5);
+-- INSERT INTO block_pbl_seq VALUES (DEFAULT, 21, 7, 6);
+
+-- INSERT INTO block_pbl_seq VALUES (DEFAULT, 33, 2, 2);
