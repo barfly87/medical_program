@@ -1,3 +1,5 @@
+-- It’s used to populate the drop downs on learning activities. Visible also on Discipline tab in menu bar
+
 BEGIN;
 --Addiction medicine
 INSERT INTO lk_curriculumareas (discipline_id, curriculumarea) SELECT auto_id, 'Alcohol harms' FROM lk_discipline WHERE name ='Addiction Medicine';
