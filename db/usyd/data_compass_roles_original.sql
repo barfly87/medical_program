@@ -1,3 +1,6 @@
+-- It's used to pre-populate the block chair and stage co-ordinator roles. 
+-- Can be edited via the admin pages as well
+
 BEGIN;
 -- BLOCK CHAIR
 INSERT INTO blockchair (uid, block_id) values ('zorba', 2);
