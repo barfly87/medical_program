@@ -1,3 +1,7 @@
+-- 3rd column: Allow for disciplines that might have multiple names 
+-- 4th and 5th columns: Disciplines at Sydney University are two separate things - the organisational unit, and the theoretical curriculum unit but they aren't used in practice
+-- 6th column: Allows to have a hierarchical tree of disciplines
+
 INSERT INTO lk_discipline VALUES (DEFAULT, '', NULL, 1, 0, 0);
 INSERT INTO lk_discipline VALUES (DEFAULT, 'Addiction Medicine', 'Drug & Alcohol', 1, 0, 0);
 SELECT nextval('lk_discipline_auto_id_seq');
