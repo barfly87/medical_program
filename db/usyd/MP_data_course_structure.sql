@@ -1,14 +1,23 @@
 -- STAGE (lk_stage)
 INSERT INTO lk_stage VALUES (DEFAULT, '');
-INSERT INTO lk_stage VALUES (DEFAULT, '1');
-INSERT INTO lk_stage VALUES (DEFAULT, '2');
-INSERT INTO lk_stage VALUES (DEFAULT, '3');
-INSERT INTO lk_stage VALUES (DEFAULT, '4');
-INSERT INTO lk_stage VALUES (DEFAULT, '5');
-INSERT INTO lk_stage VALUES (DEFAULT, '6');
-INSERT INTO lk_stage VALUES (DEFAULT, '7');
-INSERT INTO lk_stage VALUES (DEFAULT, '8');
-INSERT INTO lk_stage VALUES (DEFAULT, '9');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Tema 1: Den friska människan');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Tema 2: Den sjuka människan');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Integrerad deltentamen');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Tema 3: Klinisk medicin');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Tema 4: Klinisk medicin - inriktning kirurgi');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Examensarbetet');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Tema 5: Klinisk medicin - inriktning neuro, sinnen, psyke');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Tema 6: Klinisk medicin - inriktning reproduktion och utveckling');
+INSERT INTO lk_stage VALUES (DEFAULT, 'Tema 7: Hälsa i samhälle och miljö');
+--INSERT INTO lk_stage VALUES (DEFAULT, '1');
+--INSERT INTO lk_stage VALUES (DEFAULT, '2');
+--INSERT INTO lk_stage VALUES (DEFAULT, '3');
+--INSERT INTO lk_stage VALUES (DEFAULT, '4');
+--INSERT INTO lk_stage VALUES (DEFAULT, '5');
+--INSERT INTO lk_stage VALUES (DEFAULT, '6');
+--INSERT INTO lk_stage VALUES (DEFAULT, '7');
+--INSERT INTO lk_stage VALUES (DEFAULT, '8');
+--INSERT INTO lk_stage VALUES (DEFAULT, '9');
 
 -- BLOCK (lk_block)
 INSERT INTO lk_block VALUES(DEFAULT, '');
